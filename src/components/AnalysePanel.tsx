@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import { aiResult, aiSnapshot, applyAIFix, undoAIFix, commitAIFix } from '../state/store';
 import { aiJD, aiStatus, aiError, runAIReview } from '../state/ai';
 import { showToast } from './Toast';
@@ -62,6 +62,8 @@ export function AnalysePanel() {
             </p>
           </div>
         )}
+
+        {loading && !r && <AnalyseSkeleton />}
 
         {r && (
           <div class="analyse-results">
@@ -133,6 +135,30 @@ export function AnalysePanel() {
 
 /* ── Hero score: large ring + summary + projected lift ───────────────────── */
 
+function useCountUp(target: number, durationMs = 900): number {
+  const [val, setVal] = useState(0);
+  const startRef = useRef<number | null>(null);
+  const rafRef = useRef<number>();
+
+  useEffect(() => {
+    startRef.current = null;
+    cancelAnimationFrame(rafRef.current!);
+    const tick = (t: number) => {
+      if (startRef.current === null) startRef.current = t;
+      const elapsed = t - startRef.current;
+      const p = Math.min(1, elapsed / durationMs);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(Math.round(target * eased));
+      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current!);
+  }, [target, durationMs]);
+
+  return val;
+}
+
 function HeroScore({ result: r, canApplyFix }: { result: AIResult; canApplyFix: boolean }) {
   const score = Math.max(0, Math.min(100, r.ats_score | 0));
   const projected = Math.max(score, Math.min(100, (r.optimized_ats_score ?? score) | 0));
@@ -140,8 +166,9 @@ function HeroScore({ result: r, canApplyFix }: { result: AIResult; canApplyFix: 
   const band = scoreBand(score);
   const color = bandColor(score);
 
+  const animatedScore = useCountUp(score, 900);
   const R = 36, C = 2 * Math.PI * R;
-  const dash = C * (score / 100);
+  const dash = C * (animatedScore / 100);
 
   return (
     <div class={`hero-score hero-${band}`}>
@@ -157,7 +184,7 @@ function HeroScore({ result: r, canApplyFix }: { result: AIResult; canApplyFix: 
             style="transform:rotate(-90deg);transform-origin:center"
           />
         </svg>
-        <div class="hero-ring-num" style={`color:${color}`}>{score}</div>
+        <div class="hero-ring-num" style={`color:${color}`}>{animatedScore}</div>
       </div>
       <div class="hero-meta">
         <div class="hero-eyebrow">ATS Score</div>
@@ -375,6 +402,39 @@ function Collapsible({
 }
 
 /* ── helpers ─────────────────────────────────────────────────────────────── */
+
+/* ── Skeleton loader (shown while AI request is in flight) ─────────────────── */
+
+function AnalyseSkeleton() {
+  return (
+    <div class="analyse-skeleton" aria-busy="true" aria-label="Analysing your CV">
+      <div class="sk-hero">
+        <div class="sk-ring" />
+        <div class="sk-meta">
+          <div class="sk-line sk-line-eyebrow" />
+          <div class="sk-line sk-line-title" />
+          <div class="sk-line sk-line-summary" />
+          <div class="sk-line sk-line-summary sk-line-short" />
+        </div>
+      </div>
+      <div class="sk-block">
+        <div class="sk-line sk-line-label" />
+        <div class="sk-bar" />
+        <div class="sk-pills">
+          <div class="sk-pill" /><div class="sk-pill" /><div class="sk-pill" />
+        </div>
+      </div>
+      <div class="sk-block">
+        <div class="sk-line sk-line-label" />
+        <div class="sk-bar" />
+      </div>
+      <div class="sk-cards">
+        <div class="sk-card"><div class="sk-line sk-line-title" /><div class="sk-line sk-line-summary" /><div class="sk-line sk-line-summary sk-line-short" /></div>
+        <div class="sk-card"><div class="sk-line sk-line-title" /><div class="sk-line sk-line-summary" /></div>
+      </div>
+    </div>
+  );
+}
 
 function scoreBand(s: number): string {
   if (s >= 80) return 'excellent';

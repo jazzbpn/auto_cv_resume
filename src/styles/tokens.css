@@ -4,12 +4,42 @@
   --paper2: #ede7d9;
   --accent: #c0392b;
   --gold: #b8860b;
+  --gold-bright: #e6b829;
   --muted: #6b5f4f;
   --border: #c8bfad;
   --bg: #2c2620;
   --entry: #f9f5ee;
   --topbar: 52px;
   --bottomnav: 60px;
+
+  /* Spacing scale — use consistently across cards, sections, gaps. */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s7: 32px;
+  --s8: 48px;
+
+  /* Motion */
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 360ms;
+  --ease-out: cubic-bezier(.22, .61, .36, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-glide: cubic-bezier(.2, .8, .2, 1);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 2px rgba(230, 184, 41, .55), 0 0 0 4px rgba(230, 184, 41, .15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 @media (min-width: 1024px) {

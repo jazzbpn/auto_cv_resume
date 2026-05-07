@@ -22,6 +22,16 @@
   padding: 0 16px 14px;
   width: 100%; overflow-x: hidden;
 }
+.s-body-anim {
+  animation: s-body-rise var(--dur-base) var(--ease-out);
+  transform-origin: top;
+}
+@keyframes s-body-rise {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.s-header { transition: background var(--dur-fast) var(--ease-out); }
+.s-header:hover { background: rgba(184, 134, 11, .06); }
 
 label {
   display: block;
@@ -106,12 +116,44 @@ input:focus, textarea:focus {
 .vis-btn:hover { border-color: var(--gold); color: var(--ink); }
 .vis-btn:active { border-color: var(--accent); color: var(--accent); }
 
-.vis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+.vis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); margin-top: var(--s1); }
 .vis-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 4px 0; cursor: pointer;
-  font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--muted);
+  display: flex; align-items: center; gap: var(--s2);
+  padding: var(--s1) 0; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--ink);
+  border-radius: 4px;
+  transition: color var(--dur-fast) var(--ease-out);
 }
+.vis-item:hover { color: var(--gold); }
 .vis-item input[type=checkbox] {
-  width: 16px; height: 16px; accent-color: var(--gold); flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+.vis-item input[type=checkbox]:hover { border-color: var(--gold); }
+.vis-item input[type=checkbox]:checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.vis-item input[type=checkbox]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px; top: 1px;
+  width: 5px; height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  animation: check-pop var(--dur-base) var(--ease-spring);
+}
+@keyframes check-pop {
+  from { transform: rotate(45deg) scale(0); }
+  to   { transform: rotate(45deg) scale(1); }
 }

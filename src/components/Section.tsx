@@ -20,7 +20,7 @@ export function Section({ title, open: defaultOpen = false, children }: Props) {
         {title}
         <span class="s-arrow" aria-hidden>▾</span>
       </button>
-      {open && <div class="s-body">{children}</div>}
+      {open && <div class="s-body s-body-anim">{children}</div>}
     </div>
   );
 }
