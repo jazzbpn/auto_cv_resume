@@ -1,0 +1,106 @@
+.panel-edit { background: var(--paper2); padding: 0 0 24px; }
+.panel-edit::-webkit-scrollbar { width: 3px; }
+.panel-edit::-webkit-scrollbar-thumb { background: var(--border); }
+
+.s-group { border-bottom: 1px solid var(--border); }
+.s-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; cursor: pointer; user-select: none;
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  letter-spacing: .15em; text-transform: uppercase; color: var(--gold);
+  background: var(--paper2); width: 100%; text-align: left;
+  border: none; min-height: 48px;
+}
+.s-header::before {
+  content: ''; width: 6px; height: 6px;
+  background: var(--accent); border-radius: 50%; flex-shrink: 0;
+}
+.s-header .s-arrow { margin-left: auto; font-size: .8rem; color: var(--muted); transition: transform .25s; }
+.s-header.open .s-arrow { transform: rotate(180deg); }
+.s-body {
+  background: var(--paper2);
+  padding: 0 16px 14px;
+  width: 100%; overflow-x: hidden;
+}
+
+label {
+  display: block;
+  font-family: 'DM Mono', monospace; font-size: .58rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px;
+}
+.f { margin-top: 14px; }
+.f:first-child { margin-top: 0; }
+.entry-block label { margin-top: 12px; }
+.entry-block label:first-of-type { margin-top: 0; }
+.field-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px 12px; margin-top: 14px; min-width: 0;
+}
+.field-row > div { margin-top: 0; }
+
+input, textarea, select.form-select {
+  width: 100%; max-width: 100%;
+  background: var(--paper); border: 1px solid var(--border);
+  color: var(--ink); font-family: 'Crimson Pro', serif; font-size: 1rem;
+  padding: 10px; border-radius: 4px; outline: none;
+  resize: vertical; -webkit-appearance: none; appearance: none;
+}
+input:focus, textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(184, 134, 11, .15);
+}
+
+.add-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; background: none;
+  border: 1.5px dashed var(--border); color: var(--muted);
+  font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: 12px; width: 100%; cursor: pointer;
+  border-radius: 4px; min-height: 44px; margin-top: 10px;
+  touch-action: manipulation;
+}
+.add-btn:active { border-color: var(--accent); color: var(--accent); }
+
+.entry-block {
+  background: var(--entry); border: 1px solid var(--border);
+  border-radius: 4px; padding: 12px; margin-bottom: 10px; margin-top: 14px;
+}
+.entry-block-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.entry-block-lbl {
+  font-family: 'DM Mono', monospace; font-size: .58rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.remove-btn {
+  background: var(--accent); color: #fff; border: none;
+  font-size: .7rem; cursor: pointer; border-radius: 3px;
+  padding: 3px 8px; font-family: 'DM Mono', monospace;
+  letter-spacing: .06em; min-height: 28px; touch-action: manipulation;
+}
+
+.tpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px; }
+.tpl-card {
+  border: 2px solid var(--border); border-radius: 6px;
+  padding: 10px 6px; cursor: pointer; text-align: center;
+  background: none;
+  font-family: 'DM Mono', monospace; font-size: .62rem;
+  letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
+  touch-action: manipulation;
+}
+.tpl-card .ic { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+.tpl-card.active { border-color: var(--gold); color: var(--ink); background: rgba(184, 134, 11, .08); }
+
+.vis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+.vis-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 0; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--muted);
+}
+.vis-item input[type=checkbox] {
+  width: 16px; height: 16px; accent-color: var(--gold); flex-shrink: 0;
+}

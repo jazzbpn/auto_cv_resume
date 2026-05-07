@@ -1,0 +1,19 @@
+.panel-preview {
+  background: var(--bg);
+  display: block;
+}
+.preview-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 24px 0 48px;
+  background: var(--bg);
+}
+
+.preview-scale-wrap {
+  display: block;
+  transform-origin: top left;
+}

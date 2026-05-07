@@ -1,0 +1,17 @@
+:root {
+  --ink: #1a1510;
+  --paper: #f5f0e8;
+  --paper2: #ede7d9;
+  --accent: #c0392b;
+  --gold: #b8860b;
+  --muted: #6b5f4f;
+  --border: #c8bfad;
+  --bg: #2c2620;
+  --entry: #f9f5ee;
+  --topbar: 52px;
+  --bottomnav: 60px;
+}
+
+@media (min-width: 1024px) {
+  :root { --bottomnav: 0px; }
+}

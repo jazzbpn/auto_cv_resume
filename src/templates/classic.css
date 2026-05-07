@@ -1,0 +1,49 @@
+.resume.classic .r-name{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;line-height:1;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:5px}
+.resume.classic .r-jtitle{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.resume.classic .r-contacts{font-family:'DM Mono',monospace;font-size:.63rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 14px;margin-bottom:22px;margin-top:5px}
+.resume.classic .r-contacts a{color:var(--muted);text-decoration:none}
+.resume.classic .r-sec{margin-top:20px}
+.resume.classic .r-stitle{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:3px}
+.resume.classic .r-summary{font-size:.93rem;line-height:1.65;font-style:italic;border-left:3px solid var(--gold);padding-left:13px;color:#2e2720}
+.resume.classic .r-entry{margin-bottom:13px}
+.resume.classic .r-ehead{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px}
+.resume.classic .r-etitle{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:700}
+.resume.classic .r-edate{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);white-space:nowrap}
+.resume.classic .r-esub{font-style:italic;color:var(--muted);font-size:.88rem;margin-bottom:2px}
+.resume.classic .r-eloc{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);margin-bottom:2px}
+.resume.classic .r-edesc{font-size:.9rem;line-height:1.55;color:#2e2720;white-space:pre-wrap}
+.resume.classic .r-eurl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--gold)}
+
+.resume.classic .skill-group{margin-bottom:7px}
+.resume.classic .skill-group:last-child{margin-bottom:0}
+.resume.classic .skill-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.resume.classic .skill-tag{background:var(--paper2);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 8px;border-radius:1px}
+.resume.classic .skill-cat{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+
+.resume.classic .r-two{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.resume.classic .lang-item{display:flex;justify-content:space-between;font-size:.88rem;border-bottom:1px dotted var(--border);padding:2px 0}
+.resume.classic .lang-lvl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+
+.resume.classic .award-item{margin-bottom:8px}
+.resume.classic .award-title{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
+.resume.classic .award-date{font-family:'DM Mono',monospace;font-size:.6rem;font-weight:400;color:var(--muted)}
+.resume.classic .award-body{font-size:.87rem;color:var(--muted)}
+.resume.classic .award-desc{font-style:italic}
+
+.resume.classic .pub-item{margin-bottom:8px;font-size:.88rem;line-height:1.5}
+.resume.classic .pub-authors{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+
+.resume.classic .cert-item{margin-bottom:9px}
+.resume.classic .cert-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px}
+.resume.classic .cert-title{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700}
+
+.resume.classic .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.resume.classic .ref-item{font-size:.88rem;line-height:1.6}
+.resume.classic .ref-name{font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem}
+.resume.classic .ref-det{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.classic .ref-available{font-size:.9rem}
+
+.resume.classic .interest-wrap{display:flex;flex-wrap:wrap;gap:5px 18px;font-size:.9rem}
+
+.resume.classic .pdet-row{display:flex;gap:8px;font-size:.87rem;margin-bottom:3px}
+.resume.classic .pdet-lbl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);width:115px;flex-shrink:0;padding-top:2px}

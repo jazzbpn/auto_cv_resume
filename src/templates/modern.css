@@ -1,0 +1,46 @@
+.resume.modern{padding:0;display:grid;grid-template-columns:230px 1fr}
+.resume.modern .mod-left{background:var(--ink);color:var(--paper);padding:36px 20px 40px}
+.resume.modern .mod-right{padding:36px 36px 44px;overflow:hidden}
+.resume.modern .mod-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--paper);line-height:1.15;margin-bottom:3px}
+.resume.modern .mod-jtitle{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.resume.modern .mod-stitle{font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;margin-top:18px;border-bottom:1px solid #3a3028;padding-bottom:3px}
+.resume.modern .mod-ci{font-family:'DM Mono',monospace;font-size:.6rem;color:#a09080;margin-bottom:4px;word-break:break-word;line-height:1.4}
+.resume.modern .mod-ci a{color:#a09080;text-decoration:none}
+.resume.modern .mod-ci b{color:#c8bfad;font-weight:600}
+.resume.modern .mod-sl{font-family:'DM Mono',monospace;font-size:.6rem;color:#c8bfad;margin-bottom:2px;margin-top:7px}
+.resume.modern .mod-sb{background:#3a3028;height:3px;border-radius:1px;overflow:hidden}
+.resume.modern .mod-sf{background:var(--gold);height:100%;border-radius:1px;width:80%}
+.resume.modern .mod-li{font-size:.82rem;color:#a09080;margin-bottom:3px;font-family:'Crimson Pro',serif;line-height:1.4}
+
+.resume.modern .lang-item{display:flex;justify-content:space-between;font-size:.85rem;color:#c8bfad;border-bottom:1px solid #3a3028;padding:2px 0;font-family:'Crimson Pro',serif}
+.resume.modern .lang-lvl{font-family:'DM Mono',monospace;font-size:.57rem;color:#a09080}
+
+.resume.modern .r-stitle{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;margin-top:22px;display:flex;align-items:center;gap:8px}
+.resume.modern .r-stitle::after{content:'';flex:1;height:1px;background:var(--border)}
+.resume.modern .r-summary{font-size:.92rem;line-height:1.65;font-style:italic;border-left:3px solid var(--gold);padding-left:12px;color:#2e2720}
+.resume.modern .r-entry{margin-bottom:13px}
+.resume.modern .r-ehead{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px}
+.resume.modern .r-etitle{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700}
+.resume.modern .r-edate{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.modern .r-esub{font-style:italic;color:var(--muted);font-size:.87rem;margin-bottom:2px}
+.resume.modern .r-eloc{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);margin-bottom:2px}
+.resume.modern .r-edesc{font-size:.88rem;line-height:1.55;color:#2e2720;white-space:pre-wrap}
+.resume.modern .r-eurl{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--gold)}
+
+.resume.modern .award-item{margin-bottom:8px}
+.resume.modern .award-title{font-family:'Playfair Display',serif;font-size:.93rem;font-weight:700}
+.resume.modern .award-body{font-size:.85rem;color:var(--muted)}
+.resume.modern .award-desc{font-style:italic}
+
+.resume.modern .pub-item{margin-bottom:8px;font-size:.86rem;line-height:1.5}
+.resume.modern .pub-authors{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+
+.resume.modern .cert-item{margin-bottom:8px}
+.resume.modern .cert-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px}
+.resume.modern .cert-title{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700}
+
+.resume.modern .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.resume.modern .ref-item{font-size:.85rem;line-height:1.6}
+.resume.modern .ref-name{font-family:'Playfair Display',serif;font-weight:700;font-size:.93rem}
+.resume.modern .ref-det{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted)}
+.resume.modern .ref-available{font-size:.9rem}
