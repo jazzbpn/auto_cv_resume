@@ -1,8 +1,10 @@
 import { signal, computed, effect } from '@preact/signals';
 import type { CV, SectionKey, TemplateId, AIResult, CollectionKey } from '../types';
 import { DEFAULT_CV, DEFAULT_TEMPLATE, DEFAULT_VISIBILITY } from './defaults';
+import { idbGet, idbPut, requestPersistentStorage } from '../services/idb';
 
 const STORAGE_KEY = 'cv-builder.v1';
+const IDB_KEY = 'app-state-v1';
 
 interface Persisted {
   cv: CV;
@@ -10,7 +12,14 @@ interface Persisted {
   visibility: Record<SectionKey, boolean>;
 }
 
-function load(): Persisted {
+/**
+ * Synchronous read from localStorage so the first paint shows the user's
+ * data without a flicker. IndexedDB hydration runs asynchronously after
+ * boot and replaces these signals if the IDB record is present (canonical).
+ * For a fresh user with no localStorage yet, this returns defaults; the
+ * subsequent IDB hydrate then writes the (possibly imported) data back.
+ */
+function loadSync(): Persisted {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY };
@@ -25,7 +34,7 @@ function load(): Persisted {
   }
 }
 
-const initial = load();
+const initial = loadSync();
 
 export const cv = signal<CV>(initial.cv);
 export const template = signal<TemplateId>(initial.template);
@@ -36,8 +45,45 @@ export const aiSnapshot = signal<CV | null>(null);
 
 export type SaveStatus = 'saved' | 'saving' | 'error';
 export const saveStatus = signal<SaveStatus>('saved');
-/** UNIX ms of the last successful localStorage write; null until first save. */
+/** UNIX ms of the last successful save; null until first save. */
 export const lastSavedAt = signal<number | null>(null);
+
+/**
+ * Hydrate from IndexedDB after first paint. IDB is the canonical store —
+ * if it has data, it overrides whatever we synchronously read from
+ * localStorage. localStorage is kept as a fast-cache and migration bridge.
+ *
+ * `hydrating` blocks the auto-save effect from firing during this phase
+ * (otherwise the synchronous initial values would be flushed back to
+ * storage as if the user had typed them).
+ */
+let hydrating = true;
+async function hydrate(): Promise<void> {
+  try {
+    const persisted = await idbGet<Persisted>(IDB_KEY);
+    if (persisted) {
+      if (persisted.cv) cv.value = persisted.cv;
+      if (persisted.template) template.value = persisted.template;
+      if (persisted.visibility) {
+        visibility.value = { ...DEFAULT_VISIBILITY, ...persisted.visibility };
+      }
+    } else {
+      // No IDB record yet — likely a returning user with localStorage data,
+      // or a brand-new visitor. Either way, write current signal state to
+      // IDB so the next boot reads the canonical store.
+      await idbPut(IDB_KEY, {
+        cv: cv.value,
+        template: template.value,
+        visibility: visibility.value,
+      } satisfies Persisted);
+    }
+  } finally {
+    hydrating = false;
+  }
+}
+
+void hydrate();
+void requestPersistentStorage();
 
 let saveTimer: number | undefined;
 let firstRun = true;
@@ -45,14 +91,21 @@ effect(() => {
   const snapshot: Persisted = { cv: cv.value, template: template.value, visibility: visibility.value };
   // Skip flagging the very first effect run as "saving" — it's just init.
   if (firstRun) { firstRun = false; return; }
+  // Don't write back the synchronous defaults on top of IDB during hydration.
+  if (hydrating) return;
   saveStatus.value = 'saving';
   if (saveTimer) clearTimeout(saveTimer);
-  saveTimer = window.setTimeout(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+  saveTimer = window.setTimeout(async () => {
+    let ok = false;
+    // Canonical: IndexedDB.
+    ok = await idbPut(IDB_KEY, snapshot);
+    // Fast cache + fallback for browsers/contexts where IDB fails.
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot)); ok = true; }
+    catch { /* keep ok from IDB */ }
+    if (ok) {
       saveStatus.value = 'saved';
       lastSavedAt.value = Date.now();
-    } catch {
+    } else {
       saveStatus.value = 'error';
     }
   }, 250);
