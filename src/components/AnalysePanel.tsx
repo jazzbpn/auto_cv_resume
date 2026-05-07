@@ -12,6 +12,14 @@ async function applyAIFixAndRescore(): Promise<void> {
   await runAIReview();
 }
 
+async function commitAndRescore(): Promise<void> {
+  commitAIFix();
+  // Refresh the score against the just-committed CV. Guarantees the panel
+  // matches the saved state — important when the prior rescore failed
+  // (truncation, network) and the displayed score is still stale.
+  await runAIReview();
+}
+
 export function AnalysePanel() {
   const r = aiResult.value;
   const fixed = !!aiSnapshot.value;
@@ -66,7 +74,7 @@ export function AnalysePanel() {
         {loading && !r && <AnalyseSkeleton />}
 
         {r && (
-          <div class="analyse-results">
+          <div class={`analyse-results${loading ? ' is-rescoring' : ''}`}>
             <HeroScore result={r} canApplyFix={!fixed} />
             <SeverityBar issues={r.issues} />
             <KeywordMeter
@@ -114,12 +122,15 @@ export function AnalysePanel() {
                 <button
                   type="button"
                   class="analyse-save-btn"
+                  disabled={loading}
                   onClick={() => {
-                    commitAIFix();
-                    showToast('✓ Changes saved. AI rewrites are now part of your CV.');
+                    showToast('✓ Changes saved. Rescoring against your saved CV…');
+                    void commitAndRescore();
                   }}
                 >
-                  ✓ Save Changes
+                  {loading
+                    ? <><span class="ai-spinner ai-spinner-light" /> Rescoring…</>
+                    : <>✓ Save Changes</>}
                 </button>
                 <button type="button" class="analyse-undo-btn" onClick={undoAIFix}>
                   ↶ Undo
@@ -138,18 +149,24 @@ export function AnalysePanel() {
 function useCountUp(target: number, durationMs = 900): number {
   const [val, setVal] = useState(0);
   const startRef = useRef<number | null>(null);
+  const fromRef = useRef<number>(0);
   const rafRef = useRef<number>();
+  const valRef = useRef<number>(0);
+  valRef.current = val;
 
   useEffect(() => {
+    // Tween from the currently-displayed value to the new target so a
+    // rescore animates 75 → 82 instead of jumping to 0 then counting up.
+    fromRef.current = valRef.current;
     startRef.current = null;
     cancelAnimationFrame(rafRef.current!);
     const tick = (t: number) => {
       if (startRef.current === null) startRef.current = t;
       const elapsed = t - startRef.current;
       const p = Math.min(1, elapsed / durationMs);
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(target * eased));
+      const next = fromRef.current + (target - fromRef.current) * eased;
+      setVal(Math.round(next));
       if (p < 1) rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);

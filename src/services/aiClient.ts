@@ -89,7 +89,7 @@ function parseJSONFromText<T>(raw: string): T {
   try { return JSON.parse(m[0]) as T; }
   catch {
     throw new Error(
-      'AI returned malformed JSON (likely truncated). Try a shorter CV or fewer entries.',
+      'AI response was truncated mid-output. Tap Re-analyse to try again. If it keeps failing, your CV may have too many entries for a single response.',
     );
   }
 }
@@ -182,7 +182,7 @@ export async function reviewCV(cv: CV, jobDescription: string): Promise<AIResult
     : `Please analyse this CV for general ATS optimisation (no specific job description provided):\n\n${cvToText(cv)}`;
   const raw = await callProxy({
     model: MODEL,
-    max_tokens: 2000,
+    max_tokens: 4096,
     temperature: 0,
     response_format: { type: 'json_object' },
     messages: [
