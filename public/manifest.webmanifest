@@ -1,0 +1,17 @@
+{
+  "name": "ResumePDF — Free AI Resume Builder with ATS Score",
+  "short_name": "ResumePDF",
+  "description": "100% free AI resume and CV builder. Instant ATS score, AI keyword matching against any job description, real PDF download. No sign-up, no watermark, no credit card.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1510",
+  "theme_color": "#1a1510",
+  "lang": "en",
+  "categories": ["productivity", "business", "utilities"],
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "maskable" }
+  ]
+}

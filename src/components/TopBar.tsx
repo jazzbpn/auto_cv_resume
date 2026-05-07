@@ -11,8 +11,8 @@ export function TopBar({ onImport }: Props) {
       </div>
       <header class="top-bar">
         <div class="brand-row">
-          <a class="brand-lockup" href="/" aria-label="CVPDF">
-            <span class="brand-name">CV<span>PDF</span></span>
+          <a class="brand-lockup" href="/" aria-label="ResumePDF">
+            <span class="brand-name">Resume<span>PDF</span></span>
           </a>
           <SaveIndicator />
         </div>
