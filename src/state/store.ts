@@ -68,12 +68,6 @@ export function toggleSection(k: SectionKey) {
   visibility.value = { ...visibility.value, [k]: !visibility.value[k] };
 }
 
-export function setAllSections(value: boolean) {
-  const next = {} as Record<SectionKey, boolean>;
-  for (const k of Object.keys(visibility.value) as SectionKey[]) next[k] = value;
-  visibility.value = next;
-}
-
 export function addItem<K extends CollectionKey>(key: K, item: CV[K][number]) {
   cv.value = { ...cv.value, [key]: [...cv.value[key], item] } as CV;
 }

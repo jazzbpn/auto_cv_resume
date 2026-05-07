@@ -67,6 +67,7 @@ body {
   display: inline-flex; align-items: baseline;
   text-decoration: none; color: inherit;
   margin-left: 100px;
+  margin-right: 18px;
   transition: opacity .2s ease;
 }
 .brand-lockup:hover { opacity: .85; }

@@ -1,9 +1,79 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import preact from '@preact/preset-vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+const ALLOWED_MODELS = new Set(['deepseek-chat', 'deepseek-reasoner']);
+
+/**
+ * Dev-only middleware: handles POST /ai/chat by proxying to DeepSeek using
+ * DEEPSEEK_API_KEY from .env.local. Mirrors api/ai/chat.ts so `npm run dev`
+ * works without needing `vercel dev`.
+ */
+function aiDevProxy(apiKey: string): Plugin {
+  return {
+    name: 'ai-dev-proxy',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use('/ai/chat', async (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: { message: 'Method not allowed' } }));
+          return;
+        }
+        if (!apiKey.startsWith('sk-')) {
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: { message: 'DEEPSEEK_API_KEY missing in .env.local' } }));
+          return;
+        }
+        const chunks: Buffer[] = [];
+        for await (const chunk of req) chunks.push(chunk as Buffer);
+        const raw = Buffer.concat(chunks).toString('utf8');
+        let body: Record<string, unknown>;
+        try { body = JSON.parse(raw) as Record<string, unknown>; }
+        catch {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: { message: 'Invalid JSON' } }));
+          return;
+        }
+        const model = typeof body.model === 'string' ? body.model : '';
+        if (!ALLOWED_MODELS.has(model)) {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: { message: `Model not allowed. Use one of: ${[...ALLOWED_MODELS].join(', ')}` } }));
+          return;
+        }
+        try {
+          const upstream = await fetch('https://api.deepseek.com/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+          });
+          res.statusCode = upstream.status;
+          res.setHeader('Content-Type', upstream.headers.get('content-type') ?? 'application/json');
+          const text = await upstream.text();
+          res.end(text);
+        } catch (e) {
+          res.statusCode = 502;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: { message: `Upstream fetch failed: ${e instanceof Error ? e.message : String(e)}` } }));
+        }
+      });
+    },
+  };
+}
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const apiKey = (env.DEEPSEEK_API_KEY ?? '').trim();
+  return {
   plugins: [
+    aiDevProxy(apiKey),
     preact(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -58,8 +128,8 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // No /ai proxy here. In dev, `wrangler pages dev` runs in front of Vite
-    // (port 8788) and serves the Pages Function at /ai/chat itself, while
-    // proxying everything else through to Vite at :5173.
+    // /ai/chat is handled in-process by the aiDevProxy plugin above using
+    // DEEPSEEK_API_KEY from .env.local — no separate dev server required.
   },
+  };
 });
