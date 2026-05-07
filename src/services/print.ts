@@ -14,8 +14,19 @@ import { showToast } from '../components/Toast';
  * "Headers and footers" if they want a totally clean output.
  */
 
-function slug(s: string): string {
-  return s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || 'resume';
+/** Filesystem-safe version of the user's name: keeps case, swaps spaces for underscores, strips problematic chars. */
+function fileSafeName(s: string): string {
+  return s.trim().replace(/\s+/g, '_').replace(/[\\/:*?"<>|]/g, '').replace(/_+/g, '_') || 'Resume';
+}
+
+/** YYYY-MM-DD_HH-MM-SS in local time. */
+function timestamp(d = new Date()): string {
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}-${p(d.getMinutes())}-${p(d.getSeconds())}`;
+}
+
+function exportFilename(): string {
+  return `${fileSafeName(getName())}_${timestamp()}`;
 }
 
 function getResumeNode(): HTMLElement | null {
@@ -120,9 +131,10 @@ function buildPrintHTML(): string {
   clone.style.transform = 'none';
   clone.style.boxShadow = 'none';
   const styles = collectStyles();
-  // Title is a single space so the browser's print header reads "" rather
-  // than the document title (e.g. "CV Builder").
-  const title = ' ';
+  // Title is the suggested filename for "Save as PDF" — the browser uses
+  // the document title for that. The @top-* margin overrides above try to
+  // keep this string out of the printed page header.
+  const title = exportFilename();
   const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;1,400&display=swap">`;
@@ -133,7 +145,7 @@ function downloadHTMLFallback(html: string) {
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `${slug(getName())}-cv.html`;
+  a.href = url; a.download = `${exportFilename()}.html`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
   showToast('Downloaded as HTML. Open it in your browser, then Print → Save as PDF.');
@@ -175,6 +187,11 @@ export async function printResume(): Promise<void> {
     iframe.onload = () => {
       // Allow Google Fonts to settle so the print preview shows correct glyphs.
       setTimeout(() => {
+        // Chrome / Safari pull the suggested PDF filename from the parent
+        // document's title, not the iframe's. Swap it temporarily.
+        const filename = exportFilename();
+        const originalTitle = document.title;
+        document.title = filename;
         try {
           iframe.contentWindow?.focus();
           iframe.contentWindow?.print();
@@ -183,6 +200,10 @@ export async function printResume(): Promise<void> {
         } catch (e) {
           console.error('[print] iframe print failed:', e);
           downloadHTMLFallback(html);
+        } finally {
+          // Restore after the print dialog has captured the title. A small
+          // delay avoids races where the browser reads the title async.
+          setTimeout(() => { document.title = originalTitle; }, 1500);
         }
         cleanup();
       }, 800);
@@ -197,8 +218,12 @@ export async function printResume(): Promise<void> {
     // Last-resort safety net if onload never fires
     setTimeout(() => {
       if (!printed) {
+        const filename = exportFilename();
+        const originalTitle = document.title;
+        document.title = filename;
         try { iframe.contentWindow?.print(); printed = true; showHeadersTipOnce(); }
         catch { /* ignore */ }
+        finally { setTimeout(() => { document.title = originalTitle; }, 1500); }
       }
     }, 4000);
   } catch (e) {

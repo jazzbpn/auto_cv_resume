@@ -5,20 +5,23 @@ interface Props { onImport: () => void; }
 
 export function TopBar({ onImport }: Props) {
   return (
-    <header class="top-bar">
-      <div class="brand-row">
-        <div class="brand">CV<span> · </span>PDF</div>
-        <span class="free-badge" aria-label="100% Free, no sign-up, no card required">
-          <span class="free-badge-dot" aria-hidden />
-          100% Free
-        </span>
-        <SaveIndicator />
+    <>
+      <div class="free-ribbon" aria-label="100% Free, no sign-up, no card required">
+        <span>100% FREE</span>
       </div>
-      <div class="top-actions">
-        <button class="import-btn" type="button" onClick={onImport}>⬆ Import CV</button>
-        <button class="export-btn" type="button" onClick={() => { void printResume(); }}>⬇ Export</button>
-      </div>
-    </header>
+      <header class="top-bar">
+        <div class="brand-row">
+          <a class="brand-lockup" href="/" aria-label="CVPDF">
+            <span class="brand-name">CV<span>PDF</span></span>
+          </a>
+          <SaveIndicator />
+        </div>
+        <div class="top-actions">
+          <button class="import-btn" type="button" onClick={onImport}>⬆ Import CV</button>
+          <button class="export-btn" type="button" onClick={() => { void printResume(); }}>⬇ Export</button>
+        </div>
+      </header>
+    </>
   );
 }
 

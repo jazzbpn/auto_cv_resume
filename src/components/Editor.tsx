@@ -1,4 +1,4 @@
-import { cv, setPersonal, template, setTemplate, visibility, toggleSection } from '../state/store';
+import { cv, setPersonal, template, setTemplate, visibility, toggleSection, setAllSections } from '../state/store';
 import { SECTIONS,
   emptyEntry, emptyProject, emptyVolunteer, emptyConference,
   emptyCertification, emptyAward, emptyPublication, emptyLanguage, emptyReference,
@@ -60,6 +60,14 @@ export function Editor() {
       </Section>
 
       <Section title="Sections to Show">
+        <div class="vis-actions">
+          <button type="button" class="vis-btn" onClick={() => setAllSections(true)}>
+            Check All
+          </button>
+          <button type="button" class="vis-btn" onClick={() => setAllSections(false)}>
+            Uncheck All
+          </button>
+        </div>
         <div class="vis-grid">
           {SECTIONS.map((s) => (
             <label class="vis-item" key={s.k}>

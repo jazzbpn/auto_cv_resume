@@ -35,7 +35,7 @@
 }
 .analyse-header p {
   font-family: 'Crimson Pro', serif;
-  font-size: .82rem; color: #a09080;
+  font-size: .85rem; color: #d8cfbf;
   font-style: italic; margin: 0;
 }
 
@@ -47,21 +47,21 @@
 }
 .analyse-jd-label {
   display: block;
-  font-family: 'DM Mono', monospace; font-size: .58rem;
+  font-family: 'DM Mono', monospace; font-size: .62rem;
   letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 6px;
+  color: #e6b829; margin-bottom: 6px;
 }
-.analyse-jd-label span { color: #5a4d40; font-size: .55rem; }
+.analyse-jd-label span { color: #8d806e; font-size: .55rem; }
 .analyse-jd-textarea {
   width: 100%;
-  background: #2c2620; border: 1px solid #4a3d30;
-  color: #e8dcc8; font-family: 'Crimson Pro', serif; font-size: .88rem;
-  padding: 9px 11px; border-radius: 5px;
-  outline: none; resize: vertical; line-height: 1.5;
+  background: #2c2620; border: 1px solid #5a4d3e;
+  color: #f0e6d2; font-family: 'Crimson Pro', serif; font-size: .9rem;
+  padding: 10px 12px; border-radius: 5px;
+  outline: none; resize: vertical; line-height: 1.55;
   margin-bottom: 10px;
 }
-.analyse-jd-textarea:focus { border-color: var(--gold); }
-.analyse-jd-textarea::placeholder { color: #5a4d40; }
+.analyse-jd-textarea:focus { border-color: #e6b829; box-shadow: 0 0 0 2px rgba(230, 184, 41, .15); }
+.analyse-jd-textarea::placeholder { color: #9c8d78; opacity: 1; }
 
 .analyse-run-btn {
   width: 100%;
@@ -95,17 +95,17 @@
   padding: 40px 20px;
   text-align: center;
   font-family: 'Crimson Pro', serif;
-  color: #5a4d40;
+  color: #d8cfbf;
   font-style: italic;
   flex: 1;
 }
 .analyse-empty span {
-  display: block; font-size: 2.2rem;
-  margin-bottom: 14px; opacity: .55;
+  display: block; font-size: 2.4rem;
+  margin-bottom: 14px; opacity: .9;
   font-style: normal;
 }
-.analyse-empty p { font-size: .88rem; line-height: 1.6; max-width: 280px; margin: 0 auto; }
-.analyse-empty strong { color: var(--gold); font-style: normal; font-weight: 600; }
+.analyse-empty p { font-size: .92rem; line-height: 1.6; max-width: 280px; margin: 0 auto; }
+.analyse-empty strong { color: #e6b829; font-style: normal; font-weight: 700; }
 
 .ai-spinner {
   display: inline-block; width: 14px; height: 14px;
@@ -163,9 +163,9 @@
 .hero-meta { flex: 1; min-width: 0; }
 .hero-eyebrow {
   font-family: 'DM Mono', monospace;
-  font-size: .55rem; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--gold);
-  margin-bottom: 4px;
+  font-size: .62rem; letter-spacing: .18em;
+  text-transform: uppercase; color: #e6b829;
+  margin-bottom: 5px; font-weight: 700;
 }
 .hero-label {
   font-family: 'Playfair Display', serif;
@@ -175,8 +175,8 @@
 }
 .hero-summary {
   font-family: 'Crimson Pro', serif;
-  font-size: .82rem; color: #a09080;
-  line-height: 1.45; font-style: italic;
+  font-size: .9rem; color: #e0d4be;
+  line-height: 1.5; font-style: italic;
 }
 
 .hero-potential {
@@ -222,11 +222,11 @@
 .sev-title {
   font-family: 'DM Mono', monospace;
   font-size: .58rem; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: #e6b829;
 }
 .sev-total {
   font-family: 'DM Mono', monospace;
-  font-size: .58rem; color: #a09080;
+  font-size: .58rem; color: #c8bbaa;
 }
 .sev-track {
   display: flex; gap: 2px;
@@ -277,7 +277,7 @@
 .kw-meter-title {
   font-family: 'DM Mono', monospace;
   font-size: .58rem; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: #e6b829;
 }
 .kw-meter-count {
   font-family: 'DM Mono', monospace;
@@ -289,7 +289,7 @@
   font-size: 1rem; font-weight: 700; color: var(--paper);
   margin-right: 2px;
 }
-.kw-meter-count span { color: #5a4d40; }
+.kw-meter-count span { color: #a89a85; }
 
 .kw-meter-track {
   height: 10px;
@@ -322,7 +322,7 @@
 
 .kw-meter-pct {
   font-family: 'DM Mono', monospace;
-  font-size: .58rem; color: #a09080; letter-spacing: .04em;
+  font-size: .58rem; color: #c8bbaa; letter-spacing: .04em;
   text-align: right;
 }
 
@@ -337,12 +337,13 @@
 
 .ai-section-hd {
   display: flex; align-items: center; gap: 9px;
-  padding: 11px 13px; cursor: pointer;
+  padding: 12px 14px; cursor: pointer;
   background: #252018;
   width: 100%; text-align: left; border: none;
-  font-family: 'DM Mono', monospace; font-size: .62rem;
+  font-family: 'DM Mono', monospace; font-size: .68rem;
   letter-spacing: .12em; text-transform: uppercase; color: var(--paper);
   min-height: 44px; user-select: none;
+  font-weight: 600;
   transition: background .2s;
 }
 .ai-section-hd:hover { background: #2c2620; }
@@ -365,7 +366,7 @@
   border: 1px solid rgba(255, 255, 255, .08);
 }
 .ai-section-hd .ai-arrow {
-  color: #5a4d40; transition: transform .2s; font-size: .75rem;
+  color: #c8bbaa; transition: transform .2s; font-size: .8rem;
   margin-left: 2px;
 }
 .ai-section-hd.open .ai-arrow { transform: rotate(180deg); }
@@ -384,8 +385,8 @@
 .quick-win-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
 .quick-win-text {
   font-family: 'Crimson Pro', serif;
-  font-size: .87rem; line-height: 1.5;
-  color: #d8cfbf;
+  font-size: .92rem; line-height: 1.55;
+  color: #ece1c8;
 }
 
 /* ── Issue card with severity stripe ── */
@@ -415,49 +416,51 @@
 .issue-sev-icon { font-size: .9rem; flex-shrink: 0; }
 .issue-card-title {
   font-family: 'DM Mono', monospace;
-  font-size: .62rem; letter-spacing: .04em;
-  color: #e8dcc8; line-height: 1.3;
+  font-size: .68rem; letter-spacing: .04em;
+  color: #f0e6d2; line-height: 1.35; font-weight: 600;
 }
 .issue-card-desc {
   font-family: 'Crimson Pro', serif;
-  font-size: .85rem; color: #a09080;
-  line-height: 1.5;
+  font-size: .9rem; color: #dccfb8;
+  line-height: 1.55;
 }
 .issue-card-fix {
   margin-top: 8px;
-  padding: 8px 10px;
-  background: #1e1a16;
-  border-left: 3px solid var(--gold);
+  padding: 9px 12px;
+  background: #1a1612;
+  border-left: 3px solid #e6b829;
   border-radius: 0 4px 4px 0;
   font-family: 'Crimson Pro', serif;
-  font-size: .82rem; color: #c8bfad;
-  font-style: italic; line-height: 1.5;
+  font-size: .88rem; color: #e0d4be;
+  font-style: italic; line-height: 1.55;
 }
 .issue-card-fix-eyebrow {
   display: inline-block;
   font-family: 'DM Mono', monospace;
-  font-size: .52rem; font-style: normal;
+  font-size: .58rem; font-style: normal;
   letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gold);
+  color: #e6b829;
   margin-right: 6px;
+  font-weight: 700;
 }
 
 /* ── Keyword pills (inside accordion) ── */
 .ai-kw-block { margin-bottom: 10px; }
 .ai-kw-block:last-child { margin-bottom: 0; }
 .ai-kw-head {
-  font-family: 'DM Mono', monospace; font-size: .55rem;
-  letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px;
+  font-family: 'DM Mono', monospace; font-size: .62rem;
+  letter-spacing: .1em; text-transform: uppercase; margin-bottom: 7px;
+  font-weight: 700;
 }
-.ai-kw-found   { color: #2ecc71; }
-.ai-kw-missing { color: #e74c3c; }
+.ai-kw-found   { color: #6dffa3; }
+.ai-kw-missing { color: #ff8b7d; }
 .ai-kw-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
 .ai-kw {
-  font-family: 'DM Mono', monospace; font-size: .58rem;
-  padding: 3px 9px; border-radius: 999px; letter-spacing: .04em;
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  padding: 4px 10px; border-radius: 999px; letter-spacing: .04em;
 }
-.ai-kw.present { background: rgba(46, 204, 113, .15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, .25); }
-.ai-kw.missing { background: rgba(231, 76, 60, .15);  color: #e74c3c; border: 1px solid rgba(231, 76, 60, .25); }
+.ai-kw.present { background: rgba(46, 204, 113, .18); color: #8effb8; border: 1px solid rgba(46, 204, 113, .4); }
+.ai-kw.missing { background: rgba(231, 76, 60, .18);  color: #ffa090; border: 1px solid rgba(231, 76, 60, .4); }
 
 /* ───────── STICKY BOTTOM FOOTER ───────── */
 .analyse-footer {
@@ -499,7 +502,7 @@
 .analyse-fix-cta p,
 .analyse-undo-cta p {
   font-family: 'Crimson Pro', serif;
-  font-size: .82rem; color: #a09080; line-height: 1.5;
+  font-size: .88rem; color: #e0d4be; line-height: 1.55;
   font-style: italic; margin: 0;
 }
 

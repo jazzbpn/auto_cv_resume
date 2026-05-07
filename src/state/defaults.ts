@@ -28,7 +28,7 @@ export const DEFAULT_VISIBILITY: Record<SectionKey, boolean> = {
 
 export const DEFAULT_CV: CV = {
   personal: {
-    name: 'Alexandra Beaumont',
+    name: 'Jomes Deep',
     title: 'Senior Product Designer',
     email: 'alex@beaumont.io',
     phone: '+1 (415) 882-0044',
