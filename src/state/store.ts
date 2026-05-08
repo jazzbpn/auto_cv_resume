@@ -147,25 +147,38 @@ export function replaceCV(next: CV) {
 /**
  * Write the AI's optimized summary + experience descriptions into the form,
  * snapshotting the previous CV so it can be restored. Returns `true` if any
- * rewrites were actually applied; `false` when the AI response had no
- * usable rewrites (e.g. truncated and the repair stripped them) so the
- * caller can show a helpful message instead of a misleading "fixed" state.
+ * rewrites were applied; `false` when the AI response had no usable
+ * rewrites (e.g. truncated and the repair stripped them). The caller can
+ * show a helpful message instead of a misleading "fixed" state.
+ *
+ * Note: we don't require the AI's summary to differ from the existing one
+ * — for a strong CV, the AI may return the same text verbatim. We still
+ * count that as "applied" so the user gets the projected score and the
+ * state transition.
  */
 export function applyAIFix(): boolean {
   const r = aiResult.value;
   if (!r) return false;
   const optExp = Array.isArray(r.optimized_experience) ? r.optimized_experience : [];
   const optSummary = (r.optimized_summary ?? '').trim();
-  const hasSummaryRewrite = !!optSummary && optSummary !== cv.value.personal.summary;
+  const hasSummary = !!optSummary;
   const hasExpRewrites = optExp.some(o => (o?.optimized_desc ?? '').trim() !== '');
-  if (!hasSummaryRewrite && !hasExpRewrites) return false;
+  if (!hasSummary && !hasExpRewrites) {
+    // Surface the diagnostic so a developer / curious user can see what
+    // the AI actually returned in DevTools.
+    console.warn('[applyAIFix] AI response had no rewrites', {
+      optimized_summary: r.optimized_summary,
+      optimized_experience: r.optimized_experience,
+    });
+    return false;
+  }
 
   const before = cv.value;
   const next: CV = {
     ...before,
     personal: {
       ...before.personal,
-      summary: hasSummaryRewrite ? optSummary : before.personal.summary,
+      summary: hasSummary ? optSummary : before.personal.summary,
     },
     experience: before.experience.map((e, i) => {
       const o = optExp.find(x => x?.index === i);

@@ -15,9 +15,18 @@ function autoFixResume(): void {
   const applied = applyAIFix();
   if (applied) {
     showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
-  } else {
-    showToast('AI did not return rewrites for this analysis. Tap Re-analyse to try again.');
+    return;
   }
+  // No rewrites in this response. If the AI also said the score can't
+  // improve, frame it positively. Otherwise it's likely a truncated /
+  // weak response — point the user at Re-analyse.
+  const r = aiResult.value;
+  const sameScore = r && (r.optimized_ats_score ?? r.ats_score) <= r.ats_score;
+  showToast(
+    sameScore
+      ? '✓ Your CV is already optimised — no rewrites needed.'
+      : 'AI returned no rewrite text. Tap Re-analyse to try again.',
+  );
 }
 
 async function reAnalyseFresh(): Promise<void> {
