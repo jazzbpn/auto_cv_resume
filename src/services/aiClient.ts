@@ -255,6 +255,40 @@ export function cvToText(cv: CV): string {
   return lines.join('\n');
 }
 
+/**
+ * Coerce a possibly-partial AI response into a fully-shaped AIResult so
+ * downstream renderers (which assume arrays exist, scores are numbers, etc.)
+ * don't throw on a truncated / weird response.
+ */
+function normalizeAIResult(p: unknown): AIResult {
+  const o = (p ?? {}) as Record<string, unknown>;
+  const num = (v: unknown, fallback = 0) =>
+    typeof v === 'number' && Number.isFinite(v) ? v : fallback;
+  const str = (v: unknown, fallback = '') =>
+    typeof v === 'string' ? v : fallback;
+  const arr = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : []);
+  const ats = num(o.ats_score);
+  const opt = num(o.optimized_ats_score, ats);
+  const labelRaw = str(o.score_label);
+  const label: AIResult['score_label'] =
+    labelRaw === 'Excellent' || labelRaw === 'Good' ||
+    labelRaw === 'Fair' || labelRaw === 'Poor'
+      ? labelRaw
+      : (ats >= 80 ? 'Excellent' : ats >= 60 ? 'Good' : ats >= 40 ? 'Fair' : 'Poor');
+  return {
+    ats_score: ats,
+    optimized_ats_score: opt < ats ? ats : opt,
+    score_label: label,
+    summary: str(o.summary),
+    issues: arr<AIResult['issues'][number]>(o.issues),
+    keywords_present: arr<string>(o.keywords_present),
+    keywords_missing: arr<string>(o.keywords_missing),
+    optimized_summary: str(o.optimized_summary),
+    optimized_experience: arr<AIResult['optimized_experience'][number]>(o.optimized_experience),
+    quick_wins: arr<string>(o.quick_wins),
+  };
+}
+
 export async function reviewCV(cv: CV, jobDescription: string): Promise<AIResult> {
   const userMsg = jobDescription.trim()
     ? `JOB DESCRIPTION TO MATCH:\n${jobDescription}\n\n---\n\nMY CV:\n${cvToText(cv)}`
@@ -269,7 +303,17 @@ export async function reviewCV(cv: CV, jobDescription: string): Promise<AIResult
       { role: 'user', content: userMsg },
     ],
   });
-  return parseJSONFromText<AIResult>(raw);
+  const parsed = parseJSONFromText<unknown>(raw);
+  const o = (parsed ?? {}) as Record<string, unknown>;
+  // Reject responses that are missing the score entirely. parsing succeeded
+  // but rendering would be useless without it — treat as a transient failure
+  // so the user sees the "try again" banner instead of a blank panel.
+  if (typeof o.ats_score !== 'number' || !Number.isFinite(o.ats_score)) {
+    throw new Error(
+      'AI response was incomplete (no score). Tap Re-analyse to try again.',
+    );
+  }
+  return normalizeAIResult(parsed);
 }
 
 export interface ImportedCV {
