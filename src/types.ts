@@ -129,14 +129,30 @@ export interface AIIssue {
 export interface AIResult {
   /** Score of the CV as currently written. */
   ats_score: number;
-  /** Estimated score after applying optimized_summary + optimized_experience. */
-  optimized_ats_score: number;
   score_label: 'Excellent' | 'Good' | 'Fair' | 'Poor';
   summary: string;
   issues: AIIssue[];
   keywords_present: string[];
   keywords_missing: string[];
-  optimized_summary: string;
-  optimized_experience: { index: number; optimized_desc: string }[];
   quick_wins: string[];
+}
+
+/**
+ * Output of the secondary "optimize" call — fetched in parallel with the
+ * analysis so total perceived time is max(analyse, optimize). Each text
+ * field is optional: the AI returns an empty string / array for sections
+ * it judges already strong, and applyAIFix only writes through fields
+ * that have content.
+ */
+export interface AIOptimize {
+  /** Projected score AFTER applying the rewrites. >= current ats_score. */
+  optimized_ats_score: number;
+  optimized_summary: string;
+  optimized_objective: string;
+  optimized_skills_tech: string;
+  optimized_skills_soft: string;
+  optimized_skills_tools: string;
+  optimized_experience: { index: number; optimized_desc: string }[];
+  optimized_education: { index: number; optimized_desc: string }[];
+  optimized_projects: { index: number; optimized_desc: string }[];
 }

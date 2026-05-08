@@ -56,12 +56,34 @@ function aiDevProxy(apiKey: string): Plugin {
           });
           res.statusCode = upstream.status;
           res.setHeader('Content-Type', upstream.headers.get('content-type') ?? 'application/json');
-          const text = await upstream.text();
-          res.end(text);
+          // Pipe upstream → client unbuffered so streaming SSE chunks reach
+          // the browser as they arrive. Buffering via `upstream.text()`
+          // would defeat the streaming UX in dev.
+          if (upstream.body) {
+            const reader = upstream.body.getReader();
+            try {
+              for (;;) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                if (value) res.write(Buffer.from(value));
+              }
+            } finally {
+              reader.releaseLock();
+            }
+          }
+          res.end();
         } catch (e) {
-          res.statusCode = 502;
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ error: { message: `Upstream fetch failed: ${e instanceof Error ? e.message : String(e)}` } }));
+          // If the stream pipe already flushed any bytes, headers / status
+          // are committed and we can only end the response. Otherwise emit
+          // a JSON error envelope the client can describe.
+          const msg = e instanceof Error ? e.message : String(e);
+          if (res.headersSent) {
+            try { res.end(); } catch { /* socket already closed */ }
+          } else {
+            res.statusCode = 502;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: { message: `Upstream fetch failed: ${msg}` } }));
+          }
         }
       });
     },

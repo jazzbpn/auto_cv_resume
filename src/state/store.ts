@@ -1,5 +1,5 @@
 import { signal, computed, effect } from '@preact/signals';
-import type { CV, SectionKey, TemplateId, AIResult, CollectionKey } from '../types';
+import type { CV, SectionKey, TemplateId, AIResult, AIOptimize, CollectionKey } from '../types';
 import { DEFAULT_CV, DEFAULT_TEMPLATE, DEFAULT_VISIBILITY } from './defaults';
 import { idbGet, idbPut, requestPersistentStorage } from '../services/idb';
 
@@ -40,6 +40,12 @@ export const cv = signal<CV>(initial.cv);
 export const template = signal<TemplateId>(initial.template);
 export const visibility = signal<Record<SectionKey, boolean>>(initial.visibility);
 export const aiResult = signal<AIResult | null>(null);
+/**
+ * Result of the secondary "optimize" call (rewrites + projected score).
+ * Fetched in the background after aiResult lands so the panel paints fast.
+ * Read by HeroScore (for the "Potential" preview) and by applyAIFix.
+ */
+export const aiOptimize = signal<AIOptimize | null>(null);
 /** Snapshot of cv taken right before applyAIFix mutates it; null when no AI fix is in effect. */
 export const aiSnapshot = signal<CV | null>(null);
 
@@ -157,34 +163,57 @@ export function replaceCV(next: CV) {
  * state transition.
  */
 export function applyAIFix(): boolean {
-  const r = aiResult.value;
-  if (!r) return false;
-  const optExp = Array.isArray(r.optimized_experience) ? r.optimized_experience : [];
-  const optSummary = (r.optimized_summary ?? '').trim();
-  const hasSummary = !!optSummary;
-  const hasExpRewrites = optExp.some(o => (o?.optimized_desc ?? '').trim() !== '');
-  if (!hasSummary && !hasExpRewrites) {
-    // Surface the diagnostic so a developer / curious user can see what
-    // the AI actually returned in DevTools.
-    console.warn('[applyAIFix] AI response had no rewrites', {
-      optimized_summary: r.optimized_summary,
-      optimized_experience: r.optimized_experience,
-    });
+  const opt = aiOptimize.value;
+  if (!opt) return false;
+
+  const trimStr = (s: string | undefined | null) => (s ?? '').trim();
+  const optSummary = trimStr(opt.optimized_summary);
+  const optObjective = trimStr(opt.optimized_objective);
+  const optSkillsTech = trimStr(opt.optimized_skills_tech);
+  const optSkillsSoft = trimStr(opt.optimized_skills_soft);
+  const optSkillsTools = trimStr(opt.optimized_skills_tools);
+  const optExp = Array.isArray(opt.optimized_experience) ? opt.optimized_experience : [];
+  const optEdu = Array.isArray(opt.optimized_education) ? opt.optimized_education : [];
+  const optProj = Array.isArray(opt.optimized_projects) ? opt.optimized_projects : [];
+
+  const anyListRewrite = (arr: { optimized_desc?: string }[]) =>
+    arr.some(o => trimStr(o?.optimized_desc) !== '');
+
+  const hasAnyRewrite =
+    !!optSummary || !!optObjective ||
+    !!optSkillsTech || !!optSkillsSoft || !!optSkillsTools ||
+    anyListRewrite(optExp) || anyListRewrite(optEdu) || anyListRewrite(optProj);
+
+  if (!hasAnyRewrite) {
+    console.warn('[applyAIFix] AI response had no rewrites', opt);
     return false;
   }
+
+  // For each list-section: only replace desc on entries the AI rewrote;
+  // entries without a matching index keep their original text. Indexes are
+  // matched against the entry's 0-based position in the source CV.
+  const applyDescRewrites = <T extends { desc: string }>(
+    items: T[], rewrites: { index: number; optimized_desc: string }[],
+  ): T[] => items.map((e, i) => {
+    const r = rewrites.find(x => x?.index === i);
+    const desc = trimStr(r?.optimized_desc);
+    return desc ? { ...e, desc } : e;
+  });
 
   const before = cv.value;
   const next: CV = {
     ...before,
     personal: {
       ...before.personal,
-      summary: hasSummary ? optSummary : before.personal.summary,
+      summary:     optSummary     || before.personal.summary,
+      objective:   optObjective   || before.personal.objective,
+      skillsTech:  optSkillsTech  || before.personal.skillsTech,
+      skillsSoft:  optSkillsSoft  || before.personal.skillsSoft,
+      skillsTools: optSkillsTools || before.personal.skillsTools,
     },
-    experience: before.experience.map((e, i) => {
-      const o = optExp.find(x => x?.index === i);
-      const desc = (o?.optimized_desc ?? '').trim();
-      return desc ? { ...e, desc } : e;
-    }),
+    experience: applyDescRewrites(before.experience, optExp),
+    education:  applyDescRewrites(before.education,  optEdu),
+    projects:   applyDescRewrites(before.projects,   optProj),
   };
   aiSnapshot.value = before;
   cv.value = next;

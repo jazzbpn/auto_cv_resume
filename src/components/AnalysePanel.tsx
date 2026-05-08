@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { aiResult, aiSnapshot, applyAIFix, undoAIFix, commitAIFix } from '../state/store';
-import { aiJD, aiStatus, aiError, runAIReview } from '../state/ai';
+import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix } from '../state/store';
+import { aiJD, aiStatus, aiError, aiOptimizeStatus, aiOptimizeError, runAIReview, runAIOptimize } from '../state/ai';
 import { showToast } from './Toast';
 import type { AIResult, AIIssue } from '../types';
 
@@ -11,17 +11,32 @@ import type { AIResult, AIIssue } from '../types';
  * model already returned in the initial analysis. Undo and Re-analyse stay
  * one click away in the success banner.
  */
-function autoFixResume(): void {
+async function autoFixResume(): Promise<void> {
+  // Rewrites are fetched in the background after the analysis lands. If the
+  // user clicks Auto-Fix before that lands (or the prefetch failed), trigger
+  // / await the optimize call now so we have something to apply.
+  if (!aiOptimize.value) {
+    showToast('Preparing your AI fixes…');
+    await runAIOptimize();
+  }
+  // The optimize call itself failed (network / parse / truncation). Surface
+  // the real cause instead of the generic "no rewrite text" message — that
+  // would imply the AI ran successfully and just had nothing to say.
+  if (!aiOptimize.value && aiOptimizeStatus.value === 'error') {
+    showToast(`Auto-Fix failed: ${aiOptimizeError.value || 'try Re-analyse and Auto-Fix again.'}`);
+    return;
+  }
   const applied = applyAIFix();
   if (applied) {
     showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
     return;
   }
-  // No rewrites in this response. If the AI also said the score can't
-  // improve, frame it positively. Otherwise it's likely a truncated /
-  // weak response — point the user at Re-analyse.
+  // applyAIFix returned false: the optimize call succeeded but the AI
+  // returned all-empty rewrites. With the current prompt this should be
+  // rare; if it happens, distinguish "already optimal" from "weak response".
+  const opt = aiOptimize.value;
   const r = aiResult.value;
-  const sameScore = r && (r.optimized_ats_score ?? r.ats_score) <= r.ats_score;
+  const sameScore = !!(opt && r && opt.optimized_ats_score <= r.ats_score);
   showToast(
     sameScore
       ? '✓ Your CV is already optimised — no rewrites needed.'
@@ -62,8 +77,10 @@ function useCyclingPhrase(phrases: string[], intervalMs = 2400): string {
 
 export function AnalysePanel() {
   const r = aiResult.value;
+  const opt = aiOptimize.value;
   const fixed = !!aiSnapshot.value;
   const loading = aiStatus.value === 'loading';
+  const optimizing = aiOptimizeStatus.value === 'loading';
   const phase = useCyclingPhrase(ANALYSE_PHASES);
 
   return (
@@ -122,9 +139,9 @@ export function AnalysePanel() {
 
         {r && (
           <div class="analyse-results">
-            <HeroScore result={r} fixed={fixed} />
+            <HeroScore result={r} optimized={opt?.optimized_ats_score ?? null} fixed={fixed} />
             {fixed ? (
-              <FixedBanner result={r} />
+              <FixedBanner result={r} optimized={opt?.optimized_ats_score ?? null} />
             ) : (
               <>
                 <SeverityBar issues={r.issues} />
@@ -149,17 +166,18 @@ export function AnalysePanel() {
             <div>
               <strong>One-click optimisation</strong>
               <p>
-                Apply our rewrites to your summary and experience in one tap.
-                Score updates instantly. You can undo any time.
+                Apply our rewrites across your summary, objective, skills,
+                experience, education, and projects in one tap. Score
+                updates instantly. You can undo any time.
               </p>
             </div>
             <button
               type="button"
               class="analyse-fix-btn"
               disabled={loading}
-              onClick={autoFixResume}
+              onClick={() => { void autoFixResume(); }}
             >
-              ✦ Auto-Fix My Resume
+              {optimizing && !opt ? '✦ Preparing fixes…' : '✦ Auto-Fix My Resume'}
             </button>
           </div>
         </footer>
@@ -170,9 +188,9 @@ export function AnalysePanel() {
 
 /* ── Fixed-state success banner: shown after one-click auto-fix ────────────── */
 
-function FixedBanner({ result: r }: { result: AIResult }) {
+function FixedBanner({ result: r, optimized }: { result: AIResult; optimized: number | null }) {
   const base = Math.max(0, Math.min(100, r.ats_score | 0));
-  const optimised = Math.max(base, Math.min(100, (r.optimized_ats_score ?? base) | 0));
+  const optimised = Math.max(base, Math.min(100, (optimized ?? base) | 0));
   const delta = optimised - base;
   return (
     <div class="fixed-banner">
@@ -229,11 +247,14 @@ function useCountUp(target: number, durationMs = 900): number {
   return val;
 }
 
-function HeroScore({ result: r, fixed }: { result: AIResult; fixed: boolean }) {
+function HeroScore({ result: r, optimized, fixed }: { result: AIResult; optimized: number | null; fixed: boolean }) {
   const baseScore = Math.max(0, Math.min(100, r.ats_score | 0));
-  const optimised = Math.max(baseScore, Math.min(100, (r.optimized_ats_score ?? baseScore) | 0));
+  const optimised = Math.max(baseScore, Math.min(100, (optimized ?? baseScore) | 0));
   const score = fixed ? optimised : baseScore;
-  const delta = optimised - baseScore;
+  // No projected delta until the background optimize call lands. Until then,
+  // the "Potential X / +Y with AI fix" line stays hidden — avoids showing
+  // a misleading "+0" while rewrites are still being generated.
+  const delta = optimized != null ? optimised - baseScore : 0;
   const band = scoreBand(score);
   const color = bandColor(score);
 
