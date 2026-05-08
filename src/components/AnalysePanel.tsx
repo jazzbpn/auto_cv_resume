@@ -17,11 +17,13 @@ function autoFixResume(): void {
 }
 
 async function reAnalyseFresh(): Promise<void> {
-  // Re-analyse always operates on the current CV. If a fix is applied, drop
-  // the snapshot so the panel exits the "fixed" state when the new result
-  // lands.
-  commitAIFix();
+  // Re-analyse operates on the current CV. We *don't* drop the fix snapshot
+  // up-front: doing so would flip the panel out of the "fixed" state during
+  // the AI call and the score would visibly regress (optimised → base →
+  // newScore). Instead, await the new result and only commit on success —
+  // a failed rescore leaves the fix in place so the user can retry.
   await runAIReview();
+  if (aiStatus.value !== 'error') commitAIFix();
 }
 
 export function AnalysePanel() {
