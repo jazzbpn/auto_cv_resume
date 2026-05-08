@@ -146,25 +146,36 @@ export function replaceCV(next: CV) {
 
 /**
  * Write the AI's optimized summary + experience descriptions into the form,
- * snapshotting the previous CV so it can be restored.
+ * snapshotting the previous CV so it can be restored. Returns `true` if any
+ * rewrites were actually applied; `false` when the AI response had no
+ * usable rewrites (e.g. truncated and the repair stripped them) so the
+ * caller can show a helpful message instead of a misleading "fixed" state.
  */
-export function applyAIFix() {
+export function applyAIFix(): boolean {
   const r = aiResult.value;
-  if (!r) return;
+  if (!r) return false;
+  const optExp = Array.isArray(r.optimized_experience) ? r.optimized_experience : [];
+  const optSummary = (r.optimized_summary ?? '').trim();
+  const hasSummaryRewrite = !!optSummary && optSummary !== cv.value.personal.summary;
+  const hasExpRewrites = optExp.some(o => (o?.optimized_desc ?? '').trim() !== '');
+  if (!hasSummaryRewrite && !hasExpRewrites) return false;
+
   const before = cv.value;
   const next: CV = {
     ...before,
     personal: {
       ...before.personal,
-      summary: r.optimized_summary || before.personal.summary,
+      summary: hasSummaryRewrite ? optSummary : before.personal.summary,
     },
     experience: before.experience.map((e, i) => {
-      const o = r.optimized_experience.find(x => x.index === i);
-      return o?.optimized_desc ? { ...e, desc: o.optimized_desc } : e;
+      const o = optExp.find(x => x?.index === i);
+      const desc = (o?.optimized_desc ?? '').trim();
+      return desc ? { ...e, desc } : e;
     }),
   };
   aiSnapshot.value = before;
   cv.value = next;
+  return true;
 }
 
 /** Restore the form to its pre-fix state. No-op if no snapshot. */

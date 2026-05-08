@@ -12,8 +12,12 @@ import type { AIResult, AIIssue } from '../types';
  * one click away in the success banner.
  */
 function autoFixResume(): void {
-  applyAIFix();
-  showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
+  const applied = applyAIFix();
+  if (applied) {
+    showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
+  } else {
+    showToast('AI did not return rewrites for this analysis. Tap Re-analyse to try again.');
+  }
 }
 
 async function reAnalyseFresh(): Promise<void> {
