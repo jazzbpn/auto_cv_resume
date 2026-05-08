@@ -77,21 +77,100 @@ async function callProxy(body: ChatRequest): Promise<string> {
   return text;
 }
 
+/**
+ * Walk a JSON-ish string and return a stack of unmatched openers ('{'/'['),
+ * along with a flag for whether the string ended mid-quoted-value and the
+ * position of the last "safe" cut point (right after a closed string, a
+ * closed bracket, or a comma).
+ */
+function scanJSON(s: string): {
+  stack: string[];
+  inString: boolean;
+  lastSafe: number;
+} {
+  const stack: string[] = [];
+  let inString = false;
+  let escape = false;
+  let lastSafe = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (escape) { escape = false; continue; }
+    if (c === '\\') { escape = true; continue; }
+    if (c === '"') {
+      if (inString) { inString = false; lastSafe = i; }
+      else inString = true;
+      continue;
+    }
+    if (inString) continue;
+    if (c === '{' || c === '[') {
+      stack.push(c);
+    } else if (c === '}' || c === ']') {
+      stack.pop();
+      lastSafe = i;
+    } else if (c === ',') {
+      lastSafe = i;
+    }
+  }
+  return { stack, inString, lastSafe };
+}
+
+/**
+ * Repair a truncated JSON object by closing open structures in the right
+ * (reverse-nesting) order and trimming dangling keys / colons / commas.
+ * Returns the input unchanged if it looks structurally complete.
+ */
+function repairTruncatedJSON(input: string): string {
+  let s = input.trimEnd();
+  let scan = scanJSON(s);
+  // If we ended inside a string, lop the unfinished token off back to the
+  // last safe delimiter (closing quote of the previous value, comma, or
+  // close-bracket).
+  if (scan.inString && scan.lastSafe >= 0) {
+    s = s.slice(0, scan.lastSafe + 1);
+    scan = scanJSON(s);
+  }
+  // Iteratively strip dangling tokens that would prevent a clean close:
+  // trailing comma, trailing colon, and bare string tokens that look like
+  // dangling keys (only inside an object — in an array a trailing string
+  // is a complete value we want to keep).
+  let prev: string;
+  do {
+    prev = s;
+    s = s.replace(/,\s*$/, '');
+    s = s.replace(/:\s*$/, '');
+    const top = scanJSON(s).stack;
+    const inObject = top.length > 0 && top[top.length - 1] === '{';
+    if (inObject) s = s.replace(/"[^"\\]*"\s*$/, '');
+  } while (s !== prev);
+  // Re-scan after stripping so closes happen in the correct order.
+  scan = scanJSON(s);
+  let closer = '';
+  while (scan.stack.length) {
+    const opener = scan.stack.pop()!;
+    closer += opener === '{' ? '}' : ']';
+  }
+  return s + closer;
+}
+
 function parseJSONFromText<T>(raw: string): T {
   const stripped = raw.trim().replace(/^```(?:json)?\n?|```$/g, '').trim();
   try { return JSON.parse(stripped) as T; } catch { /* fall through */ }
-  const m = stripped.match(/\{[\s\S]*\}/);
-  if (!m) {
+  // Slice from the first { to make the regex / repair tolerant of any
+  // stray prose before the JSON.
+  const start = stripped.indexOf('{');
+  if (start < 0) {
     throw new Error(
-      'AI did not return valid JSON. Try again, or paste a shorter CV.',
+      'AI did not return valid JSON. Tap Re-analyse to try again.',
     );
   }
-  try { return JSON.parse(m[0]) as T; }
-  catch {
-    throw new Error(
-      'AI response was truncated mid-output. Tap Re-analyse to try again. If it keeps failing, your CV may have too many entries for a single response.',
-    );
+  const candidate = stripped.slice(start);
+  // Try the candidate as-is, then a brace-balancing repair for truncation.
+  for (const attempt of [candidate, repairTruncatedJSON(candidate)]) {
+    try { return JSON.parse(attempt) as T; } catch { /* try next */ }
   }
+  throw new Error(
+    'AI response was truncated mid-output. Tap Re-analyse to try again. If it keeps failing, your CV may have too many entries for one response.',
+  );
 }
 
 const REVIEW_SYSTEM = `You are an elite ATS (Applicant Tracking System) expert and professional resume coach. Analyse the provided CV/resume and respond with a single JSON object — no markdown, no explanation, just raw JSON.
@@ -182,7 +261,7 @@ export async function reviewCV(cv: CV, jobDescription: string): Promise<AIResult
     : `Please analyse this CV for general ATS optimisation (no specific job description provided):\n\n${cvToText(cv)}`;
   const raw = await callProxy({
     model: MODEL,
-    max_tokens: 4096,
+    max_tokens: 8192,
     temperature: 0,
     response_format: { type: 'json_object' },
     messages: [
