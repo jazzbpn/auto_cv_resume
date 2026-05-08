@@ -447,6 +447,110 @@
   text-align: right;
 }
 
+/* ───────── FIXED-STATE SUCCESS BANNER ───────── */
+.fixed-banner {
+  margin: var(--s4) var(--s4) var(--s5);
+  padding: var(--s4) var(--s4) var(--s3);
+  background:
+    radial-gradient(ellipse at top left, rgba(46, 204, 113, .14), transparent 70%),
+    linear-gradient(135deg, rgba(46, 204, 113, .1), rgba(46, 204, 113, .04));
+  border: 1px solid rgba(46, 204, 113, .35);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(46, 204, 113, .1);
+  animation: result-rise var(--dur-slow) var(--ease-out);
+}
+.fixed-banner-head {
+  display: flex; align-items: flex-start; gap: var(--s3);
+  margin-bottom: var(--s3);
+}
+.fixed-banner-icon {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1f8050, #2ecc71);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .9rem; font-weight: 700;
+  box-shadow: 0 0 18px rgba(46, 204, 113, .5);
+  animation: check-pop var(--dur-base) var(--ease-spring);
+}
+.fixed-banner strong {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 700;
+  color: #6dffa3;
+  margin-bottom: var(--s1);
+}
+.fixed-banner p {
+  font-family: 'Crimson Pro', serif;
+  font-size: .9rem; color: #e0d4be;
+  line-height: 1.5; margin: 0;
+}
+.fixed-banner p b {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--paper);
+  font-feature-settings: 'tnum';
+  margin: 0 1px;
+}
+.fixed-banner-delta {
+  display: inline-block;
+  padding: 1px 8px;
+  margin-left: 4px;
+  background: rgba(46, 204, 113, .25);
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: .7rem; font-weight: 700;
+  color: #6dffa3;
+  font-style: normal;
+  letter-spacing: .04em;
+  vertical-align: 2px;
+}
+.fixed-banner-actions {
+  display: flex; gap: var(--s2);
+  margin-top: var(--s3);
+}
+.fixed-banner-actions > button { flex: 1; }
+.analyse-reanalyse-btn {
+  background: linear-gradient(135deg, #b8860b, #d4a017);
+  color: #1a1510; border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 10px 14px; border-radius: 999px; cursor: pointer;
+  min-height: 42px; touch-action: manipulation;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .15) inset,
+    0 4px 14px rgba(184, 134, 11, .35);
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+.analyse-reanalyse-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .2) inset,
+    0 6px 18px rgba(184, 134, 11, .5);
+}
+.analyse-reanalyse-btn:active { transform: scale(.98); }
+
+.fixed-banner-foot {
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid rgba(46, 204, 113, .15);
+  font-size: .78rem !important;
+  color: #c8bbaa !important;
+  font-style: italic;
+}
+.fixed-banner-foot strong {
+  display: inline !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: .68rem !important;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #e6b829 !important;
+  margin: 0 !important;
+}
+
 /* ───────── ACCORDION SECTIONS ───────── */
 .ai-sections { padding: var(--s3) var(--s4); }
 .ai-section {

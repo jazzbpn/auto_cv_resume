@@ -4,19 +4,23 @@ import { aiJD, aiStatus, aiError, runAIReview } from '../state/ai';
 import { showToast } from './Toast';
 import type { AIResult, AIIssue } from '../types';
 
-async function applyAIFixAndRescore(): Promise<void> {
+/**
+ * One-click fix: apply the AI's rewrites into the form + preview, swap the
+ * displayed score to the optimized projection, collapse the panel to the
+ * "fixed" state. No second API call — we trust the optimized_ats_score the
+ * model already returned in the initial analysis. Undo and Re-analyse stay
+ * one click away in the success banner.
+ */
+function autoFixResume(): void {
   applyAIFix();
-  // After mutating the form, re-run analysis so the displayed score and
-  // issues reflect the rewritten content (otherwise the panel still shows
-  // the score of the previous version).
-  await runAIReview();
+  showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
 }
 
-async function commitAndRescore(): Promise<void> {
+async function reAnalyseFresh(): Promise<void> {
+  // Re-analyse always operates on the current CV. If a fix is applied, drop
+  // the snapshot so the panel exits the "fixed" state when the new result
+  // lands.
   commitAIFix();
-  // Refresh the score against the just-committed CV. Guarantees the panel
-  // matches the saved state — important when the prior rescore failed
-  // (truncation, network) and the displayed score is still stale.
   await runAIReview();
 }
 
@@ -48,7 +52,7 @@ export function AnalysePanel() {
             type="button"
             class="analyse-run-btn"
             disabled={loading}
-            onClick={() => { void runAIReview(); }}
+            onClick={() => { void reAnalyseFresh(); }}
           >
             {loading
               ? <><span class="ai-spinner" /> Analysing…</>
@@ -75,71 +79,87 @@ export function AnalysePanel() {
 
         {r && (
           <div class={`analyse-results${loading ? ' is-rescoring' : ''}`}>
-            <HeroScore result={r} canApplyFix={!fixed} />
-            <SeverityBar issues={r.issues} />
-            <KeywordMeter
-              present={r.keywords_present}
-              missing={r.keywords_missing}
-            />
-            <IssuesAccordion issues={r.issues} quickWins={r.quick_wins} />
-            <KeywordsAccordion
-              present={r.keywords_present}
-              missing={r.keywords_missing}
-            />
+            <HeroScore result={r} fixed={fixed} />
+            {fixed ? (
+              <FixedBanner result={r} />
+            ) : (
+              <>
+                <SeverityBar issues={r.issues} />
+                <KeywordMeter
+                  present={r.keywords_present}
+                  missing={r.keywords_missing}
+                />
+                <IssuesAccordion issues={r.issues} quickWins={r.quick_wins} />
+                <KeywordsAccordion
+                  present={r.keywords_present}
+                  missing={r.keywords_missing}
+                />
+              </>
+            )}
           </div>
         )}
       </div>
 
-      {r && (
+      {r && !fixed && (
         <footer class="analyse-footer">
-          {!fixed ? (
-            <div class="analyse-fix-cta">
-              <div>
-                <strong>Fix everything for me</strong>
-                <p>
-                  Apply our rewrites to your summary and experience descriptions —
-                  writes directly into the form. You can undo.
-                </p>
-              </div>
-              <button
-                type="button"
-                class="analyse-fix-btn"
-                disabled={loading}
-                onClick={() => { void applyAIFixAndRescore(); }}
-              >
-                {loading
-                  ? <><span class="ai-spinner ai-spinner-light" /> Rescoring…</>
-                  : <>✦ Fix Resume with AI</>}
-              </button>
+          <div class="analyse-fix-cta">
+            <div>
+              <strong>One-click optimisation</strong>
+              <p>
+                Apply our rewrites to your summary and experience in one tap.
+                Score updates instantly. You can undo any time.
+              </p>
             </div>
-          ) : (
-            <div class="analyse-undo-cta">
-              <div>
-                <strong>✓ AI rewrites applied to your form</strong>
-                <p>Save to make these changes permanent, or undo to revert to your original text.</p>
-              </div>
-              <div class="analyse-cta-row">
-                <button
-                  type="button"
-                  class="analyse-save-btn"
-                  disabled={loading}
-                  onClick={() => {
-                    showToast('✓ Changes saved. Rescoring against your saved CV…');
-                    void commitAndRescore();
-                  }}
-                >
-                  {loading
-                    ? <><span class="ai-spinner ai-spinner-light" /> Rescoring…</>
-                    : <>✓ Save Changes</>}
-                </button>
-                <button type="button" class="analyse-undo-btn" onClick={undoAIFix}>
-                  ↶ Undo
-                </button>
-              </div>
-            </div>
-          )}
+            <button
+              type="button"
+              class="analyse-fix-btn"
+              disabled={loading}
+              onClick={autoFixResume}
+            >
+              ✦ Auto-Fix My Resume
+            </button>
+          </div>
         </footer>
       )}
+    </div>
+  );
+}
+
+/* ── Fixed-state success banner: shown after one-click auto-fix ────────────── */
+
+function FixedBanner({ result: r }: { result: AIResult }) {
+  const base = Math.max(0, Math.min(100, r.ats_score | 0));
+  const optimised = Math.max(base, Math.min(100, (r.optimized_ats_score ?? base) | 0));
+  const delta = optimised - base;
+  return (
+    <div class="fixed-banner">
+      <div class="fixed-banner-head">
+        <span class="fixed-banner-icon" aria-hidden>✓</span>
+        <div>
+          <strong>Resume optimised</strong>
+          <p>
+            AI rewrites are now in your form and preview.
+            {delta > 0 && (
+              <> Score went from <b>{base}</b> to <b>{optimised}</b> <span class="fixed-banner-delta">+{delta}</span>.</>
+            )}
+          </p>
+        </div>
+      </div>
+      <div class="fixed-banner-actions">
+        <button type="button" class="analyse-undo-btn" onClick={undoAIFix}>
+          ↶ Undo
+        </button>
+        <button
+          type="button"
+          class="analyse-reanalyse-btn"
+          onClick={() => { void reAnalyseFresh(); }}
+        >
+          ↻ Re-analyse
+        </button>
+      </div>
+      <p class="fixed-banner-foot">
+        Want fresh feedback on your fixed CV? Tap <strong>Re-analyse</strong>.
+      </p>
     </div>
   );
 }
@@ -176,10 +196,11 @@ function useCountUp(target: number, durationMs = 900): number {
   return val;
 }
 
-function HeroScore({ result: r, canApplyFix }: { result: AIResult; canApplyFix: boolean }) {
-  const score = Math.max(0, Math.min(100, r.ats_score | 0));
-  const projected = Math.max(score, Math.min(100, (r.optimized_ats_score ?? score) | 0));
-  const delta = projected - score;
+function HeroScore({ result: r, fixed }: { result: AIResult; fixed: boolean }) {
+  const baseScore = Math.max(0, Math.min(100, r.ats_score | 0));
+  const optimised = Math.max(baseScore, Math.min(100, (r.optimized_ats_score ?? baseScore) | 0));
+  const score = fixed ? optimised : baseScore;
+  const delta = optimised - baseScore;
   const band = scoreBand(score);
   const color = bandColor(score);
 
@@ -204,13 +225,13 @@ function HeroScore({ result: r, canApplyFix }: { result: AIResult; canApplyFix: 
         <div class="hero-ring-num" style={`color:${color}`}>{animatedScore}</div>
       </div>
       <div class="hero-meta">
-        <div class="hero-eyebrow">ATS Score</div>
+        <div class="hero-eyebrow">ATS Score{fixed && delta > 0 ? ' · Optimised' : ''}</div>
         <div class="hero-label">{r.score_label}</div>
         <div class="hero-summary">{r.summary}</div>
-        {canApplyFix && delta > 0 && (
+        {!fixed && delta > 0 && (
           <div class="hero-potential">
             <span class="hero-potential-arrow" aria-hidden>↗</span>
-            Potential <b>{projected}</b> <span class="hero-delta">+{delta}</span> with AI fix
+            Potential <b>{optimised}</b> <span class="hero-delta">+{delta}</span> with AI fix
           </div>
         )}
       </div>
