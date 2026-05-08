@@ -39,17 +39,39 @@ async function reAnalyseFresh(): Promise<void> {
   if (aiStatus.value !== 'error') commitAIFix();
 }
 
+const ANALYSE_PHASES = [
+  'Reading your CV…',
+  'Scanning ATS keywords…',
+  'Cross-checking formatting & structure…',
+  'Evaluating impact statements…',
+  'Compiling recommendations…',
+  'Finalising your score…',
+];
+
+function useCyclingPhrase(phrases: string[], intervalMs = 2400): string {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const id = window.setInterval(
+      () => setIdx(i => (i + 1) % phrases.length),
+      intervalMs,
+    );
+    return () => window.clearInterval(id);
+  }, [phrases, intervalMs]);
+  return phrases[idx]!;
+}
+
 export function AnalysePanel() {
   const r = aiResult.value;
   const fixed = !!aiSnapshot.value;
   const loading = aiStatus.value === 'loading';
+  const phase = useCyclingPhrase(ANALYSE_PHASES);
 
   return (
     <div class="analyse-panel">
       <div class="analyse-scroll">
         <header class="analyse-header">
           <h2>ATS Analysis</h2>
-          <p>Score your CV. Optional job description for targeted match.</p>
+          <p>Beat the ATS. Score your CV in seconds.</p>
         </header>
 
         <div class="analyse-jd">
@@ -65,13 +87,19 @@ export function AnalysePanel() {
           />
           <button
             type="button"
-            class="analyse-run-btn"
+            class={`analyse-run-btn${loading ? ' analyse-run-btn-loading' : ''}`}
             disabled={loading}
             onClick={() => { void reAnalyseFresh(); }}
           >
-            {loading
-              ? <><span class="ai-spinner" /> Analysing…</>
-              : r ? <>↻ Re-analyse</> : <>✦ Analyse my CV</>}
+            {loading ? (
+              <span class="run-btn-loading">
+                <span class="run-btn-loading-row">
+                  <span class="ai-spinner" />
+                  <span class="run-btn-phase" key={phase}>{phase}</span>
+                </span>
+                <span class="run-btn-hint">Typically 10–15 seconds</span>
+              </span>
+            ) : r ? <>↻ Re-analyse</> : <>✦ Analyse my CV</>}
           </button>
           {aiStatus.value === 'error' && (
             <div class="analyse-error" role="alert">
@@ -93,7 +121,7 @@ export function AnalysePanel() {
         {loading && !r && <AnalyseSkeleton />}
 
         {r && (
-          <div class={`analyse-results${loading ? ' is-rescoring' : ''}`}>
+          <div class="analyse-results">
             <HeroScore result={r} fixed={fixed} />
             {fixed ? (
               <FixedBanner result={r} />
@@ -164,17 +192,7 @@ function FixedBanner({ result: r }: { result: AIResult }) {
         <button type="button" class="analyse-undo-btn" onClick={undoAIFix}>
           ↶ Undo
         </button>
-        <button
-          type="button"
-          class="analyse-reanalyse-btn"
-          onClick={() => { void reAnalyseFresh(); }}
-        >
-          ↻ Re-analyse
-        </button>
       </div>
-      <p class="fixed-banner-foot">
-        Want fresh feedback on your fixed CV? Tap <strong>Re-analyse</strong>.
-      </p>
     </div>
   );
 }

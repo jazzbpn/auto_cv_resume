@@ -173,14 +173,16 @@ function parseJSONFromText<T>(raw: string): T {
   );
 }
 
-const REVIEW_SYSTEM = `You are an elite ATS (Applicant Tracking System) expert and professional resume coach. Analyse the provided CV/resume and respond with a single JSON object — no markdown, no explanation, just raw JSON.
+const REVIEW_SYSTEM = `You are an elite ATS (Applicant Tracking System) expert and resume coach. Analyse the CV and respond with a single raw JSON object — no markdown, no prose.
+
+Be concise. Cap each "title" at 6 words; "description" and "fix" at 1 short sentence each (≤ 20 words). Limit "issues" to the 6 highest-impact items. Limit "keywords_present" and "keywords_missing" to 12 entries each. Limit "quick_wins" to 3.
 
 Return this exact structure:
 {
-  "ats_score": <integer 0-100, score of the CV as currently written>,
-  "optimized_ats_score": <integer 0-100, projected score AFTER applying your optimized_summary and optimized_experience rewrites; this MUST be >= ats_score and should reflect the improvement honestly>,
-  "score_label": <"Excellent"|"Good"|"Fair"|"Poor", label for the optimized_ats_score>,
-  "summary": "<2-sentence overall assessment of the rewritten CV>",
+  "ats_score": <integer 0-100, score of the CV as written>,
+  "optimized_ats_score": <integer 0-100, projected score AFTER applying optimized_summary + optimized_experience; MUST be >= ats_score>,
+  "score_label": <"Excellent"|"Good"|"Fair"|"Poor">,
+  "summary": "<2 short sentences>",
   "issues": [{"category":"Issues|Formatting|Keywords|Content|Impact","severity":"critical|warning|tip","title":"","description":"","fix":""}],
   "keywords_present": [],
   "keywords_missing": [],
