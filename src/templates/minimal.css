@@ -3,7 +3,7 @@
 .resume.minimal .r-contacts{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;margin-top:4px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .resume.minimal .r-contacts a{color:var(--muted);text-decoration:none}
 .resume.minimal .r-sec{margin-top:22px}
-.resume.minimal .r-stitle{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.resume.minimal .r-stitle{font-family:var(--font-ui);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .resume.minimal .r-summary{font-size:.93rem;line-height:1.65;font-style:italic;color:#2e2720}
 
 .resume.minimal .r-entry{margin-bottom:14px;display:grid;grid-template-columns:140px 1fr;gap:0 14px}

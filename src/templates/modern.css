@@ -3,7 +3,7 @@
 .resume.modern .mod-right{padding:36px 36px 44px;overflow:hidden}
 .resume.modern .mod-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--paper);line-height:1.15;margin-bottom:3px}
 .resume.modern .mod-jtitle{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
-.resume.modern .mod-stitle{font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;margin-top:18px;border-bottom:1px solid #3a3028;padding-bottom:3px}
+.resume.modern .mod-stitle{font-family:var(--font-ui);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;margin-top:18px;border-bottom:1px solid #3a3028;padding-bottom:3px}
 .resume.modern .mod-ci{font-family:'DM Mono',monospace;font-size:.6rem;color:#a09080;margin-bottom:4px;word-break:break-word;line-height:1.4}
 .resume.modern .mod-ci a{color:#a09080;text-decoration:none}
 .resume.modern .mod-ci b{color:#c8bfad;font-weight:600}
@@ -15,7 +15,7 @@
 .resume.modern .lang-item{display:flex;justify-content:space-between;font-size:.85rem;color:#c8bfad;border-bottom:1px solid #3a3028;padding:2px 0;font-family:'Crimson Pro',serif}
 .resume.modern .lang-lvl{font-family:'DM Mono',monospace;font-size:.57rem;color:#a09080}
 
-.resume.modern .r-stitle{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;margin-top:22px;display:flex;align-items:center;gap:8px}
+.resume.modern .r-stitle{font-family:var(--font-ui);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;margin-top:22px;display:flex;align-items:center;gap:8px}
 .resume.modern .r-stitle::after{content:'';flex:1;height:1px;background:var(--border)}
 .resume.modern .r-summary{font-size:.92rem;line-height:1.65;font-style:italic;border-left:3px solid var(--gold);padding-left:12px;color:#2e2720}
 .resume.modern .r-entry{margin-bottom:13px}
