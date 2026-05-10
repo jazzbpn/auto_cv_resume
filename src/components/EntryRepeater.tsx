@@ -46,13 +46,25 @@ export function EntryRepeater<K extends CollectionKey>({
                 updateItem(collection, i, f.key, target.value);
               };
               return (
-                <div class={`f${f.full ? ' f-full' : ''}`} key={String(f.key)}>
-                  <label>{f.label}</label>
+                <div class={`f f-float${f.full ? ' f-full' : ''}`} key={String(f.key)}>
                   {f.type === 'textarea' ? (
-                    <textarea rows={3} value={value} onInput={onInput} />
+                    <textarea
+                      rows={3}
+                      value={value}
+                      placeholder=" "
+                      aria-label={f.label}
+                      onInput={onInput}
+                    />
                   ) : (
-                    <input type={f.type ?? 'text'} value={value} onInput={onInput} />
+                    <input
+                      type={f.type ?? 'text'}
+                      value={value}
+                      placeholder=" "
+                      aria-label={f.label}
+                      onInput={onInput}
+                    />
                   )}
+                  <label>{f.label}</label>
                 </div>
               );
             })}

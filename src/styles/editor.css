@@ -50,8 +50,6 @@ label {
 }
 .f { margin-top: 14px; }
 .f:first-child { margin-top: 0; }
-.entry-block label { margin-top: 12px; }
-.entry-block label:first-of-type { margin-top: 0; }
 .field-row {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 10px 12px; margin-top: 14px; min-width: 0;
@@ -78,6 +76,47 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--hairli
 input:focus, textarea:focus {
   border-color: var(--amber);
   box-shadow: 0 0 0 3px rgba(201, 150, 46, .15);
+}
+
+/* ── FLOATING LABELS ── */
+.f-float { position: relative; }
+
+.f-float > input,
+.f-float > textarea,
+.f-float > select.form-select {
+  padding-top: 22px;
+  padding-bottom: 6px;
+}
+
+.f-float > label {
+  position: absolute;
+  left: 13px;
+  top: 16px;
+  margin: 0;
+  pointer-events: none;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: .92rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  background: transparent;
+  transition:
+    top var(--dur-fast) var(--ease-out),
+    font-size var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.f-float > input:focus ~ label,
+.f-float > input:not(:placeholder-shown) ~ label,
+.f-float > textarea:focus ~ label,
+.f-float > textarea:not(:placeholder-shown) ~ label,
+.f-float > select.form-select ~ label {
+  top: 6px;
+  font-size: .56rem;
+  font-weight: 500;
+  letter-spacing: .03em;
+  color: var(--amber-deep);
 }
 
 .add-btn {

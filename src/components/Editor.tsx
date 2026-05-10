@@ -11,13 +11,15 @@ function PersonalField<K extends keyof typeof cv.value.personal>({
 }: { id: K; label: string; type?: 'text' | 'email' | 'tel' }) {
   const value = String(cv.value.personal[id] ?? '');
   return (
-    <div class="f">
-      <label>{label}</label>
+    <div class="f f-float">
       <input
         type={type}
         value={value}
+        placeholder=" "
+        aria-label={label}
         onInput={(e) => setPersonal(id, (e.currentTarget as HTMLInputElement).value as never)}
       />
+      <label>{label}</label>
     </div>
   );
 }
@@ -26,13 +28,15 @@ function TextareaField({ id, label, rows = 3 }: {
   id: keyof typeof cv.value.personal; label: string; rows?: number;
 }) {
   return (
-    <div class="f">
-      <label>{label}</label>
+    <div class="f f-float">
       <textarea
         rows={rows}
         value={String(cv.value.personal[id] ?? '')}
+        placeholder=" "
+        aria-label={label}
         onInput={(e) => setPersonal(id, (e.currentTarget as HTMLTextAreaElement).value as never)}
       />
+      <label>{label}</label>
     </div>
   );
 }
@@ -242,10 +246,10 @@ export function Editor() {
       </Section>
 
       <Section title="📋 References">
-        <div class="f">
-          <label>Display Mode</label>
+        <div class="f f-float">
           <select
             class="form-select"
+            aria-label="Display Mode"
             value={cv.value.personal.refMode}
             onChange={(e) =>
               setPersonal('refMode', (e.currentTarget as HTMLSelectElement).value as 'available' | 'listed')
@@ -254,6 +258,7 @@ export function Editor() {
             <option value="available">Available upon request</option>
             <option value="listed">List references</option>
           </select>
+          <label>Display Mode</label>
         </div>
         <EntryRepeater
           collection="references"
