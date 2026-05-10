@@ -1,5 +1,5 @@
 .panel-preview {
-  background: var(--bg);
+  background: linear-gradient(180deg, #e6e3dd 0%, #b8b4ad 100%);
   display: block;
 }
 /* Desktop: re-establish positioned ancestor so the dock can anchor here. */
@@ -14,7 +14,7 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   padding: 24px 0 96px;
-  background: var(--bg);
+  background: linear-gradient(180deg, #e6e3dd 0%, #b8b4ad 100%);
 }
 
 .preview-scale-wrap {
