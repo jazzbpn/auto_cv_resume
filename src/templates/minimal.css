@@ -1,39 +1,39 @@
 .resume.minimal .r-name{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:400;font-style:italic;margin-bottom:2px}
-.resume.minimal .r-jtitle{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
-.resume.minimal .r-contacts{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;margin-top:4px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.resume.minimal .r-jtitle{font-family:var(--font-doc);font-size:.66rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
+.resume.minimal .r-contacts{font-family:var(--font-doc);font-size:.6rem;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;margin-top:4px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .resume.minimal .r-contacts a{color:var(--muted);text-decoration:none}
 .resume.minimal .r-sec{margin-top:22px}
-.resume.minimal .r-stitle{font-family:var(--font-ui);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.resume.minimal .r-stitle{font-family:var(--font-display);font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .resume.minimal .r-summary{font-size:.93rem;line-height:1.65;font-style:italic;color:#2e2720}
 
 .resume.minimal .r-entry{margin-bottom:14px;display:grid;grid-template-columns:140px 1fr;gap:0 14px}
-.resume.minimal .r-eleft{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);padding-top:3px;line-height:1.6}
+.resume.minimal .r-eleft{font-family:var(--font-doc);font-size:.62rem;color:var(--muted);padding-top:3px;line-height:1.6}
 .resume.minimal .r-eorg{font-style:italic;font-size:.85em}
 .resume.minimal .r-eloc-small{font-size:.58em;margin-top:1px}
 .resume.minimal .r-etitle{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700}
 .resume.minimal .r-esub{font-style:italic;color:var(--muted);font-size:.87rem;margin-bottom:2px}
 .resume.minimal .r-edesc{font-size:.88rem;line-height:1.5;color:#2e2720;white-space:pre-wrap}
-.resume.minimal .r-eurl{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--gold)}
-.resume.minimal .r-edate{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.minimal .r-eurl{font-family:var(--font-doc);font-size:.58rem;color:var(--gold)}
+.resume.minimal .r-edate{font-family:var(--font-doc);font-size:.6rem;color:var(--muted)}
 
 .resume.minimal .skill-row{margin-bottom:5px;display:flex;flex-wrap:wrap;gap:4px}
 .resume.minimal .skill-row:last-child{margin-bottom:0}
 .resume.minimal .skill-wrap{display:inline-flex;flex-wrap:wrap;gap:4px}
-.resume.minimal .skill-tag{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.minimal .skill-tag{font-family:var(--font-doc);font-size:.6rem;color:var(--muted)}
 .resume.minimal .skill-tag:not(:last-child)::after{content:'·';margin:0 6px}
-.resume.minimal .skill-cat{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
+.resume.minimal .skill-cat{font-family:var(--font-doc);font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
 
 .resume.minimal .lang-item{display:flex;justify-content:space-between;font-size:.88rem;padding:2px 0;border-bottom:1px dotted var(--border)}
-.resume.minimal .lang-lvl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.minimal .lang-lvl{font-family:var(--font-doc);font-size:.6rem;color:var(--muted)}
 
 .resume.minimal .award-item{margin-bottom:8px}
 .resume.minimal .award-title{font-size:.95rem;font-weight:600}
-.resume.minimal .award-date{font-family:'DM Mono',monospace;font-size:.6rem;font-weight:400;color:var(--muted)}
+.resume.minimal .award-date{font-family:var(--font-doc);font-size:.6rem;font-weight:400;color:var(--muted)}
 .resume.minimal .award-body{font-size:.87rem;color:var(--muted)}
 .resume.minimal .award-desc{font-style:italic}
 
 .resume.minimal .pub-item{margin-bottom:7px;font-size:.87rem;line-height:1.5}
-.resume.minimal .pub-authors{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.minimal .pub-authors{font-family:var(--font-doc);font-size:.6rem;color:var(--muted)}
 
 .resume.minimal .cert-item{margin-bottom:10px;display:grid;grid-template-columns:140px 1fr;gap:0 14px}
 .resume.minimal .cert-id{font-size:.58em}
@@ -42,10 +42,10 @@
 .resume.minimal .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .resume.minimal .ref-item{font-size:.87rem;line-height:1.6}
 .resume.minimal .ref-name{font-weight:700}
-.resume.minimal .ref-det{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted)}
+.resume.minimal .ref-det{font-family:var(--font-doc);font-size:.58rem;color:var(--muted)}
 .resume.minimal .ref-available{font-size:.9rem}
 
 .resume.minimal .interest-wrap{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.88rem}
 
 .resume.minimal .pdet-row{display:grid;grid-template-columns:140px 1fr;gap:0 14px;font-size:.87rem;margin-bottom:3px}
-.resume.minimal .pdet-lbl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+.resume.minimal .pdet-lbl{font-family:var(--font-doc);font-size:.78rem;font-weight:500;color:var(--muted);letter-spacing:.02em}

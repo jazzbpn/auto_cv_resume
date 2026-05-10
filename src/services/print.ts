@@ -137,7 +137,7 @@ function buildPrintHTML(): string {
   const title = exportFilename();
   const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;1,400&family=Inter:wght@400;500;600;700&display=swap">`;
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">`;
   return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}</style></head><body>${clone.outerHTML}</body></html>`;
 }
 
@@ -184,29 +184,44 @@ export async function printResume(): Promise<void> {
     let printed = false;
     const cleanup = () => { setTimeout(() => URL.revokeObjectURL(url), 60_000); };
 
-    iframe.onload = () => {
-      // Allow Google Fonts to settle so the print preview shows correct glyphs.
-      setTimeout(() => {
-        // Chrome / Safari pull the suggested PDF filename from the parent
-        // document's title, not the iframe's. Swap it temporarily.
-        const filename = exportFilename();
-        const originalTitle = document.title;
-        document.title = filename;
-        try {
-          iframe.contentWindow?.focus();
-          iframe.contentWindow?.print();
-          printed = true;
-          showHeadersTipOnce();
-        } catch (e) {
-          console.error('[print] iframe print failed:', e);
-          downloadHTMLFallback(html);
-        } finally {
-          // Restore after the print dialog has captured the title. A small
-          // delay avoids races where the browser reads the title async.
-          setTimeout(() => { document.title = originalTitle; }, 1500);
+    iframe.onload = async () => {
+      // Wait for Google Fonts to actually finish loading inside the iframe
+      // before printing. Without this, italic / weight variants may not be
+      // ready yet and the browser synthesizes them by skewing or boldening
+      // the regular face — which renders as visibly distorted letterforms
+      // (the "flattened width" look) in the final PDF. Cap the wait so a
+      // missing font never hangs the export.
+      try {
+        const fontsReady = iframe.contentDocument?.fonts?.ready;
+        if (fontsReady) {
+          await Promise.race([
+            fontsReady,
+            new Promise((r) => setTimeout(r, 3000)),
+          ]);
         }
-        cleanup();
-      }, 800);
+      } catch {
+        // Older browsers without document.fonts — fall through to print.
+      }
+
+      // Chrome / Safari pull the suggested PDF filename from the parent
+      // document's title, not the iframe's. Swap it temporarily.
+      const filename = exportFilename();
+      const originalTitle = document.title;
+      document.title = filename;
+      try {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+        printed = true;
+        showHeadersTipOnce();
+      } catch (e) {
+        console.error('[print] iframe print failed:', e);
+        downloadHTMLFallback(html);
+      } finally {
+        // Restore after the print dialog has captured the title. A small
+        // delay avoids races where the browser reads the title async.
+        setTimeout(() => { document.title = originalTitle; }, 1500);
+      }
+      cleanup();
     };
     iframe.onerror = () => {
       console.error('[print] iframe load failed');
