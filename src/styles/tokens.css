@@ -12,6 +12,54 @@
   --topbar: 52px;
   --bottomnav: 60px;
 
+  /* M3-style tonal surfaces — warm-neutral, layered without hard borders. */
+  --surface-0: #faf7f2;
+  --surface-1: #f2ede4;
+  --surface-2: #e9e2d4;
+  --surface-3: #ddd3bf;
+
+  /* Refined accents (premium amber + emerald) */
+  --amber: #c9962e;
+  --amber-bright: #e6b829;
+  --amber-deep: #8c6712;
+  --emerald: #10b981;
+  --emerald-deep: #047857;
+
+  /* Modern radius scale */
+  --r-1: 6px;
+  --r-2: 10px;
+  --r-3: 14px;
+  --r-4: 20px;
+  --r-pill: 999px;
+
+  /* Hairlines (replace explicit borders) */
+  --hairline: rgba(26, 21, 16, .08);
+  --hairline-strong: rgba(26, 21, 16, .14);
+
+  /* Dark tonal surfaces — mirror surface-0..3 for dark panels (Analyse, topbar) */
+  --dark-surface-0: #1a1510;
+  --dark-surface-1: #1f1a14;
+  --dark-surface-2: #252018;
+  --dark-surface-3: #2c2620;
+  --dark-hairline: rgba(255, 255, 255, .06);
+  --dark-hairline-strong: rgba(255, 255, 255, .1);
+  --on-dark: #f4efe4;
+  --on-dark-muted: rgba(244, 239, 228, .68);
+
+  /* Font stacks */
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', serif;
+  --font-doc: 'Crimson Pro', Georgia, serif;
+  --font-mono: 'DM Mono', monospace;
+
+  /* Elevation (tone + soft shadow, not hard drop) */
+  --elev-1: 0 1px 2px rgba(26, 21, 16, .04), 0 1px 1px rgba(26, 21, 16, .03);
+  --elev-2: 0 4px 12px -2px rgba(26, 21, 16, .08), 0 1px 2px rgba(26, 21, 16, .05);
+  --elev-paper:
+    0 1px 0 rgba(0, 0, 0, .04),
+    0 24px 60px -12px rgba(0, 0, 0, .35),
+    0 8px 24px -8px rgba(0, 0, 0, .18);
+
   /* Spacing scale — use consistently across cards, sections, gaps. */
   --s1: 4px;
   --s2: 8px;

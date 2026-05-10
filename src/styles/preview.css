@@ -1,7 +1,10 @@
 .panel-preview {
   background: var(--bg);
   display: block;
-  position: relative;
+}
+/* Desktop: re-establish positioned ancestor so the dock can anchor here. */
+@media (min-width: 1024px) {
+  .panel-preview { position: relative; }
 }
 .preview-scroll {
   width: 100%;
@@ -27,41 +30,60 @@
   display: flex;
   gap: 2px;
   padding: 4px;
-  background: rgba(26, 21, 16, .82);
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  border: 1px solid rgba(184, 134, 11, .35);
-  border-radius: 999px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, .45);
+  background: rgba(26, 21, 16, .78);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: var(--r-pill);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .06),
+    0 8px 28px rgba(0, 0, 0, .45);
   z-index: 5;
-  max-width: calc(100% - 24px);
+  max-width: calc(100vw - 24px);
 }
 .tpl-chip {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: 7px;
   border: none; background: none;
   padding: 8px 14px;
-  border-radius: 999px;
-  font-family: 'DM Mono', monospace;
-  font-size: .62rem;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #a89a85;
+  border-radius: var(--r-pill);
+  font-family: var(--font-ui);
+  font-size: .8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 500;
+  color: rgba(244, 239, 228, .58);
   cursor: pointer;
   touch-action: manipulation;
-  transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   white-space: nowrap;
 }
 .tpl-chip .ic { font-size: 1rem; line-height: 1; }
-.tpl-chip:hover:not(.active) { color: var(--paper); }
+.tpl-chip:hover:not(.active) {
+  color: rgba(244, 239, 228, .9);
+  background: rgba(255, 255, 255, .04);
+}
 .tpl-chip.active {
-  color: var(--paper);
-  background: rgba(184, 134, 11, .22);
-  box-shadow: inset 0 0 0 1px var(--gold);
+  color: var(--amber-bright);
+  background: rgba(230, 184, 41, .18);
+  box-shadow: inset 0 0 0 1px rgba(230, 184, 41, .35);
+  font-weight: 600;
 }
 .tpl-chip:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
+/* Mobile: anchor to viewport so it sits above the bottom nav,
+   regardless of how tall the resume content is or where the panel ends. */
+@media (max-width: 1023px) {
+  .tpl-dock {
+    position: fixed;
+    bottom: calc(var(--bottomnav) + 14px);
+    z-index: 50;
+  }
+}
+
 @media (max-width: 480px) {
-  .tpl-dock { bottom: 24px; }
-  .tpl-chip { padding: 7px 11px; font-size: .56rem; }
+  .tpl-chip { padding: 7px 11px; font-size: .74rem; }
   .tpl-chip .ic { font-size: .9rem; }
 }

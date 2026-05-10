@@ -18,7 +18,7 @@ export function TopBar({ onImport }: Props) {
           <SaveIndicator />
         </div>
         <div class="top-actions">
-          <button class="import-btn" type="button" onClick={onImport}>⬆ Import CV</button>
+          <button class="import-btn" type="button" onClick={onImport}>⬇ Import CV</button>
           <button class="export-btn" type="button" onClick={() => {
             track('export', {
               template: template.value,
@@ -26,7 +26,7 @@ export function TopBar({ onImport }: Props) {
               ai_used: wasAIUsed(),
             });
             void printResume();
-          }}>⬇ Export</button>
+          }}>⬆ Export</button>
         </div>
       </header>
     </>

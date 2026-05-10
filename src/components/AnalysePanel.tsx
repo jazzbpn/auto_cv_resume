@@ -92,8 +92,7 @@ export function AnalysePanel() {
     <div class="analyse-panel">
       <div class="analyse-scroll">
         <header class="analyse-header">
-          <h2>ATS Analysis</h2>
-          <p>Beat the ATS. Score your CV in seconds.</p>
+          <h2>Resume/CV Analysis</h2>
         </header>
 
         <div class="analyse-jd">
@@ -121,7 +120,7 @@ export function AnalysePanel() {
                 </span>
                 <span class="run-btn-hint">Typically 10–15 seconds</span>
               </span>
-            ) : r ? <>↻ Re-analyse</> : <>✦ Analyse my CV</>}
+            ) : r ? <>↻ Re-analyse</> : <>✦ Analyse my Resume</>}
           </button>
           {aiStatus.value === 'error' && (
             <div class="analyse-error" role="alert">
@@ -134,7 +133,7 @@ export function AnalysePanel() {
           <div class="analyse-empty">
             <span aria-hidden>📊</span>
             <p>
-              Click <strong>Analyse my CV</strong> to get an ATS score, see
+              Click <strong>Analyse my Resume</strong> to get an ATS score, see
               issues, and find missing keywords.
             </p>
           </div>
@@ -172,8 +171,8 @@ export function AnalysePanel() {
               <strong>One-click optimisation</strong>
               <p>
                 Apply our rewrites across your summary, objective, skills,
-                experience, education, and projects in one tap. Score
-                updates instantly. You can undo any time.
+                experience, education, and projects in one tap. You can undo
+                any time.
               </p>
             </div>
             <button

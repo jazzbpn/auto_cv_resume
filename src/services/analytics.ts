@@ -10,7 +10,7 @@ declare global {
 //   - track() is a no-op.
 // Nothing in the codebase reads umami beyond this module, so this flag is the
 // only place to toggle.
-const ANALYTICS_ENABLED = false;
+const ANALYTICS_ENABLED = true;
 
 const UMAMI_SRC = 'https://cloud.umami.is/script.js';
 const UMAMI_WEBSITE_ID = 'a85adcc4-7914-47a0-94ae-1a09590d6509';
