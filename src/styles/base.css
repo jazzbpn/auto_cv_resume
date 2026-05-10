@@ -70,7 +70,7 @@ body {
 .brand-lockup {
   display: inline-flex; align-items: baseline;
   text-decoration: none; color: inherit;
-  margin-left: 100px;
+  margin-left: 78px;
   margin-right: 18px;
   transition: opacity .2s ease;
 }
@@ -95,7 +95,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  .brand-lockup { margin-left: 80px; }
+  .brand-lockup { margin-left: 62px; }
   .brand-name { font-size: 1.05rem; }
 }
 
