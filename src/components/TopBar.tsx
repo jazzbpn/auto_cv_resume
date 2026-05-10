@@ -1,4 +1,5 @@
 import { printResume } from '../services/print';
+import { track } from '../services/analytics';
 import { saveStatus } from '../state/store';
 
 interface Props { onImport: () => void; }
@@ -18,7 +19,7 @@ export function TopBar({ onImport }: Props) {
         </div>
         <div class="top-actions">
           <button class="import-btn" type="button" onClick={onImport}>⬆ Import CV</button>
-          <button class="export-btn" type="button" onClick={() => { void printResume(); }}>⬇ Export</button>
+          <button class="export-btn" type="button" onClick={() => { track('export'); void printResume(); }}>⬇ Export</button>
         </div>
       </header>
     </>

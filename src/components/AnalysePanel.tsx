@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix } from '../state/store';
 import { aiJD, aiStatus, aiError, aiOptimizeStatus, aiOptimizeError, runAIReview, runAIOptimize } from '../state/ai';
+import { track } from '../services/analytics';
 import { showToast } from './Toast';
 import type { AIResult, AIIssue } from '../types';
 
@@ -12,6 +13,7 @@ import type { AIResult, AIIssue } from '../types';
  * one click away in the success banner.
  */
 async function autoFixResume(): Promise<void> {
+  track('ai_autofix');
   // Rewrites are fetched in the background after the analysis lands. If the
   // user clicks Auto-Fix before that lands (or the prefetch failed), trigger
   // / await the optimize call now so we have something to apply.
@@ -28,6 +30,7 @@ async function autoFixResume(): Promise<void> {
   }
   const applied = applyAIFix();
   if (applied) {
+    track('ai_autofix_success');
     showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
     return;
   }
@@ -45,6 +48,7 @@ async function autoFixResume(): Promise<void> {
 }
 
 async function reAnalyseFresh(): Promise<void> {
+  track('ai_analyze');
   // Re-analyse operates on the current CV. We *don't* drop the fix snapshot
   // up-front: doing so would flip the panel out of the "fixed" state during
   // the AI call and the score would visibly regress (optimised → base →

@@ -2,6 +2,7 @@ import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
 import { extractText } from '../services/pdfText';
 import { importCVText, type ImportedCV } from '../services/aiClient';
+import { track } from '../services/analytics';
 import { replaceCV } from '../state/store';
 import type { CV } from '../types';
 import { showToast } from './Toast';
@@ -22,6 +23,12 @@ function setProgress(pct: number, title?: string, sub?: string) {
   if (sub) progressSub.value = sub;
 }
 
+function importFormat(source: string): string {
+  if (source === 'pasted text') return 'pasted';
+  const ext = source.toLowerCase().match(/\.([a-z0-9]{1,5})$/)?.[1];
+  return ext ?? 'unknown';
+}
+
 async function runImport(text: string, source: string) {
   if (!text || text.trim().length < 50) {
     stage.value = 'error';
@@ -38,6 +45,7 @@ async function runImport(text: string, source: string) {
     sourceName.value = source;
     setProgress(100, 'Done!', '');
     stage.value = 'success';
+    track('import_success', { format: importFormat(source) });
   } catch (e) {
     stage.value = 'error';
     errorMsg.value = e instanceof Error ? e.message : 'Could not analyse your CV. Please try again.';

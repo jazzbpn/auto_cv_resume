@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'preact/hooks';
 import { cv, template, setTemplate, visibility } from '../state/store';
 import { TEMPLATES } from '../templates';
 import { buildResumeData } from '../templates/derive';
+import { track } from '../services/analytics';
 import type { TemplateId } from '../types';
 
 const TEMPLATE_OPTIONS: { id: TemplateId; label: string; icon: string }[] = [
@@ -21,7 +22,10 @@ function TemplateDock() {
           class={`tpl-chip${template.value === id ? ' active' : ''}`}
           role="radio"
           aria-checked={template.value === id}
-          onClick={() => setTemplate(id)}
+          onClick={() => {
+            if (template.value !== id) track('template_selected', { id });
+            setTemplate(id);
+          }}
         >
           <span class="ic" aria-hidden>{icon}</span>
           {label}
