@@ -246,20 +246,6 @@ export function Editor() {
       </Section>
 
       <Section title="📋 References">
-        <div class="f f-float">
-          <select
-            class="form-select"
-            aria-label="Display Mode"
-            value={cv.value.personal.refMode}
-            onChange={(e) =>
-              setPersonal('refMode', (e.currentTarget as HTMLSelectElement).value as 'available' | 'listed')
-            }
-          >
-            <option value="available">Available upon request</option>
-            <option value="listed">List references</option>
-          </select>
-          <label>Display Mode</label>
-        </div>
         <EntryRepeater
           collection="references"
           addLabel="Add Reference"

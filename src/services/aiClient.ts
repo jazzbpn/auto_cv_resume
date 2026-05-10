@@ -472,13 +472,13 @@ export function cvToText(
   if (show('interests') && p.interests) lines.push('', `INTERESTS: ${p.interests}`);
 
   if (show('references')) {
-    if (p.refMode === 'listed' && cv.references.length) {
+    if (cv.references.length) {
       lines.push('', 'REFERENCES:');
       cv.references.forEach(r => {
         const meta = [r.email, r.phone].filter(Boolean).join(' | ');
         lines.push(`  ${r.name}, ${r.title}${meta ? ' — ' + meta : ''}`);
       });
-    } else if (p.refMode === 'available') {
+    } else {
       lines.push('', 'REFERENCES: Available upon request');
     }
   }
@@ -511,9 +511,6 @@ export function cvToText(
   if (show('conf')        && !cv.conferences.length)    emptySections.push('Conferences');
   if (show('volunteer')   && !cv.volunteer.length)      emptySections.push('Volunteer');
   if (show('languages')   && !cv.languages.length)      emptySections.push('Languages');
-  if (show('references')  && p.refMode === 'listed' && !cv.references.length) {
-    emptySections.push('References');
-  }
 
   if (emptyContacts.length || emptyFields.length || emptySections.length) {
     lines.push(

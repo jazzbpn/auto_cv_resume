@@ -105,7 +105,7 @@ function buildCVFromImport(p: ImportedCV): CV {
       dob: s(p.dob), nationality: s(p.nationality), gender: s(p.gender), marital: s(p.marital),
       summary: s(p.summary), objective: s(p.objective),
       skillsTech: s(p.skills_tech), skillsSoft: s(p.skills_soft), skillsTools: s(p.skills_tools),
-      interests: s(p.interests), refMode: 'available',
+      interests: s(p.interests),
     },
     experience: (p.experience ?? []).map(fillEntry).filter(e => e.title || e.org),
     education: (p.education ?? []).map(fillEntry).filter(e => e.title || e.org),

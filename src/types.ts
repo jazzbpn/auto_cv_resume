@@ -29,7 +29,6 @@ export interface Personal {
   skillsSoft: string;
   skillsTools: string;
   interests: string;
-  refMode: 'available' | 'listed';
 }
 
 export interface Entry {

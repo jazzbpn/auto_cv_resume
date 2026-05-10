@@ -147,7 +147,7 @@ export function Minimal({ data }: { data: ResumeData }) {
       {vis.references && (
         <section class="r-sec">
           <h2 class="r-stitle">References</h2>
-          {p.refMode === 'available'
+          {cv.references.length === 0
             ? <em class="ref-available">Available upon request.</em>
             : <RefGrid items={cv.references} />}
         </section>

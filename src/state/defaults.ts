@@ -47,7 +47,6 @@ export const DEFAULT_CV: CV = {
     skillsSoft: 'Team Leadership, Stakeholder Management, Strategic Thinking, Mentoring',
     skillsTools: 'Jira, Notion, Miro, Hotjar, Amplitude, React',
     interests: 'Documentary Photography, Jazz Piano, Rock Climbing, Open-source Design',
-    refMode: 'available',
   },
   experience: [
     { title: 'Lead Product Designer', org: 'Meridian Labs', location: 'San Francisco, CA', date: 'Jan 2021 – Present', desc: 'Directed end-to-end design for a SaaS platform serving 200k+ users. Managed a 5-person design team. Reduced onboarding drop-off by 34% through iterative, research-led redesign.', url: '' },
