@@ -1,11 +1,10 @@
-import { cv, setPersonal, template, setTemplate, visibility, toggleSection } from '../state/store';
+import { cv, setPersonal, visibility, toggleSection } from '../state/store';
 import { SECTIONS,
   emptyEntry, emptyProject, emptyVolunteer, emptyConference,
   emptyCertification, emptyAward, emptyPublication, emptyLanguage, emptyReference,
 } from '../state/defaults';
 import { Section } from './Section';
 import { EntryRepeater } from './EntryRepeater';
-import type { TemplateId } from '../types';
 
 function PersonalField<K extends keyof typeof cv.value.personal>({
   id, label, type = 'text',
@@ -41,24 +40,6 @@ function TextareaField({ id, label, rows = 3 }: {
 export function Editor() {
   return (
     <>
-      <Section title="Template" open>
-        <div class="tpl-grid" role="radiogroup" aria-label="Template">
-          {(['classic', 'modern', 'minimal'] as TemplateId[]).map((id) => (
-            <button
-              type="button"
-              class={`tpl-card${template.value === id ? ' active' : ''}`}
-              role="radio"
-              aria-checked={template.value === id}
-              onClick={() => setTemplate(id)}
-              key={id}
-            >
-              <span class="ic" aria-hidden>{id === 'classic' ? '📄' : id === 'modern' ? '🗂' : '✦'}</span>
-              {id[0]!.toUpperCase() + id.slice(1)}
-            </button>
-          ))}
-        </div>
-      </Section>
-
       <Section title="Sections to Show">
         <div class="vis-grid">
           {SECTIONS.map((s) => (

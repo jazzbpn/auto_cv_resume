@@ -1,8 +1,35 @@
 import { Suspense } from 'preact/compat';
 import { useEffect, useRef } from 'preact/hooks';
-import { cv, template, visibility } from '../state/store';
+import { cv, template, setTemplate, visibility } from '../state/store';
 import { TEMPLATES } from '../templates';
 import { buildResumeData } from '../templates/derive';
+import type { TemplateId } from '../types';
+
+const TEMPLATE_OPTIONS: { id: TemplateId; label: string; icon: string }[] = [
+  { id: 'classic', label: 'Classic', icon: '📄' },
+  { id: 'modern', label: 'Modern', icon: '🗂' },
+  { id: 'minimal', label: 'Minimal', icon: '✦' },
+];
+
+function TemplateDock() {
+  return (
+    <div class="tpl-dock" role="radiogroup" aria-label="Template">
+      {TEMPLATE_OPTIONS.map(({ id, label, icon }) => (
+        <button
+          type="button"
+          key={id}
+          class={`tpl-chip${template.value === id ? ' active' : ''}`}
+          role="radio"
+          aria-checked={template.value === id}
+          onClick={() => setTemplate(id)}
+        >
+          <span class="ic" aria-hidden>{icon}</span>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 const RESUME_W = 700;
 
@@ -55,8 +82,11 @@ function ScaledResume() {
 
 export function Preview() {
   return (
-    <div class="preview-scroll">
-      <ScaledResume />
-    </div>
+    <>
+      <div class="preview-scroll">
+        <ScaledResume />
+      </div>
+      <TemplateDock />
+    </>
   );
 }
