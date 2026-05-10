@@ -1,6 +1,7 @@
 import { signal } from '@preact/signals';
 import { cv, visibility, aiResult, aiOptimize } from './store';
 import { reviewCV, optimizeCV } from '../services/aiClient';
+import { track, scoreBucket, classifyAIError, markAIUsed } from '../services/analytics';
 
 export const aiJD = signal('');
 export const aiStatus = signal<'idle' | 'loading' | 'error'>('idle');
@@ -40,9 +41,15 @@ export async function runAIReview(): Promise<void> {
     });
     aiResult.value = result;
     aiStatus.value = 'idle';
+    markAIUsed();
+    track('ai_analyze', {
+      with_jd: aiJD.value.trim().length > 0,
+      score_bucket: scoreBucket(result.ats_score),
+    });
   } catch (e) {
     aiStatus.value = 'error';
     aiError.value = e instanceof Error ? e.message : 'Analysis failed';
+    track('ai_error', { stage: 'analyze', reason: classifyAIError(e) });
   }
 }
 

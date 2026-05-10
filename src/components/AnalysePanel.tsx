@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix } from '../state/store';
 import { aiJD, aiStatus, aiError, aiOptimizeStatus, aiOptimizeError, runAIReview, runAIOptimize } from '../state/ai';
-import { track } from '../services/analytics';
+import { track, classifyAIError, markAIUsed } from '../services/analytics';
 import { showToast } from './Toast';
 import type { AIResult, AIIssue } from '../types';
 
@@ -14,6 +14,7 @@ import type { AIResult, AIIssue } from '../types';
  */
 async function autoFixResume(): Promise<void> {
   track('ai_autofix');
+  markAIUsed();
   // Rewrites are fetched in the background after the analysis lands. If the
   // user clicks Auto-Fix before that lands (or the prefetch failed), trigger
   // / await the optimize call now so we have something to apply.
@@ -25,6 +26,7 @@ async function autoFixResume(): Promise<void> {
   // the real cause instead of the generic "no rewrite text" message — that
   // would imply the AI ran successfully and just had nothing to say.
   if (!aiOptimize.value && aiOptimizeStatus.value === 'error') {
+    track('ai_error', { stage: 'autofix', reason: classifyAIError(aiOptimizeError.value) });
     showToast(`Auto-Fix failed: ${aiOptimizeError.value || 'try Re-analyse and Auto-Fix again.'}`);
     return;
   }
@@ -48,7 +50,6 @@ async function autoFixResume(): Promise<void> {
 }
 
 async function reAnalyseFresh(): Promise<void> {
-  track('ai_analyze');
   // Re-analyse operates on the current CV. We *don't* drop the fix snapshot
   // up-front: doing so would flip the panel out of the "fixed" state during
   // the AI call and the score would visibly regress (optimised → base →
@@ -211,7 +212,7 @@ function FixedBanner({ result: r, optimized }: { result: AIResult; optimized: nu
         </div>
       </div>
       <div class="fixed-banner-actions">
-        <button type="button" class="analyse-undo-btn" onClick={undoAIFix}>
+        <button type="button" class="analyse-undo-btn" onClick={() => { track('ai_autofix_undo'); undoAIFix(); }}>
           ↶ Undo
         </button>
       </div>

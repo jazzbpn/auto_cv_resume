@@ -1,6 +1,6 @@
 import { printResume } from '../services/print';
-import { track } from '../services/analytics';
-import { saveStatus } from '../state/store';
+import { track, wasAIUsed } from '../services/analytics';
+import { saveStatus, template, visibility } from '../state/store';
 
 interface Props { onImport: () => void; }
 
@@ -19,7 +19,14 @@ export function TopBar({ onImport }: Props) {
         </div>
         <div class="top-actions">
           <button class="import-btn" type="button" onClick={onImport}>⬆ Import CV</button>
-          <button class="export-btn" type="button" onClick={() => { track('export'); void printResume(); }}>⬇ Export</button>
+          <button class="export-btn" type="button" onClick={() => {
+            track('export', {
+              template: template.value,
+              sections_visible_count: Object.values(visibility.value).filter(Boolean).length,
+              ai_used: wasAIUsed(),
+            });
+            void printResume();
+          }}>⬇ Export</button>
         </div>
       </header>
     </>

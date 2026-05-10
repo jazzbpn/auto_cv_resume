@@ -33,6 +33,7 @@ async function runImport(text: string, source: string) {
   if (!text || text.trim().length < 50) {
     stage.value = 'error';
     errorMsg.value = 'Please provide more CV content before importing.';
+    track('import_error', { stage: 'too_short' });
     return;
   }
   stage.value = 'processing';
@@ -49,6 +50,7 @@ async function runImport(text: string, source: string) {
   } catch (e) {
     stage.value = 'error';
     errorMsg.value = e instanceof Error ? e.message : 'Could not analyse your CV. Please try again.';
+    track('import_error', { stage: 'parse' });
   }
 }
 
@@ -60,6 +62,7 @@ async function handleFile(file: File) {
   } catch (e) {
     stage.value = 'error';
     errorMsg.value = e instanceof Error ? e.message : 'Could not read file.';
+    track('import_error', { stage: 'extract' });
   }
 }
 
