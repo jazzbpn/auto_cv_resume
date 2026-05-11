@@ -15,8 +15,7 @@ export function TopBar({ onImport }: Props) {
           <a class="brand-lockup" href="/" aria-label="ResumePDF">
             <span class="brand-name">Resume<span>PDF</span></span>
           </a>
-          <span class="free-chip" aria-label="100% free">FREE</span>
-          <SaveIndicator />
+<SaveIndicator />
         </div>
         <div class="top-actions">
           <button class="import-btn" type="button" onClick={onImport} aria-label="Import CV">

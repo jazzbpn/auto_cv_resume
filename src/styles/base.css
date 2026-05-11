@@ -94,34 +94,8 @@ body {
   margin-left: 1px;
 }
 
-@media (max-width: 640px) {
-  .free-ribbon { display: none; }
-  .brand-lockup { margin-left: 12px; }
-}
-
 @media (max-width: 480px) {
   .brand-name { font-size: 1.05rem; }
-}
-
-.free-chip {
-  display: none;
-  font-family: var(--font-ui);
-  font-size: .52rem;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: #fff;
-  background: linear-gradient(135deg, #34d399, #059669);
-  border-radius: 999px;
-  padding: 2px 7px;
-  line-height: 1.6;
-  white-space: nowrap;
-  vertical-align: middle;
-  box-shadow: 0 1px 4px rgba(5,150,105,.35);
-}
-
-@media (max-width: 640px) {
-  .free-chip { display: inline-block; }
 }
 
 .free-ribbon {
@@ -162,10 +136,17 @@ body {
 .free-ribbon::before { left: 0;  border-width: 6px 0 0 6px; }
 .free-ribbon::after  { right: 0; border-width: 6px 6px 0 0; }
 
+/* Wider ribbon on mobile so both ends extend well off-screen */
+@media (max-width: 640px) {
+  .free-ribbon {
+    top: 16px; left: -68px; width: 192px;
+    font-size: .58rem; padding: 4px 0;
+  }
+}
 @media (max-width: 480px) {
   .free-ribbon {
-    top: 14px; left: -58px; width: 160px;
-    font-size: .54rem; letter-spacing: .14em; padding: 3px 0;
+    top: 14px; left: -74px; width: 192px;
+    font-size: .54rem; letter-spacing: .12em; padding: 3px 0;
   }
 }
 
