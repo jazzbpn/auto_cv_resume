@@ -180,8 +180,93 @@
       ]
     }
     </script>
+  <style>
+    #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #faf9f7;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      transition: opacity .55s cubic-bezier(.4,0,.2,1);
+    }
+    #splash.splash-hide { opacity: 0; pointer-events: none; }
+
+    .splash-wrap { display: flex; flex-direction: column; align-items: center; }
+
+    .splash-logo {
+      display: flex; align-items: baseline;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: clamp(2.6rem, 9vw, 4.2rem);
+      font-weight: 700;
+      letter-spacing: -.035em;
+      line-height: 1;
+    }
+    .splash-r { color: #1c1710; }
+    .splash-p { color: #c9962e; }
+
+    .splash-letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: spl-up .45s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    @keyframes spl-up {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .sl1  { animation-delay: .08s; }
+    .sl2  { animation-delay: .14s; }
+    .sl3  { animation-delay: .20s; }
+    .sl4  { animation-delay: .26s; }
+    .sl5  { animation-delay: .32s; }
+    .sl6  { animation-delay: .38s; }
+    .sl7  { animation-delay: .50s; }
+    .sl8  { animation-delay: .56s; }
+    .sl9  { animation-delay: .62s; }
+
+    .splash-line {
+      height: 2px;
+      background: linear-gradient(90deg, #c9962e, #e8b84b);
+      border-radius: 2px;
+      margin-top: 12px;
+      width: 0;
+      animation: spl-line .45s cubic-bezier(.16,1,.3,1) .78s forwards;
+    }
+    @keyframes spl-line { to { width: 100%; } }
+
+    .splash-tag {
+      margin-top: 14px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #a09070;
+      opacity: 0;
+      animation: spl-fade .4s ease 1.0s forwards;
+    }
+    @keyframes spl-fade { to { opacity: 1; } }
+  </style>
   </head>
   <body>
+    <noscript><style>#splash { display: none; }</style></noscript>
+    <div id="splash" aria-hidden="true">
+      <div class="splash-wrap">
+        <div class="splash-logo">
+          <span class="splash-r"
+            ><span class="splash-letter sl1">R</span
+            ><span class="splash-letter sl2">e</span
+            ><span class="splash-letter sl3">s</span
+            ><span class="splash-letter sl4">u</span
+            ><span class="splash-letter sl5">m</span
+            ><span class="splash-letter sl6">e</span></span
+          ><span class="splash-p"
+            ><span class="splash-letter sl7">P</span
+            ><span class="splash-letter sl8">D</span
+            ><span class="splash-letter sl9">F</span></span>
+        </div>
+        <div class="splash-line"></div>
+        <div class="splash-tag">AI · ATS · PDF</div>
+      </div>
+    </div>
     <div id="app">
       <noscript>
         <h1>Free AI Resume Builder with ATS Score — ResumePDF</h1>

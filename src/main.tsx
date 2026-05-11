@@ -8,8 +8,23 @@ import './styles/ai.css';
 import './styles/import.css';
 import './styles/langpicker.css';
 
+const SPLASH_MIN_MS = 1500;
+const splashStart = performance.now();
+
+function dismissSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  splash.classList.add('splash-hide');
+  splash.addEventListener('transitionend', () => splash.remove(), { once: true });
+}
+
 const root = document.getElementById('app');
-if (root) render(<App />, root);
+if (root) {
+  render(<App />, root);
+  const elapsed = performance.now() - splashStart;
+  const wait = Math.max(0, SPLASH_MIN_MS - elapsed);
+  setTimeout(dismissSplash, wait);
+}
 
 if ('serviceWorker' in navigator) {
   // vite-plugin-pwa registers SW in production builds.
