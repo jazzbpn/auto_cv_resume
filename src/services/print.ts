@@ -101,12 +101,7 @@ function buildPrintHTML(): string {
   // @page placed LAST so it wins the cascade over any UA-stylesheet @page rule.
   // !important is invalid inside @page descriptors (CSS spec) — source order wins instead.
   const pageReset = `@page{size:A4;margin:0;}`;
-  // Inline script runs inside the new window — calls print() once fonts are
-  // ready (or after 2.5 s), then closes the tab on afterprint.
-  // Keeping print() inside the new window avoids the iOS issue where calling
-  // win.print() from the parent after an await breaks the gesture chain.
-  const autoprint = `<script>(function(){var d=false;function p(){if(d)return;d=true;window.print();window.addEventListener('afterprint',function(){window.close();});}if(document.fonts&&document.fonts.ready){document.fonts.ready.then(p);}setTimeout(p,2500);})();</script>`;
-  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}\n${pageReset}</style></head><body>${clone.outerHTML}${autoprint}</body></html>`;
+  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}\n${pageReset}</style></head><body>${clone.outerHTML}</body></html>`;
 }
 
 export async function printResume(): Promise<void> {
@@ -116,49 +111,15 @@ export async function printResume(): Promise<void> {
   if (btn) btn.disabled = true;
   if (btnText) btnText.textContent = 'Preparing…';
 
-  const reenable = () => {
+  try {
+    const html = buildPrintHTML();
+    await printViaIframe(html);
+  } catch (e) {
+    console.error('[print] PDF export failed:', e);
+    showToast(e instanceof Error ? e.message : 'PDF export failed.');
+  } finally {
     if (btn) btn.disabled = false;
     if (btnText) btnText.textContent = original;
-  };
-
-  // Open synchronously — iOS Safari and Android Chrome block window.open()
-  // if it is called after an await (outside the user-gesture call stack).
-  const win = window.open('', '_blank');
-
-  if (win) {
-    // Primary path: new window owns its document, so iOS respects its
-    // @page{margin:0} and <title> directly (no parent-injection needed).
-    // window.print() is called by the inline <script> inside the HTML so it
-    // runs in the new window's own context — avoids iOS gesture-chain issues
-    // that broke calling win.print() from the parent after an await.
-    try {
-      const html = buildPrintHTML();
-      win.document.open();
-      win.document.write(html);
-      win.document.close();
-      win.focus();
-    } catch (e) {
-      win.close();
-      console.error('[print] failed to write print window:', e);
-      showToast(e instanceof Error ? e.message : 'PDF export failed.');
-    } finally {
-      // Re-enable after a short delay — afterprint on a child window is not
-      // reliably observable from the parent.
-      setTimeout(reenable, 1500);
-    }
-  } else {
-    // Popup blocked (aggressive WebView, browser setting) — iframe fallback.
-    // Note: on iOS the iframe's @page and parent-injected @page are both
-    // ignored for decorations; user may still see URL/date in that case.
-    try {
-      const html = buildPrintHTML();
-      await printViaIframe(html);
-    } catch (e) {
-      console.error('[print] iframe print failed:', e);
-      showToast(e instanceof Error ? e.message : 'PDF export failed.');
-    } finally {
-      reenable();
-    }
   }
 }
 
