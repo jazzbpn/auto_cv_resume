@@ -674,6 +674,12 @@ export interface UILabels {
   catImpact: string;
   issueFix: string;
   analysePhases: string[];
+  toastPreparingFixes: string;
+  toastAutoFixFailed: string;
+  toastAutoFixRetry: string;
+  toastResumeOptimized: string;
+  toastAlreadyOptimized: string;
+  toastNoRewriteText: string;
 }
 
 const U: Record<LangCode, UILabels> = {
@@ -827,6 +833,13 @@ const U: Record<LangCode, UILabels> = {
       'Compiling recommendations…',
       'Finalising your score…',
     ],
+    toastPreparingFixes: "Preparing your AI fixes…",
+    toastAutoFixFailed: "Auto-Fix failed:",
+    toastAutoFixRetry: "Try Re-analyse and Auto-Fix again.",
+    toastResumeOptimized: "✓ Resume optimized. Score updated. Tap Undo to revert.",
+    toastAlreadyOptimized: "✓ Your CV is already optimised — no rewrites needed.",
+    toastNoRewriteText: "AI returned no rewrite text. Tap Re-analyse to try again.",
+
   },
   ar: {
     sectionsToShow: 'الأقسام المعروضة',
@@ -978,6 +991,12 @@ const U: Record<LangCode, UILabels> = {
       'تجميع التوصيات…',
       'إتمام تقييمك…',
     ],
+    toastPreparingFixes: "جارٍ تحضير إصلاحات الذكاء الاصطناعي…",
+    toastAutoFixFailed: "فشل التحسين التلقائي.",
+    toastAutoFixRetry: "حاول مرة أخرى.",
+    toastResumeOptimized: "تمّ تحسين السيرة الذاتية. تم تحديث النتيجة. اضغط تراجع للعودة.",
+    toastAlreadyOptimized: "السيرة الذاتية محسّنة بالفعل.",
+    toastNoRewriteText: "لم يُعد الذكاء الاصطناعي أيّ نص.",
   },
   ur: {
     sectionsToShow: 'دکھانے کے حصے',
@@ -1129,6 +1148,12 @@ const U: Record<LangCode, UILabels> = {
       'سفارشات مرتب کی جا رہی ہیں…',
       'آپ کا اسکور حتمی کیا جا رہا ہے…',
     ],
+    toastPreparingFixes: "AI اصلاحات تیار ہو رہی ہیں…",
+    toastAutoFixFailed: "خودکار اصلاح ناکام ہوئی۔",
+    toastAutoFixRetry: "دوبارہ کوشش کریں۔",
+    toastResumeOptimized: "CV بہتر ہو گئی۔ اسکور اپڈیٹ ہوا۔ واپس کرنے کے لیے Undo دبائیں۔",
+    toastAlreadyOptimized: "CV پہلے سے بہتر ہے۔",
+    toastNoRewriteText: "AI نے کوئی متن واپس نہیں کیا۔",
   },
   hi: {
     sectionsToShow: 'दिखाए जाने वाले अनुभाग',
@@ -1280,6 +1305,12 @@ const U: Record<LangCode, UILabels> = {
       'सुझाव तैयार किए जा रहे हैं…',
       'आपका स्कोर अंतिम किया जा रहा है…',
     ],
+    toastPreparingFixes: "AI सुधार तैयार हो रहे हैं…",
+    toastAutoFixFailed: "ऑटो-सुधार विफल हुआ।",
+    toastAutoFixRetry: "पुनः प्रयास करें।",
+    toastResumeOptimized: "Resume अनुकूलित हुआ। स्कोर अपडेट हुआ। वापस करने के लिए Undo दबाएं।",
+    toastAlreadyOptimized: "Resume पहले से अनुकूलित है।",
+    toastNoRewriteText: "AI ने कोई टेक्स्ट नहीं लौटाया।",
   },
   fr: {
     sectionsToShow: 'Sections à afficher',
@@ -1431,6 +1462,13 @@ const U: Record<LangCode, UILabels> = {
       'Compilation des recommandations…',
       'Finalisation de votre score…',
     ],
+    toastPreparingFixes: "Préparation des corrections IA…",
+    toastAutoFixFailed: "Correction automatique échouée :",
+    toastAutoFixRetry: "Réessayez avec Ré-analyser et Correction automatique.",
+    toastResumeOptimized: "✓ CV optimisé. Score mis à jour. Appuyez sur Annuler pour revenir.",
+    toastAlreadyOptimized: "✓ Votre CV est déjà optimisé — aucune réécriture nécessaire.",
+    toastNoRewriteText: "L'IA n'a renvoyé aucun texte. Réessayez avec Ré-analyser.",
+
   },
   es: {
     sectionsToShow: 'Secciones a mostrar',
@@ -1582,6 +1620,13 @@ const U: Record<LangCode, UILabels> = {
       'Compilando recomendaciones…',
       'Finalizando tu puntuación…',
     ],
+    toastPreparingFixes: "Preparando las correcciones de IA…",
+    toastAutoFixFailed: "Corrección automática fallida:",
+    toastAutoFixRetry: "Intenta Re-analizar y Corrección automática de nuevo.",
+    toastResumeOptimized: "✓ CV optimizado. Puntuación actualizada. Pulsa Deshacer para revertir.",
+    toastAlreadyOptimized: "✓ Tu CV ya está optimizado — no se necesitan reescrituras.",
+    toastNoRewriteText: "La IA no devolvió texto. Intenta Re-analizar de nuevo.",
+
   },
   de: {
     sectionsToShow: 'Anzuzeigende Abschnitte',
@@ -1733,6 +1778,12 @@ const U: Record<LangCode, UILabels> = {
       'Empfehlungen werden zusammengestellt…',
       'Score wird finalisiert…',
     ],
+    toastPreparingFixes: "KI-Korrekturen werden vorbereitet…",
+    toastAutoFixFailed: "Automatische Korrektur fehlgeschlagen.",
+    toastAutoFixRetry: "Erneut versuchen.",
+    toastResumeOptimized: "Lebenslauf optimiert. Ergebnis aktualisiert. Zum Rückgängigmachen Undo tippen.",
+    toastAlreadyOptimized: "Lebenslauf ist bereits optimiert.",
+    toastNoRewriteText: "KI hat keinen Text zurückgegeben.",
   },
   pt: {
     sectionsToShow: 'Secções a mostrar',
@@ -1884,6 +1935,13 @@ const U: Record<LangCode, UILabels> = {
       'A compilar recomendações…',
       'A finalizar a sua pontuação…',
     ],
+    toastPreparingFixes: "Preparando as correções de IA…",
+    toastAutoFixFailed: "Correção automática falhou:",
+    toastAutoFixRetry: "Tente Re-analisar e Correção automática novamente.",
+    toastResumeOptimized: "✓ CV otimizado. Pontuação atualizada. Pressione Desfazer para reverter.",
+    toastAlreadyOptimized: "✓ O seu CV já está otimizado — sem necessidade de reescrita.",
+    toastNoRewriteText: "A IA não devolveu texto. Tente Re-analisar novamente.",
+
   },
   zh: {
     sectionsToShow: '显示的版块',
@@ -2035,6 +2093,12 @@ const U: Record<LangCode, UILabels> = {
       '正在整理建议…',
       '正在生成您的评分…',
     ],
+    toastPreparingFixes: "正在准备 AI 修复…",
+    toastAutoFixFailed: "自动修复失败。",
+    toastAutoFixRetry: "请重试。",
+    toastResumeOptimized: "简历已优化。评分已更新。点击撤销可恢复。",
+    toastAlreadyOptimized: "简历已是最佳状态。",
+    toastNoRewriteText: "AI 未返回任何文本。",
   },
   ja: {
     sectionsToShow: '表示するセクション',
@@ -2186,6 +2250,12 @@ const U: Record<LangCode, UILabels> = {
       '改善案をまとめています…',
       'スコアを確定中…',
     ],
+    toastPreparingFixes: "AI修正を準備中…",
+    toastAutoFixFailed: "自動修正に失敗しました。",
+    toastAutoFixRetry: "もう一度お試しください。",
+    toastResumeOptimized: "履歴書が最適化されました。スコアが更新されました。元に戻すにはUndoをタップ。",
+    toastAlreadyOptimized: "履歴書はすでに最適化されています。",
+    toastNoRewriteText: "AIがテキストを返しませんでした。",
   },
   ko: {
     sectionsToShow: '표시할 섹션',
@@ -2337,6 +2407,13 @@ const U: Record<LangCode, UILabels> = {
       '개선 사항 정리 중…',
       '점수를 확정하는 중…',
     ],
+    toastPreparingFixes: "AI 수정 사항 준비 중…",
+    toastAutoFixFailed: "자동 수정 실패:",
+    toastAutoFixRetry: "다시 분석하고 자동 수정을 시도하세요.",
+    toastResumeOptimized: "✓ 이력서가 최적화되었습니다. 점수가 업데이트되었습니다. 실행 취소를 탭하여 되돌리세요.",
+    toastAlreadyOptimized: "✓ 이력서가 이미 최적화되어 있습니다 — 재작성 불필요.",
+    toastNoRewriteText: "AI가 텍스트를 반환하지 않았습니다. 다시 분석하세요.",
+
   },
   ru: {
     sectionsToShow: 'Отображаемые разделы',
@@ -2488,6 +2565,13 @@ const U: Record<LangCode, UILabels> = {
       'Составление рекомендаций…',
       'Финализация вашей оценки…',
     ],
+    toastPreparingFixes: "Подготовка исправлений ИИ…",
+    toastAutoFixFailed: "Автоисправление не выполнено:",
+    toastAutoFixRetry: "Попробуйте повторно проанализировать и применить автоисправление.",
+    toastResumeOptimized: "✓ Резюме оптимизировано. Счёт обновлён. Нажмите «Отменить» для возврата.",
+    toastAlreadyOptimized: "✓ Ваше резюме уже оптимизировано — переписывание не требуется.",
+    toastNoRewriteText: "ИИ не вернул текст. Попробуйте повторный анализ.",
+
   },
   tr: {
     sectionsToShow: 'Gösterilecek Bölümler',
@@ -2639,6 +2723,13 @@ const U: Record<LangCode, UILabels> = {
       'Öneriler derleniyor…',
       'Puanınız sonuçlandırılıyor…',
     ],
+    toastPreparingFixes: "YZ düzeltmeleri hazırlanıyor…",
+    toastAutoFixFailed: "Otomatik düzeltme başarısız:",
+    toastAutoFixRetry: "Yeniden analiz edin ve Otomatik Düzelt'i tekrar deneyin.",
+    toastResumeOptimized: "✓ CV optimize edildi. Puan güncellendi. Geri almak için Geri Al'a dokunun.",
+    toastAlreadyOptimized: "✓ CV'niz zaten optimize edilmiş — yeniden yazma gerekmiyor.",
+    toastNoRewriteText: "YZ metin döndürmedi. Yeniden analiz edin.",
+
   },
   he: {
     sectionsToShow: 'סעיפים להצגה',
@@ -2790,6 +2881,13 @@ const U: Record<LangCode, UILabels> = {
       'המלצות מרוכזות…',
       'הציון שלך מסתיים…',
     ],
+    toastPreparingFixes: "מכין את תיקוני הבינה המלאכותית…",
+    toastAutoFixFailed: "תיקון אוטומטי נכשל:",
+    toastAutoFixRetry: "נסה לנתח מחדש ולהפעיל תיקון אוטומטי שוב.",
+    toastResumeOptimized: "✓ קורות החיים אוּפְּטְמוּ. הציון עודכן. הקש בטל לחזרה.",
+    toastAlreadyOptimized: "✓ קורות החיים שלך כבר מאוּפְּטָמִים — אין צורך בשכתוב.",
+    toastNoRewriteText: "הבינה המלאכותית לא החזירה טקסט. נסה לנתח מחדש.",
+
   },
   it: {
     sectionsToShow: 'Sezioni da mostrare',
@@ -2941,6 +3039,13 @@ const U: Record<LangCode, UILabels> = {
       'Elaborazione dei suggerimenti…',
       'Finalizzazione del punteggio…',
     ],
+    toastPreparingFixes: "Preparazione delle correzioni AI…",
+    toastAutoFixFailed: "Correzione automatica fallita:",
+    toastAutoFixRetry: "Rianalizza e riprova la correzione automatica.",
+    toastResumeOptimized: "✓ CV ottimizzato. Punteggio aggiornato. Premi Annulla per ripristinare.",
+    toastAlreadyOptimized: "✓ Il tuo CV è già ottimizzato — nessuna riscrittura necessaria.",
+    toastNoRewriteText: "L'AI non ha restituito testo. Rianalizza e riprova.",
+
   },
   id: {
     sectionsToShow: 'Bagian yang Ditampilkan',
@@ -3092,6 +3197,13 @@ const U: Record<LangCode, UILabels> = {
       'Menyusun rekomendasi…',
       'Menyelesaikan skor Anda…',
     ],
+    toastPreparingFixes: "Mempersiapkan perbaikan AI…",
+    toastAutoFixFailed: "Perbaikan otomatis gagal:",
+    toastAutoFixRetry: "Coba analisis ulang dan Perbaikan Otomatis lagi.",
+    toastResumeOptimized: "✓ CV dioptimalkan. Skor diperbarui. Ketuk Batalkan untuk kembali.",
+    toastAlreadyOptimized: "✓ CV Anda sudah dioptimalkan — tidak perlu penulisan ulang.",
+    toastNoRewriteText: "AI tidak mengembalikan teks. Coba analisis ulang.",
+
   },
   bn: {
     sectionsToShow: 'প্রদর্শনযোগ্য বিভাগ',
@@ -3243,6 +3355,13 @@ const U: Record<LangCode, UILabels> = {
       'সুপারিশ সংকলন করা হচ্ছে…',
       'আপনার স্কোর চূড়ান্ত করা হচ্ছে…',
     ],
+    toastPreparingFixes: "AI সংশোধন প্রস্তুত হচ্ছে…",
+    toastAutoFixFailed: "স্বয়ংক্রিয় সংশোধন ব্যর্থ:",
+    toastAutoFixRetry: "পুনরায় বিশ্লেষণ করুন এবং আবার চেষ্টা করুন।",
+    toastResumeOptimized: "✓ CV অপ্টিমাইজ হয়েছে। স্কোর আপডেট হয়েছে। ফিরতে Undo চাপুন।",
+    toastAlreadyOptimized: "✓ আপনার CV ইতিমধ্যে অপ্টিমাইজড — পুনর্লিখনের দরকার নেই।",
+    toastNoRewriteText: "AI কোনো টেক্সট ফেরত দেয়নি। পুনরায় বিশ্লেষণ করুন।",
+
   },
   nl: {
     sectionsToShow: 'Secties om te tonen',
@@ -3394,6 +3513,13 @@ const U: Record<LangCode, UILabels> = {
       'Aanbevelingen worden samengesteld…',
       'Uw score wordt afgerond…',
     ],
+    toastPreparingFixes: "AI-verbeteringen worden voorbereid…",
+    toastAutoFixFailed: "Automatische verbetering mislukt:",
+    toastAutoFixRetry: "Probeer opnieuw analyseren en Automatisch verbeteren.",
+    toastResumeOptimized: "✓ CV geoptimaliseerd. Score bijgewerkt. Druk op Ongedaan maken om terug te keren.",
+    toastAlreadyOptimized: "✓ Uw CV is al geoptimaliseerd — herschrijven niet nodig.",
+    toastNoRewriteText: "AI heeft geen tekst geretourneerd. Probeer opnieuw te analyseren.",
+
   },
   pl: {
     sectionsToShow: 'Sekcje do wyświetlenia',
@@ -3545,6 +3671,13 @@ const U: Record<LangCode, UILabels> = {
       'Kompilowanie rekomendacji…',
       'Finalizowanie Twojego wyniku…',
     ],
+    toastPreparingFixes: "Przygotowywanie poprawek AI…",
+    toastAutoFixFailed: "Automatyczna poprawka nie powiodła się:",
+    toastAutoFixRetry: "Spróbuj ponownie przeanalizować i zastosować automatyczną poprawkę.",
+    toastResumeOptimized: "✓ CV zoptymalizowane. Wynik zaktualizowany. Naciśnij Cofnij, aby przywrócić.",
+    toastAlreadyOptimized: "✓ Twoje CV jest już zoptymalizowane — przepisywanie nie jest potrzebne.",
+    toastNoRewriteText: "AI nie zwróciło tekstu. Spróbuj ponownie przeanalizować.",
+
   },
   vi: {
     sectionsToShow: 'Các phần hiển thị',
@@ -3696,6 +3829,13 @@ const U: Record<LangCode, UILabels> = {
       'Đang tổng hợp đề xuất…',
       'Đang hoàn thiện điểm của bạn…',
     ],
+    toastPreparingFixes: "Đang chuẩn bị các bản sửa lỗi AI…",
+    toastAutoFixFailed: "Sửa lỗi tự động thất bại:",
+    toastAutoFixRetry: "Thử Phân tích lại và Sửa tự động lần nữa.",
+    toastResumeOptimized: "✓ CV đã được tối ưu hóa. Điểm đã cập nhật. Nhấn Hoàn tác để khôi phục.",
+    toastAlreadyOptimized: "✓ CV của bạn đã được tối ưu hóa — không cần viết lại.",
+    toastNoRewriteText: "AI không trả về văn bản. Thử Phân tích lại.",
+
   },
 };
 

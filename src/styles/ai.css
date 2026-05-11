@@ -22,24 +22,16 @@
   overscroll-behavior: contain;
 }
 
-.analyse-header {
-  padding: var(--s5) var(--s5) var(--s4);
-  border-bottom: 1px solid var(--dark-hairline);
-  background: var(--dark-surface-1);
+/* ── Pre-state: vertically centered form ── */
+.analyse-scroll-pre {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
 }
-.analyse-header h2 {
-  font-family: var(--font-ui);
-  font-size: 1.05rem; font-weight: 600;
-  color: var(--on-dark);
-  margin: 0 0 4px;
-  letter-spacing: -.01em;
-}
-.analyse-header p {
-  font-family: var(--font-ui);
-  font-size: .85rem; color: var(--on-dark-muted);
-  font-weight: 400;
-  font-style: normal; margin: 0; line-height: 1.5;
-  letter-spacing: 0;
+.analyse-pre {
+  width: 100%;
+  padding: 0 0 var(--s7);
 }
 
 /* ── JD textarea + run button ── */
@@ -48,14 +40,27 @@
   border-bottom: 1px solid var(--dark-hairline);
   background: var(--dark-surface-1);
 }
-.analyse-jd-label {
-  display: block;
-  font-family: var(--font-ui); font-size: .78rem;
-  letter-spacing: 0; text-transform: none;
-  font-weight: 500;
-  color: var(--on-dark); margin-bottom: 8px;
+.analyse-pre .analyse-jd {
+  border-bottom: none;
+  background: transparent;
+  padding: var(--s5);
 }
-.analyse-jd-label span { color: var(--on-dark-muted); font-size: .72rem; font-weight: 400; }
+.analyse-pre-hint {
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: .72rem;
+  font-weight: 400;
+  color: var(--on-dark-muted);
+  opacity: .55;
+  margin: -4px var(--s5) 0;
+  line-height: 1.6;
+  letter-spacing: .01em;
+}
+.analyse-pre-hint strong {
+  font-weight: 500;
+  color: var(--amber-bright);
+  opacity: .85;
+}
 .analyse-jd-textarea {
   width: 100%;
   background: #34291f;
@@ -84,7 +89,7 @@
     inset 0 1px 0 rgba(255, 255, 255, .05),
     0 0 0 3px rgba(230, 184, 41, .18);
 }
-.analyse-jd-textarea::placeholder { color: rgba(244, 239, 228, .55); opacity: 1; }
+.analyse-jd-textarea::placeholder { color: rgba(244, 239, 228, .38); opacity: 1; }
 
 .analyse-run-btn {
   width: 100%;
@@ -129,24 +134,6 @@
 }
 .analyse-error span { color: #e74c3c; flex-shrink: 0; }
 
-/* Empty state */
-.analyse-empty {
-  padding: 40px 20px;
-  text-align: center;
-  font-family: var(--font-ui);
-  color: var(--on-dark-muted);
-  font-style: normal;
-  flex: 1;
-}
-.analyse-empty span {
-  display: block; font-size: 2.4rem;
-  margin-bottom: 14px; opacity: .9;
-}
-.analyse-empty p {
-  font-size: .9rem; line-height: 1.6; max-width: 280px; margin: 0 auto;
-  font-weight: 400; letter-spacing: 0;
-}
-.analyse-empty strong { color: var(--amber-bright); font-weight: 600; }
 
 /* ───────── SKELETON LOADER ───────── */
 .analyse-skeleton {

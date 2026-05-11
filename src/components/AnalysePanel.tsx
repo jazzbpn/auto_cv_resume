@@ -14,13 +14,14 @@ import type { AIResult, AIIssue } from '../types';
  * one click away in the success banner.
  */
 async function autoFixResume(): Promise<void> {
+  const ui = getUI(cvLang.value);
   track('ai_autofix');
   markAIUsed();
   // Rewrites are fetched in the background after the analysis lands. If the
   // user clicks Auto-Fix before that lands (or the prefetch failed), trigger
   // / await the optimize call now so we have something to apply.
   if (!aiOptimize.value) {
-    showToast('Preparing your AI fixes…');
+    showToast(ui.toastPreparingFixes);
     await runAIOptimize();
   }
   // The optimize call itself failed (network / parse / truncation). Surface
@@ -28,13 +29,13 @@ async function autoFixResume(): Promise<void> {
   // would imply the AI ran successfully and just had nothing to say.
   if (!aiOptimize.value && aiOptimizeStatus.value === 'error') {
     track('ai_error', { stage: 'autofix', reason: classifyAIError(aiOptimizeError.value) });
-    showToast(`Auto-Fix failed: ${aiOptimizeError.value || 'try Re-analyse and Auto-Fix again.'}`);
+    showToast(`${ui.toastAutoFixFailed} ${aiOptimizeError.value || ui.toastAutoFixRetry}`);
     return;
   }
   const applied = applyAIFix();
   if (applied) {
     track('ai_autofix_success');
-    showToast('✓ Resume optimized. Score updated. Tap Undo to revert.');
+    showToast(ui.toastResumeOptimized);
     return;
   }
   // applyAIFix returned false: the optimize call succeeded but the AI
@@ -43,11 +44,7 @@ async function autoFixResume(): Promise<void> {
   const opt = aiOptimize.value;
   const r = aiResult.value;
   const sameScore = !!(opt && r && opt.optimized_ats_score <= r.ats_score);
-  showToast(
-    sameScore
-      ? '✓ Your CV is already optimised — no rewrites needed.'
-      : 'AI returned no rewrite text. Tap Re-analyse to try again.',
-  );
+  showToast(sameScore ? ui.toastAlreadyOptimized : ui.toastNoRewriteText);
 }
 
 async function reAnalyseFresh(): Promise<void> {
@@ -85,57 +82,57 @@ export function AnalysePanel() {
   const ui = getUI(cvLang.value);
   const phase = useCyclingPhrase(getAnalysePhases());
 
+  const JDForm = (
+    <div class="analyse-jd">
+      <textarea
+        rows={3}
+        class="analyse-jd-textarea"
+        placeholder={ui.jobDescPlaceholder}
+        value={aiJD.value}
+        onInput={(e) => { aiJD.value = (e.currentTarget as HTMLTextAreaElement).value; }}
+      />
+      <button
+        type="button"
+        class={`analyse-run-btn${loading ? ' analyse-run-btn-loading' : ''}`}
+        disabled={loading}
+        onClick={() => { void reAnalyseFresh(); }}
+      >
+        {loading ? (
+          <span class="run-btn-loading">
+            <span class="run-btn-loading-row">
+              <span class="ai-spinner" />
+              <span class="run-btn-phase" key={phase}>{phase}</span>
+            </span>
+            <span class="run-btn-hint">{ui.analyseTiming}</span>
+          </span>
+        ) : r ? <>{ui.reanalyseBtn}</> : <>{ui.analyseBtn}</>}
+      </button>
+      {aiStatus.value === 'error' && (
+        <div class="analyse-error" role="alert">
+          <span aria-hidden>⚠</span> {aiError.value}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div class="analyse-panel">
-      <div class="analyse-scroll">
-        <header class="analyse-header">
-          <h2>{ui.analyseTitle}</h2>
-        </header>
-
-        <div class="analyse-jd">
-          <label class="analyse-jd-label">
-            {ui.jobDescLabel} <span>{ui.jobDescOptional}</span>
-          </label>
-          <textarea
-            rows={4}
-            class="analyse-jd-textarea"
-            placeholder={ui.jobDescPlaceholder}
-            value={aiJD.value}
-            onInput={(e) => { aiJD.value = (e.currentTarget as HTMLTextAreaElement).value; }}
-          />
-          <button
-            type="button"
-            class={`analyse-run-btn${loading ? ' analyse-run-btn-loading' : ''}`}
-            disabled={loading}
-            onClick={() => { void reAnalyseFresh(); }}
-          >
-            {loading ? (
-              <span class="run-btn-loading">
-                <span class="run-btn-loading-row">
-                  <span class="ai-spinner" />
-                  <span class="run-btn-phase" key={phase}>{phase}</span>
-                </span>
-                <span class="run-btn-hint">{ui.analyseTiming}</span>
-              </span>
-            ) : r ? <>{ui.reanalyseBtn}</> : <>{ui.analyseBtn}</>}
-          </button>
-          {aiStatus.value === 'error' && (
-            <div class="analyse-error" role="alert">
-              <span aria-hidden>⚠</span> {aiError.value}
-            </div>
-          )}
-        </div>
+      <div class={`analyse-scroll${!r && !loading ? ' analyse-scroll-pre' : ''}`}>
 
         {!r && !loading && (
-          <div class="analyse-empty">
-            <span aria-hidden>📊</span>
-            <p>{ui.analyseEmptyHint}</p>
+          <div class="analyse-pre">
+            {JDForm}
+            <p class="analyse-pre-hint">
+              See <strong>ATS score</strong>, <strong>issues</strong>, and find <strong>missing keywords</strong>.
+            </p>
           </div>
         )}
 
-        {loading && !r && <AnalyseSkeleton />}
+        {loading && !r && <>{JDForm}<AnalyseSkeleton /></>}
 
         {r && (
+          <>
+          {JDForm}
           <div class="analyse-results">
             <HeroScore result={r} optimized={opt?.optimized_ats_score ?? null} fixed={fixed} />
             {fixed ? (
@@ -155,6 +152,7 @@ export function AnalysePanel() {
               </>
             )}
           </div>
+          </>
         )}
       </div>
 
