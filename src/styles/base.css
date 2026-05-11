@@ -428,3 +428,24 @@ body {
   border-radius: 2px 2px 0 0;
 }
 .resume.placeholder { display: flex; align-items: center; justify-content: center; color: var(--muted); }
+
+/* ── RTL / ARABIC GLOBAL OVERRIDES ──
+   Universal rules that apply to all templates.
+   Per-template design decisions live in *.rtl.css files. */
+
+/* Font: switch to Cairo which has proper Arabic + Latin coverage */
+.resume[dir=rtl] {
+  --font-doc: var(--font-arabic);
+  --font-display: var(--font-arabic);
+  font-family: var(--font-arabic);
+  line-height: 1.9;
+}
+/* Arabic has no italic — strip it from every element */
+.resume[dir=rtl] em,
+.resume[dir=rtl] .r-summary,
+.resume[dir=rtl] .r-esub,
+.resume[dir=rtl] .award-desc,
+.resume[dir=rtl] .r-name { font-style: normal; }
+/* Body text needs more line-height for Arabic glyph height */
+.resume[dir=rtl] .r-edesc,
+.resume[dir=rtl] .r-summary { line-height: 2; }

@@ -1,4 +1,7 @@
 import './minimal.css';
+import './minimal.rtl.css';
+import { textDir, cvLang } from '../state/store';
+import { getT } from '../i18n/sections';
 import type { ResumeData } from './derive';
 import { expWithOverrides } from './derive';
 import {
@@ -48,9 +51,10 @@ export function Minimal({ data }: { data: ResumeData }) {
   const summary = summaryOverride ?? p.summary;
   const exp = expWithOverrides(data);
   const allSkills = techSkills.length + softSkills.length + toolSkills.length;
+  const t = getT(cvLang.value);
 
   return (
-    <article class="resume minimal">
+    <article class="resume minimal" dir={textDir.value}>
       <h1 class="r-name">{p.name}</h1>
       <div class="r-jtitle">{p.title}</div>
       <ContactRow items={contacts} />
@@ -58,87 +62,87 @@ export function Minimal({ data }: { data: ResumeData }) {
 
       {vis.objective && p.objective && (
         <section class="r-sec">
-          <h2 class="r-stitle">Career Objective</h2>
+          <h2 class="r-stitle">{t.objective}</h2>
           <div class="r-summary">{p.objective}</div>
         </section>
       )}
       {vis.summary && summary && (
         <section class="r-sec">
-          <h2 class="r-stitle">Profile</h2>
+          <h2 class="r-stitle">{t.summary}</h2>
           <div class="r-summary">{summary}</div>
         </section>
       )}
       {vis.experience && exp.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Experience</h2>
+          <h2 class="r-stitle">{t.experience}</h2>
           {exp.map((e, i) => <MinEntry e={e} key={i} />)}
         </section>
       )}
       {vis.education && cv.education.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Education</h2>
+          <h2 class="r-stitle">{t.education}</h2>
           {cv.education.map((e, i) => <MinEntry e={e} key={i} />)}
         </section>
       )}
       {vis.skills && allSkills > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Skills</h2>
+          <h2 class="r-stitle">{t.skills}</h2>
           {techSkills.length > 0 && (
-            <div class="skill-row"><span class="skill-cat">Technical · </span><SkillTags items={techSkills} /></div>
+            <div class="skill-row"><span class="skill-cat">{t.skillsTech} · </span><SkillTags items={techSkills} /></div>
           )}
           {softSkills.length > 0 && (
-            <div class="skill-row"><span class="skill-cat">Soft · </span><SkillTags items={softSkills} /></div>
+            <div class="skill-row"><span class="skill-cat">{t.skillsSoft} · </span><SkillTags items={softSkills} /></div>
           )}
           {toolSkills.length > 0 && (
-            <div class="skill-row"><span class="skill-cat">Tools · </span><SkillTags items={toolSkills} /></div>
+            <div class="skill-row"><span class="skill-cat">{t.skillsTools} · </span><SkillTags items={toolSkills} /></div>
           )}
         </section>
       )}
       {vis.languages && cv.languages.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Languages</h2>
+          <h2 class="r-stitle">{t.languages}</h2>
           <LangList items={cv.languages} />
         </section>
       )}
       {vis.certs && cv.certifications.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Certifications</h2>
+          <h2 class="r-stitle">{t.certs}</h2>
           {cv.certifications.map((c, i) => <MinCert c={c} key={i} />)}
         </section>
       )}
       {vis.projects && cv.projects.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Projects</h2>
+          <h2 class="r-stitle">{t.projects}</h2>
           {cv.projects.map((e, i) => <MinEntry e={e} key={i} />)}
         </section>
       )}
       {vis.awards && cv.awards.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Awards & Honors</h2>
+          <h2 class="r-stitle">{t.awards}</h2>
           {cv.awards.map((a, i) => <AwardBlock a={a} key={i} />)}
         </section>
       )}
       {vis.pubs && cv.publications.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Publications</h2>
+          <h2 class="r-stitle">{t.pubs}</h2>
           {cv.publications.map((pub, i) => <PubBlock p={pub} key={i} />)}
         </section>
       )}
       {vis.conf && cv.conferences.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Conferences & Speaking</h2>
+          <h2 class="r-stitle">{t.conf}</h2>
           {cv.conferences.map((c, i) => <MinEntry e={c} key={i} />)}
         </section>
       )}
       {vis.volunteer && cv.volunteer.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Volunteer</h2>
+          <h2 class="r-stitle">{t.volunteer}</h2>
           {cv.volunteer.map((v, i) => <MinEntry e={v} key={i} />)}
         </section>
       )}
       {vis.interests && interests.length > 0 && (
         <section class="r-sec">
-          <h2 class="r-stitle">Interests & Hobbies</h2>
+          <h2 class="r-stitle">{t.interests}</h2>
           <div class="interest-wrap">
             {interests.map((it, i) => <span key={i}>{it}</span>)}
           </div>
@@ -146,9 +150,9 @@ export function Minimal({ data }: { data: ResumeData }) {
       )}
       {vis.references && (
         <section class="r-sec">
-          <h2 class="r-stitle">References</h2>
+          <h2 class="r-stitle">{t.references}</h2>
           {cv.references.length === 0
-            ? <em class="ref-available">Available upon request.</em>
+            ? <em class="ref-available">{t.refAvailable}</em>
             : <RefGrid items={cv.references} />}
         </section>
       )}

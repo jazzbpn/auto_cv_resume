@@ -216,6 +216,16 @@ input:focus, textarea:focus {
 }
 
 .vis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); margin-top: var(--s1); }
+.lang-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hairline); }
+.lang-select { font-family: var(--font-ui); font-size: .78rem; font-weight: 500; padding: 5px 10px; border: 1.5px solid var(--hairline-strong); border-radius: var(--r-1); background: var(--surface-0); color: var(--ink); cursor: pointer; max-width: 200px; transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out); }
+.lang-select:hover { border-color: var(--amber); }
+.lang-select:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(201, 150, 46, .15); outline: none; }
+.dir-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.dir-lbl { font-family: var(--font-ui); font-size: .82rem; font-weight: 500; color: var(--ink); margin-bottom: 0; }
+.dir-seg { display: flex; border: 1.5px solid var(--hairline-strong); border-radius: var(--r-1); overflow: hidden; }
+.dir-btn { background: var(--surface-0); border: none; padding: 4px 14px; font-family: var(--font-ui); font-size: .78rem; font-weight: 500; color: var(--muted); cursor: pointer; min-height: 30px; transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
+.dir-btn:hover { background: var(--surface-2); color: var(--ink); }
+.dir-btn.active { background: var(--amber); color: #fff; }
 .vis-item {
   display: flex; align-items: center; gap: 10px;
   padding: 6px 0; cursor: pointer;

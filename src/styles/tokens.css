@@ -46,11 +46,13 @@
   --on-dark: #f4efe4;
   --on-dark-muted: rgba(244, 239, 228, .68);
 
-  /* Font stacks */
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: 'Playfair Display', serif;
-  --font-doc: 'Crimson Pro', Georgia, serif;
+  /* Font stacks — Noto fallbacks provide coverage for non-Latin scripts */
+  --font-ui: 'Inter', 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', 'Noto Serif', serif;
+  --font-doc: 'Crimson Pro', 'Noto Serif', Georgia, serif;
   --font-mono: 'DM Mono', monospace;
+  /* Arabic / RTL primary font — Cairo has excellent Arabic + Latin coverage */
+  --font-arabic: 'Cairo', 'Noto Sans Arabic', 'Noto Sans', sans-serif;
 
   /* Elevation (tone + soft shadow, not hard drop) */
   --elev-1: 0 1px 2px rgba(26, 21, 16, .04), 0 1px 1px rgba(26, 21, 16, .03);

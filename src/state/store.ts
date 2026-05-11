@@ -1,5 +1,6 @@
 import { signal, computed, effect } from '@preact/signals';
 import type { CV, SectionKey, TemplateId, AIResult, AIOptimize, CollectionKey } from '../types';
+import { type LangCode, LANG_META } from '../i18n/sections';
 import { DEFAULT_CV, DEFAULT_TEMPLATE, DEFAULT_VISIBILITY } from './defaults';
 import { idbGet, idbPut, requestPersistentStorage } from '../services/idb';
 
@@ -10,6 +11,8 @@ interface Persisted {
   cv: CV;
   template: TemplateId;
   visibility: Record<SectionKey, boolean>;
+  textDir: 'ltr' | 'rtl';
+  cvLang: LangCode;
 }
 
 /**
@@ -22,15 +25,17 @@ interface Persisted {
 function loadSync(): Persisted {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY };
+    if (!raw) return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY, textDir: 'ltr', cvLang: 'en' };
     const p = JSON.parse(raw) as Partial<Persisted>;
     return {
       cv: p.cv ?? DEFAULT_CV,
       template: p.template ?? DEFAULT_TEMPLATE,
       visibility: { ...DEFAULT_VISIBILITY, ...(p.visibility ?? {}) },
+      textDir: p.textDir ?? 'ltr',
+      cvLang: p.cvLang ?? 'en',
     };
   } catch {
-    return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY };
+    return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY, textDir: 'ltr', cvLang: 'en' };
   }
 }
 
@@ -39,6 +44,14 @@ const initial = loadSync();
 export const cv = signal<CV>(initial.cv);
 export const template = signal<TemplateId>(initial.template);
 export const visibility = signal<Record<SectionKey, boolean>>(initial.visibility);
+export const textDir = signal<'ltr' | 'rtl'>(initial.textDir);
+export function setTextDir(d: 'ltr' | 'rtl') { textDir.value = d; }
+
+export const cvLang = signal<LangCode>(initial.cvLang);
+export function setCvLang(lang: LangCode) {
+  cvLang.value = lang;
+  textDir.value = LANG_META[lang].dir;
+}
 export const aiResult = signal<AIResult | null>(null);
 /**
  * Result of the secondary "optimize" call (rewrites + projected score).
@@ -73,6 +86,8 @@ async function hydrate(): Promise<void> {
       if (persisted.visibility) {
         visibility.value = { ...DEFAULT_VISIBILITY, ...persisted.visibility };
       }
+      if (persisted.textDir) textDir.value = persisted.textDir;
+      if (persisted.cvLang) cvLang.value = persisted.cvLang;
     } else {
       // No IDB record yet — likely a returning user with localStorage data,
       // or a brand-new visitor. Either way, write current signal state to
@@ -81,6 +96,8 @@ async function hydrate(): Promise<void> {
         cv: cv.value,
         template: template.value,
         visibility: visibility.value,
+        textDir: textDir.value,
+        cvLang: cvLang.value,
       } satisfies Persisted);
     }
   } finally {
@@ -94,7 +111,7 @@ void requestPersistentStorage();
 let saveTimer: number | undefined;
 let firstRun = true;
 effect(() => {
-  const snapshot: Persisted = { cv: cv.value, template: template.value, visibility: visibility.value };
+  const snapshot: Persisted = { cv: cv.value, template: template.value, visibility: visibility.value, textDir: textDir.value, cvLang: cvLang.value };
   // Skip flagging the very first effect run as "saving" — it's just init.
   if (firstRun) { firstRun = false; return; }
   // Don't write back the synchronous defaults on top of IDB during hydration.

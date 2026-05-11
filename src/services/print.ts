@@ -1,4 +1,5 @@
 import { showToast } from '../components/Toast';
+import { cvLang } from '../state/store';
 
 /**
  * PDF export — uses the browser's native "Save as PDF" via window.print().
@@ -131,14 +132,15 @@ function buildPrintHTML(): string {
   clone.style.transform = 'none';
   clone.style.boxShadow = 'none';
   const styles = collectStyles();
+  const docDir = node.getAttribute('dir') ?? 'ltr';
   // Title is the suggested filename for "Save as PDF" — the browser uses
   // the document title for that. The @top-* margin overrides above try to
   // keep this string out of the printed page header.
   const title = exportFilename();
   const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">`;
-  return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}</style></head><body>${clone.outerHTML}</body></html>`;
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap">`;
+  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}</style></head><body>${clone.outerHTML}</body></html>`;
 }
 
 function downloadHTMLFallback(html: string) {

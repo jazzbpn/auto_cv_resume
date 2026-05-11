@@ -6,6 +6,7 @@ import './styles/editor.css';
 import './styles/preview.css';
 import './styles/ai.css';
 import './styles/import.css';
+import './styles/langpicker.css';
 
 const root = document.getElementById('app');
 if (root) render(<App />, root);

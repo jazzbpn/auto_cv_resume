@@ -1,4 +1,5 @@
-import { cv as cvSignal, addItem, removeItem, updateItem } from '../state/store';
+import { cv as cvSignal, addItem, removeItem, updateItem, cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
 import type { CV, CollectionKey } from '../types';
 
 interface FieldDef<T> {
@@ -20,6 +21,7 @@ export function EntryRepeater<K extends CollectionKey>({
   collection, addLabel, empty, fields, titleField,
 }: Props<K>) {
   const items = cvSignal.value[collection];
+  const ui = getUI(cvLang.value);
   return (
     <>
       {items.map((row, i) => {
@@ -36,7 +38,7 @@ export function EntryRepeater<K extends CollectionKey>({
                 class="remove-btn"
                 onClick={() => removeItem(collection, i)}
               >
-                Remove
+                {ui.remove}
               </button>
             </div>
             {fields.map((f) => {
@@ -50,6 +52,7 @@ export function EntryRepeater<K extends CollectionKey>({
                   {f.type === 'textarea' ? (
                     <textarea
                       rows={3}
+                      dir="auto"
                       value={value}
                       placeholder=" "
                       aria-label={f.label}
@@ -58,6 +61,7 @@ export function EntryRepeater<K extends CollectionKey>({
                   ) : (
                     <input
                       type={f.type ?? 'text'}
+                      dir="auto"
                       value={value}
                       placeholder=" "
                       aria-label={f.label}

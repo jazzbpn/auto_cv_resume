@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix } from '../state/store';
+import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix, cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
 import { aiJD, aiStatus, aiError, aiOptimizeStatus, aiOptimizeError, runAIReview, runAIOptimize } from '../state/ai';
 import { track, classifyAIError, markAIUsed } from '../services/analytics';
 import { showToast } from './Toast';
@@ -59,14 +60,9 @@ async function reAnalyseFresh(): Promise<void> {
   if (aiStatus.value !== 'error') commitAIFix();
 }
 
-const ANALYSE_PHASES = [
-  'Reading your CV…',
-  'Scanning ATS keywords…',
-  'Cross-checking formatting & structure…',
-  'Evaluating impact statements…',
-  'Compiling recommendations…',
-  'Finalising your score…',
-];
+function getAnalysePhases() {
+  return getUI(cvLang.value).analysePhases;
+}
 
 function useCyclingPhrase(phrases: string[], intervalMs = 2400): string {
   const [idx, setIdx] = useState(0);
@@ -86,23 +82,24 @@ export function AnalysePanel() {
   const fixed = !!aiSnapshot.value;
   const loading = aiStatus.value === 'loading';
   const optimizing = aiOptimizeStatus.value === 'loading';
-  const phase = useCyclingPhrase(ANALYSE_PHASES);
+  const ui = getUI(cvLang.value);
+  const phase = useCyclingPhrase(getAnalysePhases());
 
   return (
     <div class="analyse-panel">
       <div class="analyse-scroll">
         <header class="analyse-header">
-          <h2>Resume/CV Analysis</h2>
+          <h2>{ui.analyseTitle}</h2>
         </header>
 
         <div class="analyse-jd">
           <label class="analyse-jd-label">
-            Job description <span>(optional)</span>
+            {ui.jobDescLabel} <span>{ui.jobDescOptional}</span>
           </label>
           <textarea
             rows={4}
             class="analyse-jd-textarea"
-            placeholder="Paste a job description for keyword matching and role-specific feedback…"
+            placeholder={ui.jobDescPlaceholder}
             value={aiJD.value}
             onInput={(e) => { aiJD.value = (e.currentTarget as HTMLTextAreaElement).value; }}
           />
@@ -118,9 +115,9 @@ export function AnalysePanel() {
                   <span class="ai-spinner" />
                   <span class="run-btn-phase" key={phase}>{phase}</span>
                 </span>
-                <span class="run-btn-hint">Typically 10–15 seconds</span>
+                <span class="run-btn-hint">{ui.analyseTiming}</span>
               </span>
-            ) : r ? <>↻ Re-analyse</> : <>✦ Analyse my Resume</>}
+            ) : r ? <>{ui.reanalyseBtn}</> : <>{ui.analyseBtn}</>}
           </button>
           {aiStatus.value === 'error' && (
             <div class="analyse-error" role="alert">
@@ -132,10 +129,7 @@ export function AnalysePanel() {
         {!r && !loading && (
           <div class="analyse-empty">
             <span aria-hidden>📊</span>
-            <p>
-              Click <strong>Analyse my Resume</strong> to get an ATS score, see
-              issues, and find missing keywords.
-            </p>
+            <p>{ui.analyseEmptyHint}</p>
           </div>
         )}
 
@@ -168,12 +162,8 @@ export function AnalysePanel() {
         <footer class="analyse-footer">
           <div class="analyse-fix-cta">
             <div>
-              <strong>One-click optimisation</strong>
-              <p>
-                Apply our rewrites across your summary, objective, skills,
-                experience, education, and projects in one tap. You can undo
-                any time.
-              </p>
+              <strong>{ui.oneClickTitle}</strong>
+              <p>{ui.oneClickDesc}</p>
             </div>
             <button
               type="button"
@@ -181,7 +171,7 @@ export function AnalysePanel() {
               disabled={loading}
               onClick={() => { void autoFixResume(); }}
             >
-              {optimizing && !opt ? '✦ Preparing fixes…' : '✦ Auto-Fix My Resume'}
+              {optimizing && !opt ? ui.preparingFixesBtn : ui.autoFixBtn}
             </button>
           </div>
         </footer>
@@ -196,23 +186,24 @@ function FixedBanner({ result: r, optimized }: { result: AIResult; optimized: nu
   const base = Math.max(0, Math.min(100, r.ats_score | 0));
   const optimised = Math.max(base, Math.min(100, (optimized ?? base) | 0));
   const delta = optimised - base;
+  const ui = getUI(cvLang.value);
   return (
     <div class="fixed-banner">
       <div class="fixed-banner-head">
         <span class="fixed-banner-icon" aria-hidden>✓</span>
         <div>
-          <strong>Resume optimised</strong>
+          <strong>{ui.resumeOptimisedTitle}</strong>
           <p>
-            AI rewrites are now in your form and preview.
+            {ui.resumeOptimisedDesc}
             {delta > 0 && (
-              <> Score went from <b>{base}</b> to <b>{optimised}</b> <span class="fixed-banner-delta">+{delta}</span>.</>
+              <> <b>{base}</b> → <b>{optimised}</b> <span class="fixed-banner-delta">+{delta}</span></>
             )}
           </p>
         </div>
       </div>
       <div class="fixed-banner-actions">
         <button type="button" class="analyse-undo-btn" onClick={() => { track('ai_autofix_undo'); undoAIFix(); }}>
-          ↶ Undo
+          {ui.undoBtn}
         </button>
       </div>
     </div>
@@ -283,13 +274,13 @@ function HeroScore({ result: r, optimized, fixed }: { result: AIResult; optimize
         <div class="hero-ring-num" style={`color:${color}`}>{animatedScore}</div>
       </div>
       <div class="hero-meta">
-        <div class="hero-eyebrow">ATS Score{fixed && delta > 0 ? ' · Optimised' : ''}</div>
+        <div class="hero-eyebrow">{fixed && delta > 0 ? getUI(cvLang.value).atsOptimisedLabel : getUI(cvLang.value).atsScoreLabel}</div>
         <div class="hero-label">{r.score_label}</div>
         <div class="hero-summary">{r.summary}</div>
         {!fixed && delta > 0 && (
           <div class="hero-potential">
             <span class="hero-potential-arrow" aria-hidden>↗</span>
-            Potential <b>{optimised}</b> <span class="hero-delta">+{delta}</span> with AI fix
+            {getUI(cvLang.value).potentialLabel} <b>{optimised}</b> <span class="hero-delta">+{delta}</span> {getUI(cvLang.value).withAIFix}
           </div>
         )}
       </div>
@@ -307,11 +298,12 @@ function SeverityBar({ issues }: { issues: AIIssue[] }) {
 
   const pc = (n: number) => Math.round((n / total) * 100);
 
+  const ui = getUI(cvLang.value);
   return (
     <div class="sev-bar">
       <div class="sev-head">
-        <span class="sev-title">Issue breakdown</span>
-        <span class="sev-total">{total} total</span>
+        <span class="sev-title">{ui.issueBreakdown}</span>
+        <span class="sev-total">{total} {ui.totalLabel}</span>
       </div>
       <div class="sev-track" role="img" aria-label={
         `${counts.critical} critical, ${counts.warning} warning, ${counts.tip} tip`
@@ -327,9 +319,9 @@ function SeverityBar({ issues }: { issues: AIIssue[] }) {
         )}
       </div>
       <div class="sev-legend">
-        <SevPill cls="critical" emoji="🔴" label="Critical"  count={counts.critical} />
-        <SevPill cls="warning"  emoji="🟡" label="Warnings"  count={counts.warning} />
-        <SevPill cls="tip"      emoji="🟢" label="Tips"      count={counts.tip} />
+        <SevPill cls="critical" emoji="🔴" label={ui.criticalLabel} count={counts.critical} />
+        <SevPill cls="warning"  emoji="🟡" label={ui.warningsLabel} count={counts.warning} />
+        <SevPill cls="tip"      emoji="🟢" label={ui.tipsLabel}     count={counts.tip} />
       </div>
     </div>
   );
@@ -353,12 +345,13 @@ function KeywordMeter({ present, missing }: { present: string[]; missing: string
   if (!total) return null;
   const pct = Math.round((present.length / total) * 100);
 
+  const ui = getUI(cvLang.value);
   return (
     <div class="kw-meter">
       <div class="kw-meter-head">
-        <span class="kw-meter-title">Keyword match</span>
+        <span class="kw-meter-title">{ui.keywordMatchTitle}</span>
         <span class="kw-meter-count">
-          <b>{present.length}</b> <span>/ {total} keywords</span>
+          <b>{present.length}</b> <span>/ {total} {ui.keywordsLabel}</span>
         </span>
       </div>
       <div class="kw-meter-track">
@@ -367,7 +360,7 @@ function KeywordMeter({ present, missing }: { present: string[]; missing: string
           style={`width:${pct}%`}
         />
       </div>
-      <div class="kw-meter-pct">{pct}% matched</div>
+      <div class="kw-meter-pct">{pct}{ui.pctMatched}</div>
     </div>
   );
 }
@@ -388,7 +381,7 @@ function IssuesAccordion({ issues, quickWins }: { issues: AIIssue[]; quickWins: 
   return (
     <div class="ai-sections">
       {quickWins?.length > 0 && (
-        <Collapsible title="⚡ Quick Wins" badge={quickWins.length} accent="#d4a017" defaultOpen>
+        <Collapsible title={getUI(cvLang.value).quickWinsTitle} badge={quickWins.length} accent="#d4a017" defaultOpen>
           {quickWins.map((w, i) => (
             <div class="quick-win" key={i}>
               <span class="quick-win-icon" aria-hidden>💡</span>
@@ -441,12 +434,13 @@ function IssueCard({ issue }: { issue: AIIssue }) {
 
 function KeywordsAccordion({ present, missing }: { present: string[]; missing: string[] }) {
   if (!present.length && !missing.length) return null;
+  const ui = getUI(cvLang.value);
   return (
     <div class="ai-sections">
-      <Collapsible title="ATS Keywords" badge={present.length + missing.length} accent="#3498db" defaultOpen>
+      <Collapsible title={ui.atsKeywordsTitle} badge={present.length + missing.length} accent="#3498db" defaultOpen>
         {present.length > 0 && (
           <div class="ai-kw-block">
-            <div class="ai-kw-head ai-kw-found">✓ Found in your CV</div>
+            <div class="ai-kw-head ai-kw-found">{ui.foundInCV}</div>
             <div class="ai-kw-wrap">
               {present.slice(0, 30).map((k, i) => <span class="ai-kw present" key={i}>{k}</span>)}
             </div>
@@ -454,7 +448,7 @@ function KeywordsAccordion({ present, missing }: { present: string[]; missing: s
         )}
         {missing.length > 0 && (
           <div class="ai-kw-block">
-            <div class="ai-kw-head ai-kw-missing">✗ Missing — add these</div>
+            <div class="ai-kw-head ai-kw-missing">{ui.missingAdd}</div>
             <div class="ai-kw-wrap">
               {missing.slice(0, 30).map((k, i) => <span class="ai-kw missing" key={i}>{k}</span>)}
             </div>
