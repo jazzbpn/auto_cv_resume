@@ -1,0 +1,49 @@
+/* ─────────────────────────────────────────────────────────────
+   Minimal template · RTL re-skin  (Arabic / Urdu / Hebrew …)
+
+   direction:rtl on .resume.minimal flips the two-column grids
+   so the narrow column (dates) ends up on the RIGHT — exactly
+   the Arabic convention.  This file widens that column and
+   fixes typography.
+───────────────────────────────────────────────────────────── */
+
+/* ── BASE ── */
+.resume.minimal[dir=rtl] { text-align: right; }
+
+/* ── NAME
+   Minimal uses italic weight-400 Playfair as a design signature.
+   Arabic has no italic — use Cairo semi-bold instead. */
+.resume.minimal[dir=rtl] .r-name {
+  font-family: var(--font-arabic);
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ── JOB TITLE & SECTION TITLES ── */
+.resume.minimal[dir=rtl] .r-jtitle  { letter-spacing: 0; }
+.resume.minimal[dir=rtl] .r-stitle  { letter-spacing: 0; }
+
+/* ── CONTACTS
+   direction:rtl makes flex-start point to the right edge already. */
+
+/* ── ENTRY + CERT GRIDS
+   direction:rtl makes grid track 1 land on the RIGHT (inline-start).
+   The date column (.r-eleft) is DOM-first, so it sits on the right —
+   correct for Arabic reading.  Arabic month names (يناير, فبراير …)
+   are wider than English abbreviations, so we widen to 170 px. */
+.resume.minimal[dir=rtl] .r-entry,
+.resume.minimal[dir=rtl] .cert-item { grid-template-columns: 170px 1fr; }
+
+/* Align date column content to its reading edge (right) */
+.resume.minimal[dir=rtl] .r-eleft { text-align: right; }
+
+/* ── PERSONAL DETAILS ──
+   Same grid flip: label lands on right.  160 px for Arabic labels. */
+.resume.minimal[dir=rtl] .pdet-row { grid-template-columns: 160px 1fr; }
+.resume.minimal[dir=rtl] .pdet-lbl { letter-spacing: 0; }
+
+/* ── HARDCODED Playfair Display OVERRIDES ── */
+.resume.minimal[dir=rtl] .r-etitle,
+.resume.minimal[dir=rtl] .cert-title,
+.resume.minimal[dir=rtl] .award-title,
+.resume.minimal[dir=rtl] .ref-name { font-family: var(--font-arabic); }

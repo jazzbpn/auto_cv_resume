@@ -1,0 +1,48 @@
+/* ─────────────────────────────────────────────────────────────
+   Modern template · RTL re-skin  (Arabic / Urdu / Hebrew …)
+
+   Key layout fact: direction:rtl on .resume.modern flips the
+   CSS grid automatically — the dark sidebar moves to the RIGHT
+   and the content column sits on the LEFT.  No layout hacks
+   needed; this file only fixes typography and decoration.
+───────────────────────────────────────────────────────────── */
+
+/* ── BASE ── */
+.resume.modern[dir=rtl] .mod-left,
+.resume.modern[dir=rtl] .mod-right { text-align: right; }
+
+/* ── SIDEBAR: NAME
+   900 weight is too dense for Cairo in Arabic — use 700. */
+.resume.modern[dir=rtl] .mod-name {
+  font-family: var(--font-arabic);
+  font-weight: 700;
+}
+
+/* ── SIDEBAR: JOB TITLE & SECTION TITLES ── */
+.resume.modern[dir=rtl] .mod-jtitle { letter-spacing: 0; }
+.resume.modern[dir=rtl] .mod-stitle { letter-spacing: 0; }
+.resume.modern[dir=rtl] .mod-ci     { text-align: right; }
+
+/* ── CONTENT: SECTION TITLES
+   The ::after flex-line (the decorative rule) naturally extends
+   to the LEFT in RTL flex — correct Arabic visual convention. */
+.resume.modern[dir=rtl] .r-stitle { letter-spacing: 0; }
+
+/* ── SUMMARY BLOCK ── */
+.resume.modern[dir=rtl] .r-summary {
+  border-left: none;
+  border-right: 3px solid var(--gold);
+  padding-left: 0;
+  padding-right: 12px;
+  font-style: normal;
+}
+
+/* ── ENTRY HEAD
+   direction:rtl already reverses this flex row correctly.
+   Do NOT add flex-direction:row-reverse here. */
+
+/* ── HARDCODED Playfair Display OVERRIDES ── */
+.resume.modern[dir=rtl] .r-etitle,
+.resume.modern[dir=rtl] .cert-title,
+.resume.modern[dir=rtl] .award-title,
+.resume.modern[dir=rtl] .ref-name { font-family: var(--font-arabic); }

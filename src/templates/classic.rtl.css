@@ -1,0 +1,74 @@
+/* ─────────────────────────────────────────────────────────────
+   Classic template · RTL re-skin  (Arabic / Urdu / Hebrew …)
+
+   Loaded alongside classic.css. Every rule is scoped to
+   [dir=rtl] so it only activates when the user switches to RTL.
+   Written as a coherent design, not a patch list.
+───────────────────────────────────────────────────────────── */
+
+/* ── BASE ── */
+.resume.classic[dir=rtl] { text-align: right; }
+
+/* ── NAME
+   Playfair Display has no Arabic glyphs. Cairo at 700 gives a
+   balanced weight — 900 is too dense in Arabic script. */
+.resume.classic[dir=rtl] .r-name {
+  font-family: var(--font-arabic);
+  font-weight: 700;
+}
+
+/* ── JOB TITLE
+   Letter-spacing destroys Arabic character joins. */
+.resume.classic[dir=rtl] .r-jtitle { letter-spacing: 0; }
+
+/* ── CONTACTS
+   direction:rtl makes flex-start point to the right edge already.
+   No override needed — removing flex-end which was pushing items left. */
+
+/* ── SECTION TITLES
+   Bottom underline is directionally neutral, but the spaced-
+   uppercase treatment has no equivalent in Arabic.  Replace with
+   a right accent bar — a common Arabic document convention. */
+.resume.classic[dir=rtl] .r-stitle {
+  border-bottom: none;
+  border-right: 3px solid var(--accent);
+  padding-bottom: 0;
+  padding-right: 10px;
+  letter-spacing: 0;
+}
+
+/* ── SUMMARY BLOCK
+   Flip the gold bar to the right. font-style:normal is already
+   applied globally in base.css but we restate it for clarity. */
+.resume.classic[dir=rtl] .r-summary {
+  border-left: none;
+  border-right: 3px solid var(--gold);
+  padding-left: 0;
+  padding-right: 13px;
+  font-style: normal;
+}
+
+/* ── ENTRY HEAD
+   direction:rtl on the parent already reverses this flex row:
+   r-etitle sits on the right, r-edate on the left.
+   Adding row-reverse here would double-flip it (wrong) — omit. */
+
+/* ── HARDCODED Playfair Display OVERRIDES
+   These elements set font-family directly in classic.css so the
+   CSS-variable override in base.css does not reach them. */
+.resume.classic[dir=rtl] .r-etitle,
+.resume.classic[dir=rtl] .cert-title,
+.resume.classic[dir=rtl] .award-title,
+.resume.classic[dir=rtl] .ref-name { font-family: var(--font-arabic); }
+
+/* ── SKILLS ── */
+.resume.classic[dir=rtl] .skill-cat { letter-spacing: 0; }
+
+/* ── PERSONAL DETAILS
+   Label is in a flex row; direction:rtl already puts it on the
+   right without needing flex-direction:row-reverse (which would
+   double-flip).  130 px gives Arabic label text room to breathe. */
+.resume.classic[dir=rtl] .pdet-lbl {
+  width: 130px;
+  letter-spacing: 0;
+}
