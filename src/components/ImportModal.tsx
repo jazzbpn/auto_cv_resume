@@ -162,7 +162,11 @@ export function ImportModal({ onClose }: Props) {
       <div class="import-modal-box" onClick={(e) => e.stopPropagation()}>
         <header class="import-modal-hd">
           <span class="import-modal-title">{ui.importModalTitle}</span>
-          <button type="button" class="import-modal-close" onClick={onClose} aria-label="Close">×</button>
+          <button type="button" class="import-modal-close" onClick={onClose} aria-label="Close">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/>
+            </svg>
+          </button>
         </header>
 
         {stage.value === 'idle' && (
@@ -175,7 +179,12 @@ export function ImportModal({ onClose }: Props) {
               onDragLeave={onDragLeave}
               onDrop={onDrop}
             >
-              <div class="import-drop-icon" aria-hidden>📄</div>
+              <div class="import-drop-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 15V3m0 0L8 7m4-4 4 4"/>
+                  <path d="M3 15v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/>
+                </svg>
+              </div>
               <div class="import-drop-title">{ui.importDropTitle}</div>
               <div class="import-drop-sub">{ui.importDropSub}</div>
               <div class="import-drop-formats">{ui.importDropFormats}</div>

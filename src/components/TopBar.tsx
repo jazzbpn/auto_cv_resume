@@ -10,7 +10,7 @@ export function TopBar({ onImport }: Props) {
   return (
     <>
       <div class="free-ribbon" aria-label="100% Free, no sign-up, no card required">
-        <span>100% FREE</span>
+        <span>{ui.freeRibbon}</span>
       </div>
       <header class="top-bar">
         <div class="brand-row">

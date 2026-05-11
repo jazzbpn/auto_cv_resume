@@ -195,6 +195,10 @@ body {
 @media (max-width: 600px) {
   .save-indicator { display: none; }
 }
+@media (max-width: 640px) {
+  .export-btn .btn-text { display: none; }
+  .export-btn { padding: 8px 10px; }
+}
 
 .top-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 .tpl-select {
