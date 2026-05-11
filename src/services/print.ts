@@ -151,87 +151,97 @@ export async function printResume(): Promise<void> {
   if (btn) btn.disabled = true;
   if (btnText) btnText.textContent = 'Preparing…';
 
+  // Open the window SYNCHRONOUSLY while we are still inside the user-gesture
+  // call stack. iOS Safari and Android Chrome require the window.open() call
+  // to happen synchronously or they block it as a popup. We write the content
+  // into the blank window once it is ready.
+  const win = window.open('', '_blank');
+
   try {
     const html = buildPrintHTML();
-    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
 
-    document.getElementById('print-iframe')?.remove();
-    const iframe = document.createElement('iframe');
-    iframe.id = 'print-iframe';
-    // 794px = A4 width at 96 dpi. Mobile WebKit/Android WebView resolve
-    // percentage widths in @media print against the iframe's rendered width,
-    // not the @page size, so a 1px iframe produces a 1px-wide layout that
-    // gets scaled up with massive visible margins. Rendering at A4 width
-    // makes width:100% map correctly to the full page.
-    iframe.style.cssText =
-      'position:fixed;top:-9999px;left:-9999px;width:794px;height:1123px;border:none;opacity:0;pointer-events:none';
-    document.body.appendChild(iframe);
+    if (win) {
+      // Set the title before writing so Chrome/Safari use it as the PDF filename.
+      win.document.title = exportFilename();
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
 
-    let printed = false;
-    const cleanup = () => { setTimeout(() => URL.revokeObjectURL(url), 60_000); };
-
-    iframe.onload = async () => {
-      // Wait for Google Fonts to actually finish loading inside the iframe
-      // before printing. Without this, italic / weight variants may not be
-      // ready yet and the browser synthesizes them by skewing or boldening
-      // the regular face — which renders as visibly distorted letterforms
-      // (the "flattened width" look) in the final PDF. Cap the wait so a
-      // missing font never hangs the export.
+      // Wait for web fonts to finish loading so printed glyphs are correct.
       try {
-        const fontsReady = iframe.contentDocument?.fonts?.ready;
-        if (fontsReady) {
-          await Promise.race([
-            fontsReady,
-            new Promise((r) => setTimeout(r, 3000)),
-          ]);
-        }
-      } catch {
-        // Older browsers without document.fonts — fall through to print.
-      }
+        await Promise.race([
+          win.document.fonts?.ready ?? Promise.resolve(),
+          new Promise((r) => setTimeout(r, 3000)),
+        ]);
+      } catch { /* browsers without document.fonts */ }
 
-      // Chrome / Safari pull the suggested PDF filename from the parent
-      // document's title, not the iframe's. Swap it temporarily.
-      const filename = exportFilename();
-      const originalTitle = document.title;
-      document.title = filename;
-      try {
-        iframe.contentWindow?.focus();
-        iframe.contentWindow?.print();
-        printed = true;
-      } catch (e) {
-        console.error('[print] iframe print failed:', e);
-        downloadHTMLFallback(html);
-      } finally {
-        // Restore after the print dialog has captured the title. A small
-        // delay avoids races where the browser reads the title async.
-        setTimeout(() => { document.title = originalTitle; }, 1500);
-      }
-      cleanup();
-    };
-    iframe.onerror = () => {
-      console.error('[print] iframe load failed');
-      downloadHTMLFallback(html);
-      cleanup();
-    };
-    iframe.src = url;
-
-    // Last-resort safety net if onload never fires
-    setTimeout(() => {
-      if (!printed) {
-        const filename = exportFilename();
-        const originalTitle = document.title;
-        document.title = filename;
-        try { iframe.contentWindow?.print(); printed = true; }
-        catch { /* ignore */ }
-        finally { setTimeout(() => { document.title = originalTitle; }, 1500); }
-      }
-    }, 4000);
+      // Close the window automatically once the print dialog is dismissed.
+      win.addEventListener('afterprint', () => { win.close(); });
+      win.focus();
+      win.print();
+    } else {
+      // Popup was blocked — fall back to the invisible-iframe path.
+      await printViaIframe(html);
+    }
   } catch (e) {
+    win?.close();
     console.error('[print] PDF export failed:', e);
     showToast(e instanceof Error ? e.message : 'PDF export failed.');
   } finally {
     if (btn) btn.disabled = false;
     if (btnText) btnText.textContent = original;
   }
+}
+
+async function printViaIframe(html: string): Promise<void> {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const cleanup = () => { setTimeout(() => URL.revokeObjectURL(url), 60_000); };
+
+  document.getElementById('print-iframe')?.remove();
+  const iframe = document.createElement('iframe');
+  iframe.id = 'print-iframe';
+  iframe.style.cssText =
+    'position:fixed;top:-9999px;left:-9999px;width:794px;height:1123px;border:none;opacity:0;pointer-events:none';
+  document.body.appendChild(iframe);
+
+  let printed = false;
+
+  iframe.onload = async () => {
+    try {
+      await Promise.race([
+        iframe.contentDocument?.fonts?.ready ?? Promise.resolve(),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch { /* ignore */ }
+
+    const filename = exportFilename();
+    const originalTitle = document.title;
+    document.title = filename;
+    try {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      printed = true;
+    } catch (e) {
+      console.error('[print] iframe print failed:', e);
+      downloadHTMLFallback(html);
+    } finally {
+      setTimeout(() => { document.title = originalTitle; }, 1500);
+    }
+    cleanup();
+  };
+
+  iframe.onerror = () => { downloadHTMLFallback(html); cleanup(); };
+  iframe.src = url;
+
+  setTimeout(() => {
+    if (!printed) {
+      const filename = exportFilename();
+      const orig = document.title;
+      document.title = filename;
+      try { iframe.contentWindow?.print(); printed = true; }
+      catch { /* ignore */ }
+      finally { setTimeout(() => { document.title = orig; }, 1500); }
+    }
+  }, 4000);
 }
