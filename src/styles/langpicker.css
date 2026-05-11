@@ -17,7 +17,7 @@
 /* Icon-only on small screens — hide text label to avoid overlapping template dock */
 @media (max-width: 640px) {
   .lang-fab-label { display: none; }
-  .lang-fab { right: 19px; }
+  .lang-fab { right: 15px; }
 }
 
 .lang-fab-btn {
