@@ -168,7 +168,27 @@ async function printViaIframe(html: string): Promise<void> {
 
     const filename = exportFilename();
     const prevTitle = document.title;
+
+    // Set the suggested PDF filename on both the parent document (desktop
+    // browsers, Android) and the iframe document (iOS Safari / WKWebView reads
+    // the iframe's own title when generating the "Save as PDF" filename).
     document.title = filename;
+    try { if (iframe.contentDocument) iframe.contentDocument.title = filename; }
+    catch { /* cross-origin guard — blob: is same-origin, but be safe */ }
+
+    // Restore the parent title after the print dialog closes, not on a fixed
+    // timer. A short timer (old 1.5 s) could revert the title while the iOS
+    // "Save as PDF" sheet is still open, causing the wrong filename to be used.
+    const restoreTitle = () => {
+      document.title = prevTitle;
+      window.removeEventListener('afterprint', restoreTitle);
+      iframe.contentWindow?.removeEventListener('afterprint', restoreTitle);
+    };
+    window.addEventListener('afterprint', restoreTitle);
+    // iOS fires afterprint on the iframe's window, not the parent.
+    iframe.contentWindow?.addEventListener('afterprint', restoreTitle);
+    setTimeout(restoreTitle, 60_000); // safety fallback
+
     try {
       iframe.contentWindow?.focus();
       iframe.contentWindow?.print();
@@ -176,8 +196,7 @@ async function printViaIframe(html: string): Promise<void> {
     } catch (e) {
       console.error('[print] iframe print failed:', e);
       removePageStyle();
-    } finally {
-      setTimeout(() => { document.title = prevTitle; }, 1500);
+      restoreTitle();
     }
     setTimeout(() => URL.revokeObjectURL(url), 60_000);
   };
@@ -194,9 +213,12 @@ async function printViaIframe(html: string): Promise<void> {
       const filename = exportFilename();
       const prev = document.title;
       document.title = filename;
+      try { if (iframe.contentDocument) iframe.contentDocument.title = filename; } catch { /* ignore */ }
+      const restoreFallback = () => { document.title = prev; window.removeEventListener('afterprint', restoreFallback); };
+      window.addEventListener('afterprint', restoreFallback);
+      setTimeout(restoreFallback, 60_000);
       try { iframe.contentWindow?.print(); printed = true; }
       catch { /* ignore */ }
-      finally { setTimeout(() => { document.title = prev; }, 1500); }
     }
   }, 4000);
 }
