@@ -64,13 +64,15 @@ html, body {
   padding: 0 !important;
   display: block !important;
 }
-body { padding: 24px; }
-.resume {
-  margin: 0 auto !important;
-  box-shadow: none !important;
-  transform: none !important;
-  width: 700px;
-  min-height: auto !important;
+@media screen {
+  body { padding: 24px; }
+  .resume {
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    transform: none !important;
+    width: 700px;
+    min-height: auto !important;
+  }
 }
 
 /* Setting margin: 0 on @page removes the margin-box area entirely, which
@@ -94,9 +96,6 @@ body { padding: 24px; }
     background: #fff !important;
     overflow: visible !important;
   }
-  /* Page margins live here (not on @page) so Safari has no margin-box area
-     to inject URL / date / page-number headers and footers into. */
-  body { padding: 12mm !important; }
   .resume {
     width: 100% !important;
     margin: 0 !important;
