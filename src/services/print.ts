@@ -75,13 +75,6 @@ html, body {
   }
 }
 
-/* Setting margin: 0 on @page removes the margin-box area entirely, which
-   is where Safari/WebKit injects URL, date, and page-number headers/footers.
-   Visual page margins are provided via body padding in @media print below. */
-@page {
-  size: A4;
-  margin: 0;
-}
 
 @media print {
   /* Force all backgrounds, gradients, and tinted text to actually print. */
@@ -132,7 +125,11 @@ function buildPrintHTML(): string {
   const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap">`;
-  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}</style></head><body>${clone.outerHTML}</body></html>`;
+  // @page must come before collected styles so nothing can override it.
+  // Omitting `size` lets the system use its native paper size (avoids
+  // mobile print engines rescaling A4 content and re-adding margins).
+  const pageReset = `@page{margin:0mm!important;size:auto;}`;
+  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${pageReset}\n${styles}\n${PRINT_OVERRIDES}</style></head><body>${clone.outerHTML}</body></html>`;
 }
 
 function downloadHTMLFallback(html: string) {
@@ -142,14 +139,15 @@ function downloadHTMLFallback(html: string) {
   a.href = url; a.download = `${exportFilename()}.html`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
-  showToast('Downloaded as HTML. Open it in your browser, then Print → Save as PDF.');
+  showToast('Downloaded. Open the file in your browser, then Print → Save as PDF.');
 }
-
 
 export async function printResume(): Promise<void> {
   const btn = document.querySelector<HTMLButtonElement>('.export-btn');
-  const original = btn?.textContent ?? '';
-  if (btn) { btn.textContent = 'Preparing…'; btn.disabled = true; }
+  const btnText = btn?.querySelector<HTMLElement>('.btn-text');
+  const original = btnText?.textContent ?? '';
+  if (btn) btn.disabled = true;
+  if (btnText) btnText.textContent = 'Preparing…';
 
   try {
     const html = buildPrintHTML();
@@ -231,6 +229,7 @@ export async function printResume(): Promise<void> {
     console.error('[print] PDF export failed:', e);
     showToast(e instanceof Error ? e.message : 'PDF export failed.');
   } finally {
-    if (btn) { btn.textContent = original; btn.disabled = false; }
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.textContent = original;
   }
 }
