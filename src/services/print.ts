@@ -125,11 +125,13 @@ function buildPrintHTML(): string {
   const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap">`;
-  // @page must come before collected styles so nothing can override it.
-  // Omitting `size` lets the system use its native paper size (avoids
-  // mobile print engines rescaling A4 content and re-adding margins).
-  const pageReset = `@page{margin:0mm!important;size:auto;}`;
-  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${pageReset}\n${styles}\n${PRINT_OVERRIDES}</style></head><body>${clone.outerHTML}</body></html>`;
+  // @page placed LAST so it wins the cascade over any UA-stylesheet @page rule.
+  // !important is invalid inside @page descriptors (CSS spec) and silently
+  // ignored — omitting it and winning by source order is the correct approach.
+  // margin:0 removes the margin area where Safari/iOS injects URL, date and
+  // page-number decorations; size:A4 sets the default paper size.
+  const pageReset = `@page{size:A4;margin:0;}`;
+  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}\n${pageReset}</style></head><body>${clone.outerHTML}</body></html>`;
 }
 
 function downloadHTMLFallback(html: string) {
