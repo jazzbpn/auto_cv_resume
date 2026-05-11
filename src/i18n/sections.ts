@@ -517,6 +517,16 @@ export interface UILabels {
   atsOptimisedLabel: string;
   potentialLabel: string;
   withAIFix: string;
+  scoreLabelExcellent: string;
+  scoreLabelGood: string;
+  scoreLabelFair: string;
+  scoreLabelPoor: string;
+  catIssues: string;
+  catFormatting: string;
+  catKeywords: string;
+  catContent: string;
+  catImpact: string;
+  issueFix: string;
   analysePhases: string[];
 }
 
@@ -659,6 +669,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS Score · Optimised',
     potentialLabel: 'Potential',
     withAIFix: 'with AI fix',
+    scoreLabelExcellent: 'Excellent', scoreLabelGood: 'Good', scoreLabelFair: 'Fair', scoreLabelPoor: 'Poor',
+    catIssues: 'Issues', catFormatting: 'Formatting', catKeywords: 'Keywords', catContent: 'Content', catImpact: 'Impact',
+    issueFix: 'Fix',
     analysePhases: [
       'Reading your CV…',
       'Scanning ATS keywords…',
@@ -806,6 +819,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'تقييم ATS · محسّن',
     potentialLabel: 'المحتمل',
     withAIFix: 'مع إصلاح الذكاء الاصطناعي',
+    scoreLabelExcellent: 'ممتاز', scoreLabelGood: 'جيد', scoreLabelFair: 'مقبول', scoreLabelPoor: 'ضعيف',
+    catIssues: 'مشكلات', catFormatting: 'التنسيق', catKeywords: 'الكلمات المفتاحية', catContent: 'المحتوى', catImpact: 'الأثر',
+    issueFix: 'الحل',
     analysePhases: [
       'جارٍ قراءة سيرتك الذاتية…',
       'فحص الكلمات المفتاحية…',
@@ -953,6 +969,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS اسکور · بہتر شدہ',
     potentialLabel: 'ممکنہ',
     withAIFix: 'AI اصلاح کے ساتھ',
+    scoreLabelExcellent: 'بہترین', scoreLabelGood: 'اچھا', scoreLabelFair: 'قابل قبول', scoreLabelPoor: 'کمزور',
+    catIssues: 'مسائل', catFormatting: 'فارمیٹنگ', catKeywords: 'کلیدی الفاظ', catContent: 'مواد', catImpact: 'اثر',
+    issueFix: 'حل',
     analysePhases: [
       'آپ کا CV پڑھا جا رہا ہے…',
       'ATS کلیدی الفاظ اسکین ہو رہے ہیں…',
@@ -1100,6 +1119,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS स्कोर · अनुकूलित',
     potentialLabel: 'संभावित',
     withAIFix: 'AI सुधार के साथ',
+    scoreLabelExcellent: 'उत्कृष्ट', scoreLabelGood: 'अच्छा', scoreLabelFair: 'ठीक', scoreLabelPoor: 'कमज़ोर',
+    catIssues: 'समस्याएं', catFormatting: 'स्वरूपण', catKeywords: 'कीवर्ड', catContent: 'सामग्री', catImpact: 'प्रभाव',
+    issueFix: 'सुधार',
     analysePhases: [
       'आपका CV पढ़ा जा रहा है…',
       'ATS कीवर्ड स्कैन हो रहे हैं…',
@@ -1247,6 +1269,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'Score ATS · Optimisé',
     potentialLabel: 'Potentiel',
     withAIFix: 'avec correction IA',
+    scoreLabelExcellent: 'Excellent', scoreLabelGood: 'Bon', scoreLabelFair: 'Passable', scoreLabelPoor: 'Faible',
+    catIssues: 'Problèmes', catFormatting: 'Mise en forme', catKeywords: 'Mots-clés', catContent: 'Contenu', catImpact: 'Impact',
+    issueFix: 'Correction',
     analysePhases: [
       'Lecture de votre CV…',
       'Analyse des mots-clés ATS…',
@@ -1394,6 +1419,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'Puntuación ATS · Optimizada',
     potentialLabel: 'Potencial',
     withAIFix: 'con corrección IA',
+    scoreLabelExcellent: 'Excelente', scoreLabelGood: 'Bueno', scoreLabelFair: 'Regular', scoreLabelPoor: 'Deficiente',
+    catIssues: 'Problemas', catFormatting: 'Formato', catKeywords: 'Palabras clave', catContent: 'Contenido', catImpact: 'Impacto',
+    issueFix: 'Solución',
     analysePhases: [
       'Leyendo tu CV…',
       'Escaneando palabras clave ATS…',
@@ -1541,6 +1569,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS-Score · Optimiert',
     potentialLabel: 'Potenzial',
     withAIFix: 'mit KI-Korrektur',
+    scoreLabelExcellent: 'Ausgezeichnet', scoreLabelGood: 'Gut', scoreLabelFair: 'Ausreichend', scoreLabelPoor: 'Schlecht',
+    catIssues: 'Probleme', catFormatting: 'Formatierung', catKeywords: 'Schlüsselwörter', catContent: 'Inhalt', catImpact: 'Wirkung',
+    issueFix: 'Lösung',
     analysePhases: [
       'Lebenslauf wird gelesen…',
       'ATS-Keywords werden gescannt…',
@@ -1688,6 +1719,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'Pontuação ATS · Otimizada',
     potentialLabel: 'Potencial',
     withAIFix: 'com correção IA',
+    scoreLabelExcellent: 'Excelente', scoreLabelGood: 'Bom', scoreLabelFair: 'Regular', scoreLabelPoor: 'Fraco',
+    catIssues: 'Problemas', catFormatting: 'Formatação', catKeywords: 'Palavras-chave', catContent: 'Conteúdo', catImpact: 'Impacto',
+    issueFix: 'Solução',
     analysePhases: [
       'A ler o seu CV…',
       'A analisar palavras-chave ATS…',
@@ -1835,6 +1869,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS 评分 · 已优化',
     potentialLabel: '潜力',
     withAIFix: '通过 AI 修复',
+    scoreLabelExcellent: '优秀', scoreLabelGood: '良好', scoreLabelFair: '一般', scoreLabelPoor: '较差',
+    catIssues: '问题', catFormatting: '格式', catKeywords: '关键词', catContent: '内容', catImpact: '影响',
+    issueFix: '修复',
     analysePhases: [
       '正在读取您的简历…',
       '正在扫描 ATS 关键词…',
@@ -1982,6 +2019,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATSスコア · 最適化済み',
     potentialLabel: 'ポテンシャル',
     withAIFix: 'AI修正後',
+    scoreLabelExcellent: '優秀', scoreLabelGood: '良好', scoreLabelFair: '普通', scoreLabelPoor: '不良',
+    catIssues: '問題', catFormatting: '書式', catKeywords: 'キーワード', catContent: '内容', catImpact: 'インパクト',
+    issueFix: '修正',
     analysePhases: [
       '履歴書を読み込んでいます…',
       'ATSキーワードをスキャン中…',
@@ -2129,6 +2169,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS 점수 · 최적화됨',
     potentialLabel: '잠재 점수',
     withAIFix: 'AI 수정 후',
+    scoreLabelExcellent: '우수', scoreLabelGood: '양호', scoreLabelFair: '보통', scoreLabelPoor: '미흡',
+    catIssues: '문제', catFormatting: '서식', catKeywords: '키워드', catContent: '내용', catImpact: '영향',
+    issueFix: '수정',
     analysePhases: [
       '이력서를 읽고 있습니다…',
       'ATS 키워드를 스캔 중…',
@@ -2276,6 +2319,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS-оценка · Оптимизировано',
     potentialLabel: 'Потенциал',
     withAIFix: 'с правкой ИИ',
+    scoreLabelExcellent: 'Отлично', scoreLabelGood: 'Хорошо', scoreLabelFair: 'Удовлетворительно', scoreLabelPoor: 'Плохо',
+    catIssues: 'Проблемы', catFormatting: 'Форматирование', catKeywords: 'Ключевые слова', catContent: 'Содержание', catImpact: 'Влияние',
+    issueFix: 'Исправление',
     analysePhases: [
       'Чтение вашего резюме…',
       'Сканирование ATS-ключевых слов…',
@@ -2423,6 +2469,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ATS Puanı · Optimize Edildi',
     potentialLabel: 'Potansiyel',
     withAIFix: 'YZ düzeltmesiyle',
+    scoreLabelExcellent: 'Mükemmel', scoreLabelGood: 'İyi', scoreLabelFair: 'Orta', scoreLabelPoor: 'Zayıf',
+    catIssues: 'Sorunlar', catFormatting: 'Biçimlendirme', catKeywords: 'Anahtar Kelimeler', catContent: 'İçerik', catImpact: 'Etki',
+    issueFix: 'Düzeltme',
     analysePhases: [
       'CV\'niz okunuyor…',
       'ATS anahtar kelimeleri taranıyor…',
@@ -2570,6 +2619,9 @@ const U: Record<LangCode, UILabels> = {
     atsOptimisedLabel: 'ציון ATS · מאוּפְּטָם',
     potentialLabel: 'פוטנציאל',
     withAIFix: 'עם תיקון AI',
+    scoreLabelExcellent: 'מצוין', scoreLabelGood: 'טוב', scoreLabelFair: 'סביר', scoreLabelPoor: 'גרוע',
+    catIssues: 'בעיות', catFormatting: 'עיצוב', catKeywords: 'מילות מפתח', catContent: 'תוכן', catImpact: 'השפעה',
+    issueFix: 'תיקון',
     analysePhases: [
       'קורות החיים נקראים…',
       'מילות מפתח ATS נסרקות…',

@@ -275,7 +275,12 @@ function HeroScore({ result: r, optimized, fixed }: { result: AIResult; optimize
       </div>
       <div class="hero-meta">
         <div class="hero-eyebrow">{fixed && delta > 0 ? getUI(cvLang.value).atsOptimisedLabel : getUI(cvLang.value).atsScoreLabel}</div>
-        <div class="hero-label">{r.score_label}</div>
+        <div class="hero-label">{{
+          Excellent: ui.scoreLabelExcellent,
+          Good: ui.scoreLabelGood,
+          Fair: ui.scoreLabelFair,
+          Poor: ui.scoreLabelPoor,
+        }[r.score_label] ?? r.score_label}</div>
         <div class="hero-summary">{r.summary}</div>
         {!fixed && delta > 0 && (
           <div class="hero-potential">
@@ -373,9 +378,14 @@ function IssuesAccordion({ issues, quickWins }: { issues: AIIssue[]; quickWins: 
     const arr = byCat.get(i.category) ?? [];
     arr.push(i); byCat.set(i.category, arr);
   }
+  const ui = getUI(cvLang.value);
   const catColor: Record<AIIssue['category'], string> = {
     Issues: '#e74c3c', Formatting: '#e67e22', Keywords: '#3498db',
     Content: '#9b59b6', Impact: '#2ecc71',
+  };
+  const catLabel: Record<AIIssue['category'], string> = {
+    Issues: ui.catIssues, Formatting: ui.catFormatting, Keywords: ui.catKeywords,
+    Content: ui.catContent, Impact: ui.catImpact,
   };
 
   return (
@@ -393,7 +403,7 @@ function IssuesAccordion({ issues, quickWins }: { issues: AIIssue[]; quickWins: 
 
       {[...byCat.entries()].map(([cat, items]) => (
         <Collapsible
-          title={cat}
+          title={catLabel[cat] ?? cat}
           badge={items.length}
           accent={catColor[cat] ?? '#a09080'}
           defaultOpen
@@ -421,7 +431,7 @@ function IssueCard({ issue }: { issue: AIIssue }) {
         <div class="issue-card-desc">{issue.description}</div>
         {issue.fix && (
           <div class="issue-card-fix">
-            <span class="issue-card-fix-eyebrow">Fix</span>
+            <span class="issue-card-fix-eyebrow">{getUI(cvLang.value).issueFix}</span>
             {issue.fix}
           </div>
         )}
