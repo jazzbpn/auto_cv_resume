@@ -602,10 +602,16 @@ function tryParseProgressive(acc: string): AIResult | null {
   return null;
 }
 
+function langInstruction(lang: string): string {
+  if (!lang || lang === 'English') return '';
+  return `\n\nIMPORTANT: Write ALL human-readable text fields (issue titles, descriptions, fixes, quick_wins, summary) in ${lang}. Keep the "score_label" value in English (Excellent/Good/Fair/Poor). Preserve all technical keywords, skill names, tool names, and proper nouns in their original form.`;
+}
+
 export async function reviewCV(
   cv: CV,
   jobDescription: string,
   visibility: Record<SectionKey, boolean>,
+  lang = 'English',
   onPartial?: (partial: AIResult) => void,
 ): Promise<AIResult> {
   const cvText = cvToText(cv, visibility);
@@ -618,7 +624,7 @@ export async function reviewCV(
     temperature: 0,
     response_format: { type: 'json_object' },
     messages: [
-      { role: 'system', content: REVIEW_SYSTEM },
+      { role: 'system', content: REVIEW_SYSTEM + langInstruction(lang) },
       { role: 'user', content: userMsg },
     ],
   }, (acc) => {
@@ -656,6 +662,7 @@ export async function optimizeCV(
   cv: CV,
   jobDescription: string,
   visibility: Record<SectionKey, boolean>,
+  lang = 'English',
 ): Promise<AIOptimize> {
   const cvText = cvToText(cv, visibility);
   const userMsg = jobDescription.trim()
@@ -667,7 +674,7 @@ export async function optimizeCV(
     temperature: 0,
     response_format: { type: 'json_object' },
     messages: [
-      { role: 'system', content: OPTIMIZE_SYSTEM },
+      { role: 'system', content: OPTIMIZE_SYSTEM + langInstruction(lang) },
       { role: 'user', content: userMsg },
     ],
   });

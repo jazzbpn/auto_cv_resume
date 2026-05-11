@@ -3,9 +3,10 @@ import { useEffect, useRef } from 'preact/hooks';
 import { extractText } from '../services/pdfText';
 import { importCVText, type ImportedCV } from '../services/aiClient';
 import { track } from '../services/analytics';
-import { replaceCV } from '../state/store';
+import { replaceCV, cvLang } from '../state/store';
 import type { CV } from '../types';
 import { showToast } from './Toast';
+import { getUI } from '../i18n/sections';
 
 type Stage = 'idle' | 'processing' | 'success' | 'error';
 const stage = signal<Stage>('idle');
@@ -30,26 +31,27 @@ function importFormat(source: string): string {
 }
 
 async function runImport(text: string, source: string) {
+  const ui = getUI(cvLang.value);
   if (!text || text.trim().length < 50) {
     stage.value = 'error';
-    errorMsg.value = 'Please provide more CV content before importing.';
+    errorMsg.value = ui.importErrTooShort;
     track('import_error', { stage: 'too_short' });
     return;
   }
   stage.value = 'processing';
-  setProgress(10, 'Reading your CV…', 'Preparing your content');
+  setProgress(10, ui.importProgressReading, 'Preparing your content');
   try {
-    setProgress(30, 'Analysing your CV…', 'Identifying sections and entries');
+    setProgress(30, ui.importProgressAnalysing, 'Identifying sections and entries');
     const result = await importCVText(text);
-    setProgress(85, 'Extracting information…', 'Mapping fields to your editor');
+    setProgress(85, ui.importProgressExtracting, 'Mapping fields to your editor');
     parsed.value = result;
     sourceName.value = source;
-    setProgress(100, 'Done!', '');
+    setProgress(100, ui.importProgressDone, '');
     stage.value = 'success';
     track('import_success', { format: importFormat(source) });
   } catch (e) {
     stage.value = 'error';
-    errorMsg.value = e instanceof Error ? e.message : 'Could not analyse your CV. Please try again.';
+    errorMsg.value = e instanceof Error ? e.message : ui.importErrParse;
     track('import_error', { stage: 'parse' });
   }
 }
@@ -61,7 +63,7 @@ async function handleFile(file: File) {
     await runImport(text, file.name);
   } catch (e) {
     stage.value = 'error';
-    errorMsg.value = e instanceof Error ? e.message : 'Could not read file.';
+    errorMsg.value = e instanceof Error ? e.message : getUI(cvLang.value).importErrRead;
     track('import_error', { stage: 'extract' });
   }
 }
@@ -122,12 +124,13 @@ function buildCVFromImport(p: ImportedCV): CV {
 
 function applyImport(p: ImportedCV) {
   replaceCV(buildCVFromImport(p));
-  showToast('✓ CV imported. Review and edit your details in the form.');
+  showToast(getUI(cvLang.value).importToast);
 }
 
 interface Props { onClose: () => void }
 
 export function ImportModal({ onClose }: Props) {
+  const ui = getUI(cvLang.value);
   const fileRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
 
@@ -158,7 +161,7 @@ export function ImportModal({ onClose }: Props) {
     <div class="import-modal" role="dialog" aria-modal="true" onClick={onBackdrop}>
       <div class="import-modal-box" onClick={(e) => e.stopPropagation()}>
         <header class="import-modal-hd">
-          <span class="import-modal-title">⬆ Import your CV / Resume</span>
+          <span class="import-modal-title">{ui.importModalTitle}</span>
           <button type="button" class="import-modal-close" onClick={onClose} aria-label="Close">×</button>
         </header>
 
@@ -173,9 +176,9 @@ export function ImportModal({ onClose }: Props) {
               onDrop={onDrop}
             >
               <div class="import-drop-icon" aria-hidden>📄</div>
-              <div class="import-drop-title">Drop your CV here</div>
-              <div class="import-drop-sub">or click to browse</div>
-              <div class="import-drop-formats">PDF · DOCX · TXT · pasted text</div>
+              <div class="import-drop-title">{ui.importDropTitle}</div>
+              <div class="import-drop-sub">{ui.importDropSub}</div>
+              <div class="import-drop-formats">{ui.importDropFormats}</div>
             </div>
             <input
               ref={fileRef}
@@ -187,20 +190,20 @@ export function ImportModal({ onClose }: Props) {
                 if (f) void handleFile(f);
               }}
             />
-            <div class="import-or-row"><span>or paste your CV text directly</span></div>
+            <div class="import-or-row"><span>{ui.importOrPaste}</span></div>
             <textarea
               class="import-paste-area"
               rows={8}
               value={pasteText.value}
               onInput={(e) => { pasteText.value = (e.currentTarget as HTMLTextAreaElement).value; }}
-              placeholder="Paste the full text of your CV / resume here…"
+              placeholder={ui.importPastePlaceholder}
             />
             <button
               class="import-go-btn"
               type="button"
               onClick={() => { void runImport(pasteText.value, 'pasted text'); }}
             >
-              ✦ Analyse &amp; Import
+              {ui.importAnalyseBtn}
             </button>
           </>
         )}
@@ -225,7 +228,7 @@ export function ImportModal({ onClose }: Props) {
           return (
           <div class="import-success-wrap">
             <div class="import-success-icon" aria-hidden>✓</div>
-            <div class="import-success-title">CV imported successfully</div>
+            <div class="import-success-title">{ui.importSuccessTitle}</div>
             <div class="import-success-sub">
               Extracted from {sourceName.value}: {expN} job{expN === 1 ? '' : 's'},{' '}
               {eduN} education entr{eduN === 1 ? 'y' : 'ies'}, {skillN} skill{skillN === 1 ? '' : 's'}.
@@ -243,9 +246,9 @@ export function ImportModal({ onClose }: Props) {
               type="button"
               onClick={() => { applyImport(parsed.value!); onClose(); }}
             >
-              ✓ Apply to Editor
+              {ui.importApplyBtn}
             </button>
-            <button class="import-cancel-btn" type="button" onClick={onClose}>Cancel</button>
+            <button class="import-cancel-btn" type="button" onClick={onClose}>{ui.importCancelBtn}</button>
           </div>
           );
         })()}
@@ -253,9 +256,9 @@ export function ImportModal({ onClose }: Props) {
         {stage.value === 'error' && (
           <div class="import-error-wrap">
             <div class="import-error-icon" aria-hidden>⚠</div>
-            <div class="import-error-title">Import failed</div>
+            <div class="import-error-title">{ui.importErrorTitle}</div>
             <div class="import-error-msg">{errorMsg.value}</div>
-            <button class="import-go-btn" type="button" onClick={() => { stage.value = 'idle'; }}>Try again</button>
+            <button class="import-go-btn" type="button" onClick={() => { stage.value = 'idle'; }}>{ui.importTryAgainBtn}</button>
           </div>
         )}
       </div>

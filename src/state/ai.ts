@@ -1,6 +1,7 @@
 import { signal } from '@preact/signals';
-import { cv, visibility, aiResult, aiOptimize } from './store';
+import { cv, visibility, aiResult, aiOptimize, cvLang } from './store';
 import { reviewCV, optimizeCV } from '../services/aiClient';
+import { LANG_META } from '../i18n/sections';
 import { track, scoreBucket, classifyAIError, markAIUsed } from '../services/analytics';
 
 export const aiJD = signal('');
@@ -36,7 +37,8 @@ export async function runAIReview(): Promise<void> {
   void runAIOptimize();
 
   try {
-    const result = await reviewCV(cv.value, aiJD.value, visibility.value, (partial) => {
+    const lang = LANG_META[cvLang.value].label;
+    const result = await reviewCV(cv.value, aiJD.value, visibility.value, lang, (partial) => {
       aiResult.value = partial;
     });
     aiResult.value = result;
@@ -64,7 +66,7 @@ export function runAIOptimize(): Promise<void> {
   aiOptimizeError.value = '';
   optimizeInflight = (async () => {
     try {
-      const result = await optimizeCV(cv.value, aiJD.value, visibility.value);
+      const result = await optimizeCV(cv.value, aiJD.value, visibility.value, LANG_META[cvLang.value].label);
       aiOptimize.value = result;
       aiOptimizeStatus.value = 'idle';
     } catch (e) {

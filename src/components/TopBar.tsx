@@ -1,10 +1,12 @@
 import { printResume } from '../services/print';
 import { track, wasAIUsed } from '../services/analytics';
-import { saveStatus, template, visibility } from '../state/store';
+import { saveStatus, template, visibility, cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
 
 interface Props { onImport: () => void; }
 
 export function TopBar({ onImport }: Props) {
+  const ui = getUI(cvLang.value);
   return (
     <>
       <div class="free-ribbon" aria-label="100% Free, no sign-up, no card required">
@@ -24,7 +26,7 @@ export function TopBar({ onImport }: Props) {
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-            <span class="btn-text">Import CV</span>
+            <span class="btn-text">{ui.importBtn}</span>
           </button>
           <button class="export-btn" type="button" aria-label="Export CV" onClick={() => {
             track('export', {
@@ -39,7 +41,7 @@ export function TopBar({ onImport }: Props) {
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
-            <span class="btn-text">Export</span>
+            <span class="btn-text">{ui.exportBtn}</span>
           </button>
         </div>
       </header>
