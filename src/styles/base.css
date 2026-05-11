@@ -138,14 +138,16 @@ body {
 
 @media (max-width: 640px) {
   .free-ribbon {
-    top: 27px; left: -60px; width: 192px;
-    font-size: .58rem; padding: 4px 0;
+    top: 16px; left: -55px; width: 180px;
+    transform: rotate(-45deg) scale(0.88);
+    padding: 4px 0;
   }
 }
 @media (max-width: 480px) {
   .free-ribbon {
-    top: 24px; left: -64px; width: 192px;
-    font-size: .54rem; letter-spacing: .12em; padding: 3px 0;
+    top: 14px; left: -58px; width: 160px;
+    transform: rotate(-45deg) scale(0.80);
+    font-size: .58rem; letter-spacing: .12em; padding: 3px 0;
   }
 }
 
