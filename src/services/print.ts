@@ -159,8 +159,13 @@ export async function printResume(): Promise<void> {
     document.getElementById('print-iframe')?.remove();
     const iframe = document.createElement('iframe');
     iframe.id = 'print-iframe';
+    // 794px = A4 width at 96 dpi. Mobile WebKit/Android WebView resolve
+    // percentage widths in @media print against the iframe's rendered width,
+    // not the @page size, so a 1px iframe produces a 1px-wide layout that
+    // gets scaled up with massive visible margins. Rendering at A4 width
+    // makes width:100% map correctly to the full page.
     iframe.style.cssText =
-      'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0';
+      'position:fixed;top:-9999px;left:-9999px;width:794px;height:1123px;border:none;opacity:0;pointer-events:none';
     document.body.appendChild(iframe);
 
     let printed = false;
