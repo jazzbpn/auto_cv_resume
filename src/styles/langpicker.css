@@ -9,9 +9,9 @@
   gap: 8px;
 }
 
-/* Above the mobile bottom nav */
+/* Above the mobile bottom nav + template dock */
 @media (max-width: 1023px) {
-  .lang-fab { bottom: 72px; }
+  .lang-fab { bottom: calc(var(--bottomnav) + 74px); }
 }
 
 .lang-fab-btn {
