@@ -1,6 +1,7 @@
 import { showToast } from '../components/Toast';
+import { cvLang } from '../state/store';
 
-/** Filesystem-safe version of the user's name. */
+/** Filesystem-safe version of the user's name: keeps case, swaps spaces for underscores, strips problematic chars. */
 function fileSafeName(s: string): string {
   return s.trim().replace(/\s+/g, '_').replace(/[\\/:*?"<>|]/g, '').replace(/_+/g, '_') || 'Resume';
 }
@@ -24,6 +25,85 @@ function getName(): string {
   return node?.textContent?.trim() || 'resume';
 }
 
+function collectStyles(): string {
+  const out: string[] = [];
+  for (const sheet of Array.from(document.styleSheets)) {
+    try {
+      const rules = sheet.cssRules;
+      if (!rules) continue;
+      for (const r of Array.from(rules)) out.push(r.cssText);
+    } catch {
+      // Cross-origin stylesheet (e.g. Google Fonts) — skip; the @import in
+      // the print HTML reloads the same fonts.
+    }
+  }
+  return out.join('\n');
+}
+
+const PRINT_OVERRIDES = `
+/* Standalone-file view (in case the user opens the downloaded HTML). */
+@media screen {
+  body { padding: 24px; }
+  .resume {
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    transform: none !important;
+    width: 700px;
+    min-height: auto !important;
+  }
+}
+
+@media print {
+  /* Force all backgrounds, gradients, and tinted text to actually print. */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+  .resume {
+    width: 100% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    min-height: auto !important;
+  }
+  /* Belt-and-suspenders for the modern template's coloured fills. */
+  .resume.modern .mod-left,
+  .resume.modern .mod-sf,
+  .skill-tag, .ai-kw,
+  [class*="badge-"], [class*="sev-"], [class*="hero-"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+`;
+
+function buildPrintHTML(): string {
+  const node = getResumeNode();
+  if (!node) {
+    throw new Error('Could not find the CV preview to print. Open the Preview tab and try again.');
+  }
+  const clone = node.cloneNode(true) as HTMLElement;
+  clone.style.transform = 'none';
+  clone.style.boxShadow = 'none';
+  const styles = collectStyles();
+  const docDir = node.getAttribute('dir') ?? 'ltr';
+  const title = exportFilename();
+  const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap">`;
+  // @page placed LAST so it wins the cascade over any UA-stylesheet @page rule.
+  // !important is invalid inside @page descriptors (CSS spec) — source order wins instead.
+  const pageReset = `@page{size:A4;margin:0;}`;
+  return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}\n${pageReset}</style></head><body>${clone.outerHTML}</body></html>`;
+}
+
 export async function printResume(): Promise<void> {
   const btn = document.querySelector<HTMLButtonElement>('.export-btn');
   const btnText = btn?.querySelector<HTMLElement>('.btn-text');
@@ -32,7 +112,8 @@ export async function printResume(): Promise<void> {
   if (btnText) btnText.textContent = 'Preparing…';
 
   try {
-    await printInline();
+    const html = buildPrintHTML();
+    await printViaIframe(html);
   } catch (e) {
     console.error('[print] PDF export failed:', e);
     showToast(e instanceof Error ? e.message : 'PDF export failed.');
@@ -42,76 +123,80 @@ export async function printResume(): Promise<void> {
   }
 }
 
-/**
- * Prints by cloning the resume into the main document and calling window.print().
- *
- * Why not window.open(): on iOS Safari, window.open() opens a background tab
- * and window.print() called on it never shows the dialog. On Android/iOS
- * WebViews it is blocked entirely. Calling window.print() on the current
- * window is never blocked and respects our injected @page CSS on all platforms.
- */
-async function printInline(): Promise<void> {
-  const node = getResumeNode();
-  if (!node) throw new Error('Could not find the CV preview to print. Open the Preview tab and try again.');
+async function printViaIframe(html: string): Promise<void> {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
 
-  const STYLE_ID = 'cv-print-override';
-  const CLONE_ID = 'cv-print-clone';
+  document.getElementById('print-iframe')?.remove();
+  const iframe = document.createElement('iframe');
+  iframe.id = 'print-iframe';
+  // 794px = A4 width in px at 96dpi so that %-based widths resolve correctly
+  // when mobile WebKit calculates print layout from the iframe's rendered size.
+  iframe.style.cssText =
+    'position:fixed;top:-9999px;left:-9999px;width:794px;height:1123px;border:none;opacity:0;pointer-events:none';
+  document.body.appendChild(iframe);
 
-  document.getElementById(STYLE_ID)?.remove();
-  document.getElementById(CLONE_ID)?.remove();
+  let printed = false;
 
-  // Clone the resume off-screen so it doesn't affect the visible layout.
-  const clone = node.cloneNode(true) as HTMLElement;
-  clone.id = CLONE_ID;
-  clone.style.cssText = 'position:fixed;left:-99999px;top:0;transform:none;box-shadow:none;pointer-events:none;';
-  document.body.appendChild(clone);
+  iframe.onload = async () => {
+    try {
+      await Promise.race([
+        iframe.contentDocument?.fonts?.ready ?? Promise.resolve(),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch { /* browsers without document.fonts */ }
 
-  // Set the document title to the desired PDF filename; browsers use it when
-  // the user chooses "Save as PDF" from the print dialog.
-  const prevTitle = document.title;
-  document.title = exportFilename();
+    // iOS Safari and Android Chrome read the *parent* page's @page rules when
+    // printing iframe content — the iframe's own @page is ignored for the
+    // header/footer margin area (where URL, date, page-number appear).
+    // Injecting @page into the parent document suppresses those decorations
+    // and sets A4 as the default paper size on both platforms.
+    const PAGE_ID = 'cv-page-override';
+    document.getElementById(PAGE_ID)?.remove();
+    const pageStyle = document.createElement('style');
+    pageStyle.id = PAGE_ID;
+    pageStyle.textContent = '@page{size:A4;margin:0;}';
+    document.head.appendChild(pageStyle);
 
-  const docDir = node.getAttribute('dir') ?? 'ltr';
+    const removePageStyle = () => {
+      document.getElementById(PAGE_ID)?.remove();
+      window.removeEventListener('afterprint', removePageStyle);
+    };
+    window.addEventListener('afterprint', removePageStyle);
+    // Safety cleanup if afterprint never fires (some WebViews).
+    setTimeout(removePageStyle, 10_000);
 
-  const style = document.createElement('style');
-  style.id = STYLE_ID;
-  // @page placed last so it wins the UA-stylesheet cascade.
-  // !important is invalid inside @page descriptors — source-order wins instead.
-  style.textContent =
-    `@media print{` +
-    `*,*::before,*::after{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}` +
-    `html{direction:${docDir};}` +
-    `html,body{margin:0!important;padding:0!important;background:#fff!important;}` +
-    // Hide every direct child of body EXCEPT the print clone.
-    // Specificity: body>* = (0,0,1); #CLONE_ID = (1,0,0) — ID wins, so clone stays visible.
-    `body>*{display:none!important;}` +
-    `#${CLONE_ID}{display:block!important;position:static!important;left:auto!important;` +
-    `width:100%!important;margin:0!important;transform:none!important;box-shadow:none!important;min-height:auto!important;}` +
-    // Ensure coloured fills (modern template, badges, etc.) survive print.
-    `.mod-left,.mod-sf,.skill-tag,.ai-kw,[class*="badge-"],[class*="sev-"],[class*="hero-"]` +
-    `{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}` +
-    `}` +
-    `@page{size:A4;margin:0;}`;
-  document.head.appendChild(style);
-
-  // Fonts are likely already loaded (the preview is visible), but wait briefly
-  // to be safe — especially for users who just switched to the Preview tab.
-  try {
-    await Promise.race([
-      document.fonts?.ready ?? Promise.resolve(),
-      new Promise((r) => setTimeout(r, 2000)),
-    ]);
-  } catch { /* browsers without document.fonts */ }
-
-  const cleanup = () => {
-    document.getElementById(STYLE_ID)?.remove();
-    document.getElementById(CLONE_ID)?.remove();
-    document.title = prevTitle;
-    window.removeEventListener('afterprint', cleanup);
+    const filename = exportFilename();
+    const prevTitle = document.title;
+    document.title = filename;
+    try {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      printed = true;
+    } catch (e) {
+      console.error('[print] iframe print failed:', e);
+      removePageStyle();
+    } finally {
+      setTimeout(() => { document.title = prevTitle; }, 1500);
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
   };
-  window.addEventListener('afterprint', cleanup);
-  // Safety: some WebViews never fire afterprint.
-  setTimeout(cleanup, 10_000);
 
-  window.print();
+  iframe.onerror = () => {
+    URL.revokeObjectURL(url);
+    showToast('PDF export failed.');
+  };
+  iframe.src = url;
+
+  // Safety: trigger print if onload is delayed (e.g. slow blob resolution).
+  setTimeout(() => {
+    if (!printed) {
+      const filename = exportFilename();
+      const prev = document.title;
+      document.title = filename;
+      try { iframe.contentWindow?.print(); printed = true; }
+      catch { /* ignore */ }
+      finally { setTimeout(() => { document.title = prev; }, 1500); }
+    }
+  }, 4000);
 }
