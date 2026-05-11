@@ -243,6 +243,7 @@ function useCountUp(target: number, durationMs = 900): number {
 }
 
 function HeroScore({ result: r, optimized, fixed }: { result: AIResult; optimized: number | null; fixed: boolean }) {
+  const ui = getUI(cvLang.value);
   const baseScore = Math.max(0, Math.min(100, r.ats_score | 0));
   const optimised = Math.max(baseScore, Math.min(100, (optimized ?? baseScore) | 0));
   const score = fixed ? optimised : baseScore;
