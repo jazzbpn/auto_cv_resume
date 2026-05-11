@@ -73,22 +73,12 @@ body { padding: 24px; }
   min-height: auto !important;
 }
 
-/* Real per-page margins on every page. The blank @top-* / @bottom-*
-   margin boxes are an attempt to override browser-injected header/footer
-   content; they're respected by some browsers but not all. */
+/* Setting margin: 0 on @page removes the margin-box area entirely, which
+   is where Safari/WebKit injects URL, date, and page-number headers/footers.
+   Visual page margins are provided via body padding in @media print below. */
 @page {
   size: A4;
-  margin: 12mm;
-  @top-left-corner { content: ""; }
-  @top-left        { content: ""; }
-  @top-center      { content: ""; }
-  @top-right       { content: ""; }
-  @top-right-corner{ content: ""; }
-  @bottom-left-corner { content: ""; }
-  @bottom-left        { content: ""; }
-  @bottom-center      { content: ""; }
-  @bottom-right       { content: ""; }
-  @bottom-right-corner{ content: ""; }
+  margin: 0;
 }
 
 @media print {
@@ -104,6 +94,9 @@ body { padding: 24px; }
     background: #fff !important;
     overflow: visible !important;
   }
+  /* Page margins live here (not on @page) so Safari has no margin-box area
+     to inject URL / date / page-number headers and footers into. */
+  body { padding: 12mm !important; }
   .resume {
     width: 100% !important;
     margin: 0 !important;
@@ -153,18 +146,6 @@ function downloadHTMLFallback(html: string) {
   showToast('Downloaded as HTML. Open it in your browser, then Print → Save as PDF.');
 }
 
-const HEADERS_TIP_KEY = 'cv-pdf-headers-tip-shown';
-
-function showHeadersTipOnce() {
-  try {
-    if (localStorage.getItem(HEADERS_TIP_KEY)) return;
-    showToast('Tip: untick "Headers and footers" in the print dialog for a totally clean PDF.');
-    localStorage.setItem(HEADERS_TIP_KEY, '1');
-  } catch {
-    // Privacy mode / quota — show the tip anyway, every time
-    showToast('Tip: untick "Headers and footers" in the print dialog for a totally clean PDF.');
-  }
-}
 
 export async function printResume(): Promise<void> {
   const btn = document.querySelector<HTMLButtonElement>('.export-btn');
@@ -214,7 +195,6 @@ export async function printResume(): Promise<void> {
         iframe.contentWindow?.focus();
         iframe.contentWindow?.print();
         printed = true;
-        showHeadersTipOnce();
       } catch (e) {
         console.error('[print] iframe print failed:', e);
         downloadHTMLFallback(html);
@@ -238,7 +218,7 @@ export async function printResume(): Promise<void> {
         const filename = exportFilename();
         const originalTitle = document.title;
         document.title = filename;
-        try { iframe.contentWindow?.print(); printed = true; showHeadersTipOnce(); }
+        try { iframe.contentWindow?.print(); printed = true; }
         catch { /* ignore */ }
         finally { setTimeout(() => { document.title = originalTitle; }, 1500); }
       }
