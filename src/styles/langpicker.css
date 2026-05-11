@@ -9,9 +9,14 @@
   gap: 8px;
 }
 
-/* Above the mobile bottom nav + template dock */
+/* Above the mobile bottom nav */
 @media (max-width: 1023px) {
-  .lang-fab { bottom: calc(var(--bottomnav) + 74px); }
+  .lang-fab { bottom: 72px; }
+}
+
+/* Icon-only on small screens — hide text label to avoid overlapping template dock */
+@media (max-width: 640px) {
+  .lang-fab-label { display: none; }
 }
 
 .lang-fab-btn {
