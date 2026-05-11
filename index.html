@@ -187,6 +187,7 @@
       background: #faf9f7;
       display: flex; align-items: center; justify-content: center;
       flex-direction: column;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
       transition: opacity .73s cubic-bezier(.4,0,.2,1);
     }
     #splash.splash-hide { opacity: 0; pointer-events: none; }
@@ -196,7 +197,7 @@
     .splash-logo {
       display: flex; align-items: baseline;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: clamp(2.6rem, 9vw, 4.2rem);
+      font-size: clamp(1.8rem, 9vw, 4.2rem);
       font-weight: 700;
       letter-spacing: -.035em;
       line-height: 1;
@@ -279,11 +280,20 @@
       border: 1.5px solid rgba(201,150,46,.5);
       border-radius: 999px; padding: 7px 22px;
       cursor: pointer; letter-spacing: .04em;
+      min-height: 44px; touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
       transition: background .2s ease, color .2s ease, border-color .2s ease;
     }
     .splash-timeout button:hover {
       background: #c9962e; color: #fff;
       border-color: #c9962e;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .splash-letter { opacity: 1; transform: none; animation: none; }
+      .splash-line { width: 100%; animation: none; }
+      .splash-shimmer { display: none; }
+      .splash-tag { opacity: 1; animation: none; }
     }
   </style>
   </head>
