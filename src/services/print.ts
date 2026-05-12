@@ -128,15 +128,52 @@ export async function downloadPDF(): Promise<void> {
     }
 
     const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${filename}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 10_000);
-    showToast('Your PDF is ready — check your downloads.');
+    const pdfName = `${filename}.pdf`;
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS) {
+      // iOS Safari ignores the `download` attribute on blob URLs — it just
+      // opens a preview with no obvious save option.
+      // 1. Try the Web Share API (share sheet → "Save to Files", AirDrop, etc.)
+      // 2. If the gesture context expired after the async fetch, fall back to
+      //    opening the blob URL directly; iOS PDF viewer has a ⬆ share icon.
+      const file = new File([blob], pdfName, { type: 'application/pdf' });
+      let saved = false;
+
+      if (navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: filename });
+          saved = true;
+        } catch (e) {
+          if ((e as Error).name === 'AbortError') return; // user dismissed sheet
+          // NotAllowedError (gesture expired) — fall through to viewer
+        }
+      }
+
+      if (!saved) {
+        // Open in iOS PDF viewer; user taps ⬆ to save.
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
+        showToast('PDF ready — tap the ⬆ icon to save it.');
+      }
+    } else {
+      // Desktop and Android — direct file download, no extra steps.
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = pdfName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      showToast('Your PDF is ready — check your downloads.');
+    }
   } catch (e) {
     console.error('[pdf] download failed:', e);
     showToast(e instanceof Error ? e.message : 'PDF generation failed.');
