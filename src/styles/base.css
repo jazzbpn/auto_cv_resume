@@ -460,3 +460,86 @@ body {
 /* Body text needs more line-height for Arabic glyph height */
 .resume[dir=rtl] .r-edesc,
 .resume[dir=rtl] .r-summary { line-height: 2; }
+
+/* ── PWA INSTALL PROMPT ── */
+.install-prompt {
+  position: fixed;
+  bottom: calc(var(--bottom-nav, 56px) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex; align-items: center; gap: 12px;
+  background: #2a2218;
+  border: 1px solid rgba(201,150,46,.35);
+  border-radius: 14px;
+  padding: 10px 12px 10px 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.55), 0 0 0 1px rgba(201,150,46,.08);
+  max-width: calc(100vw - 32px);
+  width: max-content;
+  animation: install-in .35s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes install-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.install-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.install-body {
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 0;
+}
+.install-body strong {
+  font-family: var(--font-ui, 'Inter', system-ui, sans-serif);
+  font-size: .82rem; font-weight: 600;
+  color: #f0e8d8;
+  line-height: 1.2;
+}
+.install-body span {
+  font-family: var(--font-ui, 'Inter', system-ui, sans-serif);
+  font-size: .73rem; font-weight: 400;
+  color: #a09070;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.install-cta {
+  font-family: var(--font-ui, 'Inter', system-ui, sans-serif);
+  font-size: .78rem; font-weight: 600;
+  color: #1a1510;
+  background: #c9962e;
+  border: none; border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer; flex-shrink: 0;
+  transition: background .2s ease;
+  min-height: 36px; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.install-cta:hover { background: #e8b84b; }
+.install-close {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: none; border: none;
+  border-radius: 6px;
+  color: #6b5d3f;
+  cursor: pointer; flex-shrink: 0;
+  padding: 0;
+  transition: color .2s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.install-close:hover { color: #c9962e; background: rgba(201,150,46,.12); }
+.install-close svg { width: 14px; height: 14px; }
+
+/* On desktop (no bottom nav), anchor to bottom-right corner */
+@media (min-width: 768px) {
+  .install-prompt {
+    left: auto; right: 20px;
+    bottom: 20px;
+    transform: none;
+  }
+  @keyframes install-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}

@@ -99,21 +99,10 @@ export default defineConfig(({ mode }) => {
     preact(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
-      manifest: {
-        name: 'CV Builder',
-        short_name: 'CV',
-        description: 'Lightweight CV / resume builder with AI ATS review.',
-        theme_color: '#1a1510',
-        background_color: '#2c2620',
-        display: 'standalone',
-        start_url: '/',
-        icons: [
-          { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-        ],
-      },
+      // manifest lives in public/manifest.webmanifest — don't auto-generate one
+      manifest: false,
+      includeAssets: ['favicon.svg', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png', 'apple-touch-icon.png'],
+      devOptions: { enabled: true },
       workbox: {
         // Don't cache the AI endpoint — every call should hit the live function.
         navigateFallbackDenylist: [/^\/ai\//],
