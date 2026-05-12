@@ -8,7 +8,7 @@ import './styles/ai.css';
 import './styles/import.css';
 import './styles/langpicker.css';
 
-const SPLASH_MIN_MS = 3100;
+const SPLASH_MIN_MS = 3500;
 const splashStart = performance.now();
 
 function dismissSplash() {

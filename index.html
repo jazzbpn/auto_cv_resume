@@ -248,17 +248,21 @@
       100% { transform: translateX(320%); }
     }
 
-    /* ── Tagline ── */
+    /* ── Tagline word stagger ── */
     .splash-tag {
       margin-top: 14px;
       font-family: 'Inter', system-ui, sans-serif;
       font-size: .72rem; font-weight: 500;
       letter-spacing: .14em; text-transform: uppercase;
       color: #a09070;
-      opacity: 0;
-      animation: spl-fade .79s ease 1.98s forwards;
     }
-    @keyframes spl-fade { to { opacity: 1; } }
+    .splash-tag span {
+      display: inline-block;
+      opacity: 0; transform: translateY(14px);
+    }
+    .st1 { animation: spl-up .60s cubic-bezier(.16,1,.3,1) 1.98s forwards; }
+    .st2 { animation: spl-up .60s cubic-bezier(.16,1,.3,1) 2.26s forwards; }
+    .st3 { animation: spl-up .60s cubic-bezier(.16,1,.3,1) 2.54s forwards; }
 
     /* ── Timeout fallback (shows after 8 s) ── */
     .splash-timeout {
@@ -293,7 +297,7 @@
       .splash-letter { opacity: 1; transform: none; animation: none; }
       .splash-line { width: 100%; animation: none; }
       .splash-shimmer { display: none; }
-      .splash-tag { opacity: 1; animation: none; }
+      .splash-tag span { opacity: 1; transform: none; animation: none; }
     }
   </style>
   </head>
@@ -318,7 +322,7 @@
           <div class="splash-line"></div>
           <div class="splash-shimmer"></div>
         </div>
-        <div class="splash-tag">AI · ATS · PDF</div>
+        <div class="splash-tag"><span class="st1">AI</span><span class="st2"> · ATS</span><span class="st3"> · PDF</span></div>
       </div>
       <div class="splash-timeout">
         <p>Taking longer than usual…</p>
