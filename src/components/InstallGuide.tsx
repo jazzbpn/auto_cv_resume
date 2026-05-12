@@ -166,7 +166,7 @@ export function InstallGuide() {
     return () => document.removeEventListener('mousedown', handler);
   }, [open.value]);
 
-  if (!visible.value) return null;
+  if (!visible.value || isStandalone()) return null;
 
   const current = detectPlatform();
   const platform = PLATFORMS.find(p => p.id === current) ?? PLATFORMS[4];
@@ -180,7 +180,7 @@ export function InstallGuide() {
             <div class="ig-header">
               <div class="ig-title-row">
                 <platform.Icon />
-                <span class="ig-title">Install ResumePDF</span>
+                <span class="ig-title">Install ResumePDF App</span>
               </div>
               <button class="ig-close" type="button" onClick={() => { open.value = false; }} aria-label="Close">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden>
