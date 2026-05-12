@@ -2,6 +2,7 @@ import { downloadPDF } from '../services/print';
 import { track, wasAIUsed } from '../services/analytics';
 import { saveStatus, template, visibility, cvLang } from '../state/store';
 import { getUI } from '../i18n/sections';
+import { LanguagePicker } from './LanguagePicker';
 
 interface Props { onImport: () => void; }
 
@@ -44,6 +45,7 @@ export function TopBar({ onImport }: Props) {
             </svg>
             <span class="btn-text">Download</span>
           </button>
+          <LanguagePicker />
         </div>
       </header>
     </>
