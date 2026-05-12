@@ -101,7 +101,7 @@ export default defineConfig(({ mode }) => {
       registerType: 'autoUpdate',
       // manifest lives in public/manifest.webmanifest — don't auto-generate one
       manifest: false,
-      includeAssets: ['favicon.svg', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png', 'apple-touch-icon.png'],
+      includeAssets: ['favicon-32.png', 'favicon-48.png', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png', 'apple-touch-icon.png'],
       devOptions: { enabled: true },
       workbox: {
         // Don't cache the AI endpoint — every call should hit the live function.
