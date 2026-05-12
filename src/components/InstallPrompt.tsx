@@ -7,7 +7,22 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
-const installState = signal<'hidden' | 'available' | 'ios'>('hidden');
+const installState = signal<'hidden' | 'available' | 'ios' | 'safari-macos'>('hidden');
+
+function detectPlatform(): 'ios' | 'safari-macos' | 'chromium' | 'other' {
+  const ua = navigator.userAgent;
+  const isIOS = /iphone|ipad|ipod/i.test(ua) && !(window as Window & { MSStream?: unknown }).MSStream;
+  if (isIOS) return 'ios';
+  // Safari on macOS: vendor is Apple, no Chrome/Chromium in UA, not iOS
+  const isSafariMac =
+    navigator.vendor === 'Apple Computer, Inc.' &&
+    !/chrome|chromium|crios/i.test(ua) &&
+    /safari/i.test(ua);
+  if (isSafariMac) return 'safari-macos';
+  // Chrome / Edge / Brave / Opera — support beforeinstallprompt
+  if ('BeforeInstallPromptEvent' in window || /chrome/i.test(ua)) return 'chromium';
+  return 'other';
+}
 
 export function InstallPrompt() {
   useEffect(() => {
@@ -18,10 +33,15 @@ export function InstallPrompt() {
       (navigator as Navigator & { standalone?: boolean }).standalone === true;
     if (isStandalone) return;
 
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !(window as Window & { MSStream?: unknown }).MSStream;
+    const platform = detectPlatform();
 
-    if (isIOS) {
+    if (platform === 'ios') {
       const t = setTimeout(() => { installState.value = 'ios'; }, 4000);
+      return () => clearTimeout(t);
+    }
+
+    if (platform === 'safari-macos') {
+      const t = setTimeout(() => { installState.value = 'safari-macos'; }, 4000);
       return () => clearTimeout(t);
     }
 
@@ -55,12 +75,19 @@ export function InstallPrompt() {
     <div class="install-prompt" role="complementary" aria-label="Install app">
       <img src="/icon-192.png" class="install-icon" alt="" width="40" height="40" />
       <div class="install-body">
-        {state === 'ios' ? (
+        {state === 'ios' && (
           <>
             <strong>Add to Home Screen</strong>
             <span>Tap <ShareIcon /> then "Add to Home Screen"</span>
           </>
-        ) : (
+        )}
+        {state === 'safari-macos' && (
+          <>
+            <strong>Add to Dock</strong>
+            <span>Safari menu: File → Add to Dock</span>
+          </>
+        )}
+        {state === 'available' && (
           <>
             <strong>Install ResumePDF</strong>
             <span>Works offline · no browser chrome</span>
