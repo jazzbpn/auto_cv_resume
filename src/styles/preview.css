@@ -13,7 +13,7 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  padding: 24px 0 96px;
+  padding: 24px 0 calc(96px + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, #e6e3dd 0%, #b8b4ad 100%);
 }
 
@@ -78,7 +78,7 @@
 @media (max-width: 1023px) {
   .tpl-dock {
     position: fixed;
-    bottom: calc(var(--bottomnav) + 14px);
+    bottom: calc(var(--bottomnav) + env(safe-area-inset-bottom) + 14px);
     z-index: 50;
   }
 }
