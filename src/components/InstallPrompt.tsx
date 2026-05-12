@@ -1,5 +1,7 @@
 import { signal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
+import { cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -79,37 +81,39 @@ export function InstallPrompt() {
   const state = installState.value;
   if (state === 'hidden') return null;
 
+  const ui = getUI(cvLang.value);
+
   return (
     <div class="install-prompt" role="complementary" aria-label="Install app">
       <img src="/icon-192.png" class="install-icon" alt="" width="40" height="40" />
       <div class="install-body">
         {state === 'ios' && (
           <>
-            <strong>Add to Home Screen</strong>
-            <span>Tap <ThreeDotsIcon /> → <ShareIcon /> Share → Add to Home Screen</span>
+            <strong>{ui.installAddToHome}</strong>
+            <span>{ui.installTap} <ThreeDotsIcon /> → <ShareIcon /> {ui.installShare} → {ui.installAddToHome}</span>
           </>
         )}
         {state === 'ios-other' && (
           <>
-            <strong>Open in Safari to install</strong>
-            <span>iOS only allows installs from Safari</span>
+            <strong>{ui.installIOSOtherTitle}</strong>
+            <span>{ui.installIOSOtherHint}</span>
           </>
         )}
         {state === 'safari-macos' && (
           <>
-            <strong>Install on your Mac</strong>
-            <span>Safari: File menu → Add to Dock</span>
+            <strong>{ui.installMacTitle}</strong>
+            <span>{ui.installMacHint}</span>
           </>
         )}
         {state === 'available' && (
           <>
-            <strong>Install ResumePDF</strong>
-            <span>Works offline · no browser chrome</span>
+            <strong>{ui.installTitle}</strong>
+            <span>{ui.installDesc}</span>
           </>
         )}
       </div>
       {state === 'available' && (
-        <button class="install-cta" type="button" onClick={install}>Install</button>
+        <button class="install-cta" type="button" onClick={install}>{ui.installBtn}</button>
       )}
       <button class="install-close" type="button" onClick={dismiss} aria-label="Dismiss">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden>

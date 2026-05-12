@@ -1,8 +1,11 @@
 import type { MobilePanel } from '../state/ui';
+import { cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
 
 interface Props { active: MobilePanel; onSelect: (p: MobilePanel) => void; }
 
 export function BottomNav({ active, onSelect }: Props) {
+  const ui = getUI(cvLang.value);
   return (
     <nav class="bottom-nav" aria-label="Mobile views">
       <button
@@ -21,7 +24,7 @@ export function BottomNav({ active, onSelect }: Props) {
             <path d="M3 21.5h18v1.5H3z" opacity="0" />
           </svg>
         </span>
-        <span class="nav-label">Edit</span>
+        <span class="nav-label">{ui.navEdit}</span>
       </button>
       <button
         type="button"
@@ -38,7 +41,7 @@ export function BottomNav({ active, onSelect }: Props) {
             <path d="M12 4.5C5.5 4.5 1.7 9.7 1 12c.7 2.3 4.5 7.5 11 7.5s10.3-5.2 11-7.5c-.7-2.3-4.5-7.5-11-7.5zm0 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
           </svg>
         </span>
-        <span class="nav-label">Preview</span>
+        <span class="nav-label">{ui.navPreview}</span>
       </button>
       <button
         type="button"
@@ -60,7 +63,7 @@ export function BottomNav({ active, onSelect }: Props) {
             <rect x="17" y="5" width="3" height="14" rx="0.5" />
           </svg>
         </span>
-        <span class="nav-label">AI Score</span>
+        <span class="nav-label">{ui.navAiScore}</span>
       </button>
     </nav>
   );

@@ -28,7 +28,7 @@ export function EntryRepeater<K extends CollectionKey>({
         const rowAny = row as unknown as Record<string, unknown>;
         const labelText =
           (titleField && String(rowAny[titleField as string] ?? '')) ||
-          'New Entry';
+          ui.newEntry;
         return (
           <div class="entry-block" key={i}>
             <div class="entry-block-hd">

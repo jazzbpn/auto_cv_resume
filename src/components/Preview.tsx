@@ -1,21 +1,28 @@
 import { Suspense } from 'preact/compat';
 import { useEffect, useRef } from 'preact/hooks';
-import { cv, template, setTemplate, visibility } from '../state/store';
+import { cv, template, setTemplate, visibility, cvLang } from '../state/store';
 import { TEMPLATES } from '../templates';
 import { buildResumeData } from '../templates/derive';
 import { track } from '../services/analytics';
+import { getUI } from '../i18n/sections';
 import type { TemplateId } from '../types';
 
-const TEMPLATE_OPTIONS: { id: TemplateId; label: string; icon: string }[] = [
-  { id: 'classic', label: 'Classic', icon: '📄' },
-  { id: 'modern', label: 'Modern', icon: '🗂' },
-  { id: 'minimal', label: 'Minimal', icon: '✦' },
-];
+const TEMPLATE_ICONS: Record<TemplateId, string> = {
+  classic: '📄',
+  modern: '🗂',
+  minimal: '✦',
+};
 
 function TemplateDock() {
+  const ui = getUI(cvLang.value);
+  const options = [
+    { id: 'classic' as TemplateId, label: ui.tplClassic },
+    { id: 'modern' as TemplateId, label: ui.tplModern },
+    { id: 'minimal' as TemplateId, label: ui.tplMinimal },
+  ];
   return (
     <div class="tpl-dock" role="radiogroup" aria-label="Template">
-      {TEMPLATE_OPTIONS.map(({ id, label, icon }) => (
+      {options.map(({ id, label }) => (
         <button
           type="button"
           key={id}
@@ -27,7 +34,7 @@ function TemplateDock() {
             setTemplate(id);
           }}
         >
-          <span class="ic" aria-hidden>{icon}</span>
+          <span class="ic" aria-hidden>{TEMPLATE_ICONS[id]}</span>
           {label}
         </button>
       ))}
@@ -75,7 +82,7 @@ function ScaledResume() {
   return (
     <div class="preview-scale-wrap" ref={wrapRef} id="preview-scale-wrap">
       <div ref={docRef}>
-        <Suspense fallback={<div class="resume placeholder">Loading template…</div>}>
+        <Suspense fallback={<div class="resume placeholder">{getUI(cvLang.value).loadingTemplate}</div>}>
           {/* @ts-expect-error — Preact lazy types pass through children */}
           <Template data={data} />
         </Suspense>

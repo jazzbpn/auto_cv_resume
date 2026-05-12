@@ -43,7 +43,7 @@ export function TopBar({ onImport }: Props) {
               <polyline points="7 10 12 15 17 10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            <span class="btn-text">Download</span>
+            <span class="btn-text">{ui.downloadBtn}</span>
           </button>
           <LanguagePicker />
         </div>
@@ -54,10 +54,11 @@ export function TopBar({ onImport }: Props) {
 
 function SaveIndicator() {
   const status = saveStatus.value;
+  const ui = getUI(cvLang.value);
   const label =
-    status === 'saving' ? 'Saving…'
-    : status === 'error' ? 'Save failed'
-    : 'Saved locally';
+    status === 'saving' ? ui.savingLabel
+    : status === 'error' ? ui.saveFailedLabel
+    : ui.savedLocallyLabel;
   return (
     <span
       class={`save-indicator save-${status}`}
