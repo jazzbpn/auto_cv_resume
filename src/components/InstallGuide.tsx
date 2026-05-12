@@ -153,6 +153,13 @@ export function InstallGuide() {
   useEffect(() => {
     if (isStandalone()) return;
     visible.value = true;
+    if (!localStorage.getItem('ig-seen')) {
+      const t = setTimeout(() => {
+        open.value = true;
+        localStorage.setItem('ig-seen', '1');
+      }, 2000);
+      return () => clearTimeout(t);
+    }
   }, []);
 
   useEffect(() => {
@@ -179,7 +186,7 @@ export function InstallGuide() {
           <div class="ig-panel" role="dialog" aria-label="How to install ResumePDF">
             <div class="ig-header">
               <div class="ig-title-row">
-                <platform.Icon />
+                <img src="/icon-192.png" class="ig-app-icon" alt="" width="28" height="28" />
                 <span class="ig-title">Install ResumePDF App</span>
               </div>
               <button class="ig-close" type="button" onClick={() => { open.value = false; }} aria-label="Close">
