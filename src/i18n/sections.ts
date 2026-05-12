@@ -708,6 +708,13 @@ export interface UILabels {
   installTitle: string;
   installDesc: string;
   installBtn: string;
+  // Install guide steps (per platform)
+  igIosSafariSteps: string[];
+  igIosOtherSteps: string[];
+  igMacSteps: string[];
+  igAndroidSteps: string[];
+  igChromiumSteps: string[];
+  igFirefoxSteps: string[];
 }
 
 const U: Record<LangCode, UILabels> = {
@@ -893,6 +900,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Install ResumePDF',
     installDesc: 'Works offline · no browser chrome',
     installBtn: 'Install',
+    igIosSafariSteps: ['Open this page in Safari', 'Tap the ••• button in the address bar', 'Tap the Share button', 'Scroll down and tap "Add to Home Screen"', 'Tap "Add" to confirm'],
+    igIosOtherSteps: ['Copy the page URL', 'Open Safari and paste the URL', 'Tap the ••• button → Share', 'Tap "Add to Home Screen" → Add'],
+    igMacSteps: ['Open this page in Safari', 'Click "File" in the menu bar', 'Click "Add to Dock…"', 'Click "Add" to confirm'],
+    igAndroidSteps: ['Tap the menu icon (⋮) in your browser', 'Tap "Add to Home screen"', 'Tap "Add" to confirm'],
+    igChromiumSteps: ['Look for the install icon (⊕) in the address bar', 'Click it and select "Install"', 'Or: open the browser menu (⋮) → "Install ResumePDF"'],
+    igFirefoxSteps: ['Firefox does not support PWA installs', 'Open this page in Chrome, Edge, or Brave to install'],
 
   },
   ar: {
@@ -1077,6 +1090,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ثبّت ResumePDF',
     installDesc: 'يعمل بدون إنترنت · بدون شريط المتصفح',
     installBtn: 'تثبيت',
+    igIosSafariSteps: ['افتح هذه الصفحة في Safari', 'اضغط على زر ••• في شريط العنوان', 'اضغط على زر المشاركة', 'مرر للأسفل واضغط على "إضافة إلى الشاشة الرئيسية"', 'اضغط على "إضافة" للتأكيد'],
+    igIosOtherSteps: ['انسخ رابط الصفحة', 'افتح Safari والصق الرابط', 'اضغط على ••• → مشاركة', 'اضغط على "إضافة إلى الشاشة الرئيسية" → إضافة'],
+    igMacSteps: ['افتح هذه الصفحة في Safari', 'انقر على "ملف" في شريط القوائم', 'انقر على "إضافة إلى الـ Dock…"', 'انقر على "إضافة" للتأكيد'],
+    igAndroidSteps: ['اضغط على أيقونة القائمة (⋮) في متصفحك', 'اضغط على "إضافة إلى الشاشة الرئيسية"', 'اضغط على "إضافة" للتأكيد'],
+    igChromiumSteps: ['ابحث عن أيقونة التثبيت (⊕) في شريط العنوان', 'انقر عليها واختر "تثبيت"', 'أو: افتح قائمة المتصفح (⋮) → "تثبيت ResumePDF"'],
+    igFirefoxSteps: ['Firefox لا يدعم تثبيت تطبيقات PWA', 'افتح هذه الصفحة في Chrome أو Edge أو Brave للتثبيت'],
   },
   ur: {
     sectionsToShow: 'دکھانے کے حصے',
@@ -1260,6 +1279,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF انسٹال کریں',
     installDesc: 'آف لائن کام کرتا ہے · براؤزر بار نہیں',
     installBtn: 'انسٹال کریں',
+    igIosSafariSteps: ['یہ صفحہ Safari میں کھولیں', 'ایڈریس بار میں ••• بٹن دبائیں', 'شیئر بٹن دبائیں', 'نیچے سکرول کریں اور "Add to Home Screen" دبائیں', 'تصدیق کے لیے "Add" دبائیں'],
+    igIosOtherSteps: ['صفحے کا URL کاپی کریں', 'Safari کھولیں اور URL پیسٹ کریں', '••• بٹن دبائیں → Share', '"Add to Home Screen" → Add دبائیں'],
+    igMacSteps: ['یہ صفحہ Safari میں کھولیں', 'مینو بار میں "File" پر کلک کریں', '"Add to Dock…" پر کلک کریں', 'تصدیق کے لیے "Add" پر کلک کریں'],
+    igAndroidSteps: ['اپنے براؤزر میں مینو آئیکن (⋮) دبائیں', '"Add to Home screen" دبائیں', 'تصدیق کے لیے "Add" دبائیں'],
+    igChromiumSteps: ['ایڈریس بار میں انسٹال آئیکن (⊕) تلاش کریں', 'اس پر کلک کریں اور "Install" منتخب کریں', 'یا: براؤزر مینو (⋮) → "Install ResumePDF"'],
+    igFirefoxSteps: ['Firefox PWA انسٹال کو سپورٹ نہیں کرتا', 'انسٹال کرنے کے لیے یہ صفحہ Chrome، Edge یا Brave میں کھولیں'],
   },
   hi: {
     sectionsToShow: 'दिखाए जाने वाले अनुभाग',
@@ -1443,6 +1468,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF इंस्टॉल करें',
     installDesc: 'ऑफ़लाइन काम करता है · ब्राउज़र बार नहीं',
     installBtn: 'इंस्टॉल करें',
+    igIosSafariSteps: ['यह पेज Safari में खोलें', 'एड्रेस बार में ••• बटन दबाएं', 'Share बटन दबाएं', 'नीचे स्क्रॉल करें और "Add to Home Screen" दबाएं', 'पुष्टि के लिए "Add" दबाएं'],
+    igIosOtherSteps: ['पेज का URL कॉपी करें', 'Safari खोलें और URL पेस्ट करें', '••• बटन → Share दबाएं', '"Add to Home Screen" → Add दबाएं'],
+    igMacSteps: ['यह पेज Safari में खोलें', 'मेनू बार में "File" पर क्लिक करें', '"Add to Dock…" पर क्लिक करें', 'पुष्टि के लिए "Add" पर क्लिक करें'],
+    igAndroidSteps: ['अपने ब्राउज़र में मेनू आइकन (⋮) दबाएं', '"Add to Home screen" दबाएं', 'पुष्टि के लिए "Add" दबाएं'],
+    igChromiumSteps: ['एड्रेस बार में इंस्टॉल आइकन (⊕) देखें', 'उस पर क्लिक करें और "Install" चुनें', 'या: ब्राउज़र मेनू (⋮) → "Install ResumePDF"'],
+    igFirefoxSteps: ['Firefox PWA इंस्टॉल को सपोर्ट नहीं करता', 'इंस्टॉल करने के लिए यह पेज Chrome, Edge या Brave में खोलें'],
   },
   fr: {
     sectionsToShow: 'Sections à afficher',
@@ -1626,6 +1657,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Installer ResumePDF',
     installDesc: 'Fonctionne hors ligne · sans barre de navigation',
     installBtn: 'Installer',
+    igIosSafariSteps: ['Ouvrez cette page dans Safari', 'Appuyez sur le bouton ••• dans la barre d\'adresse', 'Appuyez sur le bouton Partager', 'Faites défiler vers le bas et appuyez sur "Sur l\'écran d\'accueil"', 'Appuyez sur "Ajouter" pour confirmer'],
+    igIosOtherSteps: ['Copiez l\'URL de la page', 'Ouvrez Safari et collez l\'URL', 'Appuyez sur ••• → Partager', 'Appuyez sur "Sur l\'écran d\'accueil" → Ajouter'],
+    igMacSteps: ['Ouvrez cette page dans Safari', 'Cliquez sur "Fichier" dans la barre de menus', 'Cliquez sur "Ajouter au Dock…"', 'Cliquez sur "Ajouter" pour confirmer'],
+    igAndroidSteps: ['Appuyez sur l\'icône du menu (⋮) dans votre navigateur', 'Appuyez sur "Ajouter à l\'écran d\'accueil"', 'Appuyez sur "Ajouter" pour confirmer'],
+    igChromiumSteps: ['Cherchez l\'icône d\'installation (⊕) dans la barre d\'adresse', 'Cliquez dessus et sélectionnez "Installer"', 'Ou : ouvrez le menu du navigateur (⋮) → "Installer ResumePDF"'],
+    igFirefoxSteps: ['Firefox ne prend pas en charge l\'installation PWA', 'Ouvrez cette page dans Chrome, Edge ou Brave pour installer'],
 
   },
   es: {
@@ -1810,6 +1847,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Instalar ResumePDF',
     installDesc: 'Funciona sin conexión · sin barra del navegador',
     installBtn: 'Instalar',
+    igIosSafariSteps: ['Abre esta página en Safari', 'Toca el botón ••• en la barra de direcciones', 'Toca el botón Compartir', 'Desplázate hacia abajo y toca "Añadir a pantalla de inicio"', 'Toca "Añadir" para confirmar'],
+    igIosOtherSteps: ['Copia la URL de la página', 'Abre Safari y pega la URL', 'Toca ••• → Compartir', 'Toca "Añadir a pantalla de inicio" → Añadir'],
+    igMacSteps: ['Abre esta página en Safari', 'Haz clic en "Archivo" en la barra de menús', 'Haz clic en "Añadir al Dock…"', 'Haz clic en "Añadir" para confirmar'],
+    igAndroidSteps: ['Toca el icono del menú (⋮) en tu navegador', 'Toca "Añadir a pantalla de inicio"', 'Toca "Añadir" para confirmar'],
+    igChromiumSteps: ['Busca el icono de instalación (⊕) en la barra de direcciones', 'Haz clic en él y selecciona "Instalar"', 'O: abre el menú del navegador (⋮) → "Instalar ResumePDF"'],
+    igFirefoxSteps: ['Firefox no admite instalaciones PWA', 'Abre esta página en Chrome, Edge o Brave para instalar'],
 
   },
   de: {
@@ -1994,6 +2037,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF installieren',
     installDesc: 'Offline nutzbar · kein Browser-Chrome',
     installBtn: 'Installieren',
+    igIosSafariSteps: ['Diese Seite in Safari öffnen', 'Die ••• Schaltfläche in der Adressleiste antippen', 'Die Teilen-Schaltfläche antippen', 'Nach unten scrollen und "Zum Home-Bildschirm" antippen', '"Hinzufügen" zur Bestätigung antippen'],
+    igIosOtherSteps: ['Die Seiten-URL kopieren', 'Safari öffnen und URL einfügen', '••• Schaltfläche → Teilen antippen', '"Zum Home-Bildschirm" → Hinzufügen antippen'],
+    igMacSteps: ['Diese Seite in Safari öffnen', 'Auf "Ablage" in der Menüleiste klicken', 'Auf "Zum Dock hinzufügen…" klicken', 'Auf "Hinzufügen" zur Bestätigung klicken'],
+    igAndroidSteps: ['Das Menü-Symbol (⋮) im Browser antippen', 'Auf "Zum Startbildschirm hinzufügen" tippen', '"Hinzufügen" zur Bestätigung antippen'],
+    igChromiumSteps: ['Das Installationssymbol (⊕) in der Adressleiste suchen', 'Darauf klicken und "Installieren" auswählen', 'Oder: Browsermenü (⋮) → "ResumePDF installieren"'],
+    igFirefoxSteps: ['Firefox unterstützt keine PWA-Installation', 'Diese Seite in Chrome, Edge oder Brave öffnen, um zu installieren'],
   },
   pt: {
     sectionsToShow: 'Secções a mostrar',
@@ -2177,6 +2226,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Instalar ResumePDF',
     installDesc: 'Funciona offline · sem barra do navegador',
     installBtn: 'Instalar',
+    igIosSafariSteps: ['Abra esta página no Safari', 'Toque no botão ••• na barra de endereços', 'Toque no botão Compartilhar', 'Role para baixo e toque em "Adicionar à Tela de Início"', 'Toque em "Adicionar" para confirmar'],
+    igIosOtherSteps: ['Copie o URL da página', 'Abra o Safari e cole o URL', 'Toque em ••• → Compartilhar', 'Toque em "Adicionar à Tela de Início" → Adicionar'],
+    igMacSteps: ['Abra esta página no Safari', 'Clique em "Arquivo" na barra de menus', 'Clique em "Adicionar ao Dock…"', 'Clique em "Adicionar" para confirmar'],
+    igAndroidSteps: ['Toque no ícone do menu (⋮) no seu navegador', 'Toque em "Adicionar à tela inicial"', 'Toque em "Adicionar" para confirmar'],
+    igChromiumSteps: ['Procure o ícone de instalação (⊕) na barra de endereços', 'Clique nele e selecione "Instalar"', 'Ou: abra o menu do navegador (⋮) → "Instalar ResumePDF"'],
+    igFirefoxSteps: ['Firefox não suporta instalação de PWA', 'Abra esta página no Chrome, Edge ou Brave para instalar'],
 
   },
   zh: {
@@ -2361,6 +2416,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: '安装 ResumePDF',
     installDesc: '离线可用 · 无浏览器界面',
     installBtn: '安装',
+    igIosSafariSteps: ['在 Safari 中打开此页面', '点击地址栏中的 ••• 按钮', '点击分享按钮', '向下滚动并点击"添加到主屏幕"', '点击"添加"确认'],
+    igIosOtherSteps: ['复制页面网址', '打开 Safari 并粘贴网址', '点击 ••• → 分享', '点击"添加到主屏幕" → 添加'],
+    igMacSteps: ['在 Safari 中打开此页面', '点击菜单栏中的"文件"', '点击"添加到程序坞…"', '点击"添加"确认'],
+    igAndroidSteps: ['点击浏览器中的菜单图标 (⋮)', '点击"添加到主屏幕"', '点击"添加"确认'],
+    igChromiumSteps: ['在地址栏中查找安装图标 (⊕)', '点击它并选择"安装"', '或：打开浏览器菜单 (⋮) → "安装 ResumePDF"'],
+    igFirefoxSteps: ['Firefox 不支持 PWA 安装', '请在 Chrome、Edge 或 Brave 中打开此页面进行安装'],
   },
   ja: {
     sectionsToShow: '表示するセクション',
@@ -2544,6 +2605,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDFをインストール',
     installDesc: 'オフライン対応・ブラウザバーなし',
     installBtn: 'インストール',
+    igIosSafariSteps: ['Safari でこのページを開く', 'アドレスバーの ••• ボタンをタップ', '共有ボタンをタップ', '下にスクロールして「ホーム画面に追加」をタップ', '「追加」をタップして確認'],
+    igIosOtherSteps: ['ページのURLをコピー', 'Safariを開いてURLを貼り付け', '••• ボタン → 共有をタップ', '「ホーム画面に追加」→ 追加をタップ'],
+    igMacSteps: ['Safari でこのページを開く', 'メニューバーの「ファイル」をクリック', '「Dockに追加…」をクリック', '「追加」をクリックして確認'],
+    igAndroidSteps: ['ブラウザのメニューアイコン (⋮) をタップ', '「ホーム画面に追加」をタップ', '「追加」をタップして確認'],
+    igChromiumSteps: ['アドレスバーのインストールアイコン (⊕) を探す', 'クリックして「インストール」を選択', 'またはブラウザメニュー (⋮) → 「ResumePDFをインストール」'],
+    igFirefoxSteps: ['Firefox は PWA インストールに対応していません', 'Chrome、Edge、または Brave でページを開いてインストール'],
   },
   ko: {
     sectionsToShow: '표시할 섹션',
@@ -2727,6 +2794,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF 설치',
     installDesc: '오프라인 작동 · 브라우저 도구모음 없음',
     installBtn: '설치',
+    igIosSafariSteps: ['Safari에서 이 페이지 열기', '주소 표시줄의 ••• 버튼 탭하기', '공유 버튼 탭하기', '아래로 스크롤하여 "홈 화면에 추가" 탭하기', '"추가"를 탭하여 확인'],
+    igIosOtherSteps: ['페이지 URL 복사', 'Safari를 열고 URL 붙여넣기', '••• 버튼 → 공유 탭하기', '"홈 화면에 추가" → 추가 탭하기'],
+    igMacSteps: ['Safari에서 이 페이지 열기', '메뉴 표시줄에서 "파일" 클릭', '"Dock에 추가…" 클릭', '"추가"를 클릭하여 확인'],
+    igAndroidSteps: ['브라우저에서 메뉴 아이콘 (⋮) 탭하기', '"홈 화면에 추가" 탭하기', '"추가"를 탭하여 확인'],
+    igChromiumSteps: ['주소 표시줄에서 설치 아이콘 (⊕) 찾기', '클릭하고 "설치" 선택', '또는: 브라우저 메뉴 (⋮) → "ResumePDF 설치"'],
+    igFirefoxSteps: ['Firefox는 PWA 설치를 지원하지 않습니다', 'Chrome, Edge 또는 Brave에서 페이지를 열어 설치하세요'],
 
   },
   ru: {
@@ -2911,6 +2984,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Установить ResumePDF',
     installDesc: 'Работает офлайн · без панели браузера',
     installBtn: 'Установить',
+    igIosSafariSteps: ['Откройте эту страницу в Safari', 'Нажмите кнопку ••• в адресной строке', 'Нажмите кнопку «Поделиться»', 'Прокрутите вниз и нажмите «На экран «Домой»»', 'Нажмите «Добавить» для подтверждения'],
+    igIosOtherSteps: ['Скопируйте URL страницы', 'Откройте Safari и вставьте URL', 'Нажмите ••• → Поделиться', 'Нажмите «На экран Домой» → Добавить'],
+    igMacSteps: ['Откройте эту страницу в Safari', 'Нажмите «Файл» в строке меню', 'Нажмите «Добавить в Dock…»', 'Нажмите «Добавить» для подтверждения'],
+    igAndroidSteps: ['Нажмите значок меню (⋮) в браузере', 'Нажмите «Добавить на главный экран»', 'Нажмите «Добавить» для подтверждения'],
+    igChromiumSteps: ['Найдите значок установки (⊕) в адресной строке', 'Нажмите и выберите «Установить»', 'Или: откройте меню браузера (⋮) → «Установить ResumePDF»'],
+    igFirefoxSteps: ['Firefox не поддерживает установку PWA', 'Откройте страницу в Chrome, Edge или Brave для установки'],
 
   },
   tr: {
@@ -3095,6 +3174,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF\'i Yükle',
     installDesc: 'Çevrimdışı çalışır · tarayıcı çubuğu yok',
     installBtn: 'Yükle',
+    igIosSafariSteps: ['Bu sayfayı Safari\'de açın', 'Adres çubuğundaki ••• düğmesine dokunun', 'Paylaş düğmesine dokunun', 'Aşağı kaydırın ve "Ana Ekrana Ekle"ye dokunun', 'Onaylamak için "Ekle"ye dokunun'],
+    igIosOtherSteps: ['Sayfa URL\'sini kopyalayın', 'Safari\'yi açın ve URL\'yi yapıştırın', '••• düğmesine → Paylaş\'a dokunun', '"Ana Ekrana Ekle" → Ekle\'ye dokunun'],
+    igMacSteps: ['Bu sayfayı Safari\'de açın', 'Menü çubuğunda "Dosya"ya tıklayın', '"Dock\'a Ekle…"ye tıklayın', 'Onaylamak için "Ekle"ye tıklayın'],
+    igAndroidSteps: ['Tarayıcınızdaki menü simgesine (⋮) dokunun', '"Ana ekrana ekle"ye dokunun', 'Onaylamak için "Ekle"ye dokunun'],
+    igChromiumSteps: ['Adres çubuğundaki yükleme simgesini (⊕) arayın', 'Tıklayın ve "Yükle"yi seçin', 'Veya: tarayıcı menüsü (⋮) → "ResumePDF\'yi Yükle"'],
+    igFirefoxSteps: ['Firefox PWA yüklemesini desteklemiyor', 'Yüklemek için bu sayfayı Chrome, Edge veya Brave\'de açın'],
 
   },
   he: {
@@ -3279,6 +3364,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'התקן את ResumePDF',
     installDesc: 'עובד במצב לא מקוון · ללא סרגל דפדפן',
     installBtn: 'התקן',
+    igIosSafariSteps: ['פתח דף זה ב-Safari', 'הקש על כפתור ••• בשורת הכתובת', 'הקש על כפתור השיתוף', 'גלול למטה והקש על "הוסף למסך הבית"', 'הקש על "הוסף" לאישור'],
+    igIosOtherSteps: ['העתק את כתובת הדף', 'פתח את Safari והדבק את הכתובת', 'הקש ••• → שתף', 'הקש על "הוסף למסך הבית" → הוסף'],
+    igMacSteps: ['פתח דף זה ב-Safari', 'לחץ על "קובץ" בשורת התפריטים', 'לחץ על "הוסף ל-Dock…"', 'לחץ על "הוסף" לאישור'],
+    igAndroidSteps: ['הקש על סמל התפריט (⋮) בדפדפן', 'הקש על "הוסף למסך הבית"', 'הקש על "הוסף" לאישור'],
+    igChromiumSteps: ['חפש את סמל ההתקנה (⊕) בשורת הכתובת', 'לחץ עליו ובחר "התקן"', 'או: פתח את תפריט הדפדפן (⋮) → "התקן את ResumePDF"'],
+    igFirefoxSteps: ['Firefox אינו תומך בהתקנת PWA', 'פתח דף זה ב-Chrome, Edge או Brave להתקנה'],
 
   },
   it: {
@@ -3463,6 +3554,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Installa ResumePDF',
     installDesc: 'Funziona offline · nessuna barra browser',
     installBtn: 'Installa',
+    igIosSafariSteps: ['Apri questa pagina in Safari', 'Tocca il pulsante ••• nella barra degli indirizzi', 'Tocca il pulsante Condividi', 'Scorri verso il basso e tocca "Aggiungi alla schermata Home"', 'Tocca "Aggiungi" per confermare'],
+    igIosOtherSteps: ['Copia l\'URL della pagina', 'Apri Safari e incolla l\'URL', 'Tocca ••• → Condividi', 'Tocca "Aggiungi alla schermata Home" → Aggiungi'],
+    igMacSteps: ['Apri questa pagina in Safari', 'Clicca su "File" nella barra dei menu', 'Clicca su "Aggiungi al Dock…"', 'Clicca su "Aggiungi" per confermare'],
+    igAndroidSteps: ['Tocca l\'icona del menu (⋮) nel tuo browser', 'Tocca "Aggiungi alla schermata Home"', 'Tocca "Aggiungi" per confermare'],
+    igChromiumSteps: ['Cerca l\'icona di installazione (⊕) nella barra degli indirizzi', 'Cliccaci sopra e seleziona "Installa"', 'Oppure: apri il menu del browser (⋮) → "Installa ResumePDF"'],
+    igFirefoxSteps: ['Firefox non supporta l\'installazione PWA', 'Apri questa pagina in Chrome, Edge o Brave per installare'],
 
   },
   id: {
@@ -3647,6 +3744,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Pasang ResumePDF',
     installDesc: 'Bekerja offline · tanpa bilah browser',
     installBtn: 'Instal',
+    igIosSafariSteps: ['Buka halaman ini di Safari', 'Ketuk tombol ••• di bilah alamat', 'Ketuk tombol Bagikan', 'Gulir ke bawah dan ketuk "Tambahkan ke Layar Utama"', 'Ketuk "Tambahkan" untuk mengonfirmasi'],
+    igIosOtherSteps: ['Salin URL halaman', 'Buka Safari dan tempel URL', 'Ketuk ••• → Bagikan', 'Ketuk "Tambahkan ke Layar Utama" → Tambahkan'],
+    igMacSteps: ['Buka halaman ini di Safari', 'Klik "File" di bilah menu', 'Klik "Tambahkan ke Dock…"', 'Klik "Tambahkan" untuk mengonfirmasi'],
+    igAndroidSteps: ['Ketuk ikon menu (⋮) di browser Anda', 'Ketuk "Tambahkan ke layar utama"', 'Ketuk "Tambahkan" untuk mengonfirmasi'],
+    igChromiumSteps: ['Cari ikon instal (⊕) di bilah alamat', 'Klik dan pilih "Instal"', 'Atau: buka menu browser (⋮) → "Instal ResumePDF"'],
+    igFirefoxSteps: ['Firefox tidak mendukung instalasi PWA', 'Buka halaman ini di Chrome, Edge, atau Brave untuk menginstal'],
 
   },
   bn: {
@@ -3831,6 +3934,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF ইনস্টল করুন',
     installDesc: 'অফলাইনে কাজ করে · ব্রাউজার বার নেই',
     installBtn: 'ইনস্টল করুন',
+    igIosSafariSteps: ['Safari-তে এই পৃষ্ঠাটি খুলুন', 'ঠিকানা বারে ••• বোতামটি ট্যাপ করুন', 'শেয়ার বোতামটি ট্যাপ করুন', 'নিচে স্ক্রল করুন এবং "Add to Home Screen" ট্যাপ করুন', 'নিশ্চিত করতে "Add" ট্যাপ করুন'],
+    igIosOtherSteps: ['পৃষ্ঠার URL কপি করুন', 'Safari খুলুন এবং URL পেস্ট করুন', '••• বোতাম → Share ট্যাপ করুন', '"Add to Home Screen" → Add ট্যাপ করুন'],
+    igMacSteps: ['Safari-তে এই পৃষ্ঠাটি খুলুন', 'মেনু বারে "File" ক্লিক করুন', '"Add to Dock…" ক্লিক করুন', 'নিশ্চিত করতে "Add" ক্লিক করুন'],
+    igAndroidSteps: ['আপনার ব্রাউজারে মেনু আইকন (⋮) ট্যাপ করুন', '"Add to Home screen" ট্যাপ করুন', 'নিশ্চিত করতে "Add" ট্যাপ করুন'],
+    igChromiumSteps: ['ঠিকানা বারে ইনস্টল আইকন (⊕) খুঁজুন', 'এটিতে ক্লিক করুন এবং "Install" বেছে নিন', 'অথবা: ব্রাউজার মেনু (⋮) → "Install ResumePDF"'],
+    igFirefoxSteps: ['Firefox PWA ইনস্টল সমর্থন করে না', 'ইনস্টল করতে Chrome, Edge বা Brave-এ এই পৃষ্ঠাটি খুলুন'],
 
   },
   nl: {
@@ -4015,6 +4124,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'ResumePDF installeren',
     installDesc: 'Werkt offline · geen browserbalk',
     installBtn: 'Installeren',
+    igIosSafariSteps: ['Open deze pagina in Safari', 'Tik op de ••• knop in de adresbalk', 'Tik op de Deel-knop', 'Scroll naar beneden en tik op "Zet op beginscherm"', 'Tik op "Voeg toe" om te bevestigen'],
+    igIosOtherSteps: ['Kopieer de pagina-URL', 'Open Safari en plak de URL', 'Tik op ••• → Delen', 'Tik op "Zet op beginscherm" → Voeg toe'],
+    igMacSteps: ['Open deze pagina in Safari', 'Klik op "Archief" in de menubalk', 'Klik op "Voeg toe aan Dock…"', 'Klik op "Voeg toe" om te bevestigen'],
+    igAndroidSteps: ['Tik op het menupictogram (⋮) in je browser', 'Tik op "Toevoegen aan startscherm"', 'Tik op "Toevoegen" om te bevestigen'],
+    igChromiumSteps: ['Zoek het installatiepictogram (⊕) in de adresbalk', 'Klik erop en selecteer "Installeren"', 'Of: open het browsermenu (⋮) → "ResumePDF installeren"'],
+    igFirefoxSteps: ['Firefox ondersteunt geen PWA-installaties', 'Open deze pagina in Chrome, Edge of Brave om te installeren'],
 
   },
   pl: {
@@ -4199,6 +4314,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Zainstaluj ResumePDF',
     installDesc: 'Działa offline · bez paska przeglądarki',
     installBtn: 'Zainstaluj',
+    igIosSafariSteps: ['Otwórz tę stronę w Safari', 'Dotknij przycisku ••• na pasku adresu', 'Dotknij przycisku Udostępnij', 'Przewiń w dół i dotknij „Dodaj do ekranu głównego"', 'Dotknij „Dodaj", aby potwierdzić'],
+    igIosOtherSteps: ['Skopiuj adres URL strony', 'Otwórz Safari i wklej adres URL', 'Dotknij ••• → Udostępnij', 'Dotknij „Dodaj do ekranu głównego" → Dodaj'],
+    igMacSteps: ['Otwórz tę stronę w Safari', 'Kliknij „Plik" na pasku menu', 'Kliknij „Dodaj do Docka…"', 'Kliknij „Dodaj", aby potwierdzić'],
+    igAndroidSteps: ['Dotknij ikony menu (⋮) w przeglądarce', 'Dotknij „Dodaj do ekranu głównego"', 'Dotknij „Dodaj", aby potwierdzić'],
+    igChromiumSteps: ['Poszukaj ikony instalacji (⊕) na pasku adresu', 'Kliknij ją i wybierz „Zainstaluj"', 'Lub: otwórz menu przeglądarki (⋮) → „Zainstaluj ResumePDF"'],
+    igFirefoxSteps: ['Firefox nie obsługuje instalacji PWA', 'Otwórz tę stronę w Chrome, Edge lub Brave, aby zainstalować'],
 
   },
   vi: {
@@ -4383,6 +4504,12 @@ const U: Record<LangCode, UILabels> = {
     installTitle: 'Cài đặt ResumePDF',
     installDesc: 'Hoạt động ngoại tuyến · không có thanh trình duyệt',
     installBtn: 'Cài đặt',
+    igIosSafariSteps: ['Mở trang này trong Safari', 'Nhấn nút ••• trên thanh địa chỉ', 'Nhấn nút Chia sẻ', 'Cuộn xuống và nhấn "Thêm vào Màn hình chính"', 'Nhấn "Thêm" để xác nhận'],
+    igIosOtherSteps: ['Sao chép URL trang', 'Mở Safari và dán URL', 'Nhấn ••• → Chia sẻ', 'Nhấn "Thêm vào Màn hình chính" → Thêm'],
+    igMacSteps: ['Mở trang này trong Safari', 'Nhấp vào "Tệp" trên thanh menu', 'Nhấp vào "Thêm vào Dock…"', 'Nhấp vào "Thêm" để xác nhận'],
+    igAndroidSteps: ['Nhấn biểu tượng menu (⋮) trong trình duyệt', 'Nhấn "Thêm vào màn hình chính"', 'Nhấn "Thêm" để xác nhận'],
+    igChromiumSteps: ['Tìm biểu tượng cài đặt (⊕) trên thanh địa chỉ', 'Nhấp vào đó và chọn "Cài đặt"', 'Hoặc: mở menu trình duyệt (⋮) → "Cài đặt ResumePDF"'],
+    igFirefoxSteps: ['Firefox không hỗ trợ cài đặt PWA', 'Mở trang này trong Chrome, Edge hoặc Brave để cài đặt'],
 
   },
 };

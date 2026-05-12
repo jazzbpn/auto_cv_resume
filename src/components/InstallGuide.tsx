@@ -3,6 +3,9 @@ import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
 import { detectPlatform, isStandalone } from '../services/platform';
 import type { Platform } from '../services/platform';
+import { cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
+import type { UILabels } from '../i18n/sections';
 
 const open = signal(false);
 const visible = signal(false);
@@ -81,71 +84,16 @@ function FirefoxIcon() {
   );
 }
 
-const PLATFORMS: PlatformInfo[] = [
-  {
-    id: 'ios-safari',
-    Icon: IOSIcon,
-    name: 'iPhone / iPad — Safari',
-    steps: [
-      'Open this page in Safari',
-      'Tap the ••• button in the address bar',
-      'Tap the Share button',
-      'Scroll down and tap "Add to Home Screen"',
-      'Tap "Add" to confirm',
-    ],
-  },
-  {
-    id: 'ios-other',
-    Icon: IOSIcon,
-    name: 'iPhone / iPad — Chrome / Firefox',
-    steps: [
-      'Copy the page URL',
-      'Open Safari and paste the URL',
-      'Tap the ••• button → Share',
-      'Tap "Add to Home Screen" → Add',
-    ],
-  },
-  {
-    id: 'safari-macos',
-    Icon: MacIcon,
-    name: 'Mac — Safari',
-    steps: [
-      'Open this page in Safari',
-      'Click "File" in the menu bar',
-      'Click "Add to Dock…"',
-      'Click "Add" to confirm',
-    ],
-  },
-  {
-    id: 'android',
-    Icon: AndroidIcon,
-    name: 'Android — Chrome / Samsung Browser',
-    steps: [
-      'Tap the menu icon (⋮) in your browser',
-      'Tap "Add to Home screen"',
-      'Tap "Add" to confirm',
-    ],
-  },
-  {
-    id: 'chromium',
-    Icon: LaptopIcon,
-    name: 'Chrome / Edge / Brave — Desktop',
-    steps: [
-      'Look for the install icon (⊕) in the address bar',
-      'Click it and select "Install"',
-      'Or: open the browser menu (⋮) → "Install ResumePDF"',
-    ],
-  },
-  {
-    id: 'firefox',
-    Icon: FirefoxIcon,
-    name: 'Firefox',
-    steps: [
-      'Firefox does not support PWA installs',
-      'Open this page in Chrome, Edge, or Brave to install',
-    ],
-  },
-];
+function buildPlatforms(ui: UILabels): PlatformInfo[] {
+  return [
+    { id: 'ios-safari',   Icon: IOSIcon,      name: 'iPhone / iPad — Safari',               steps: ui.igIosSafariSteps },
+    { id: 'ios-other',    Icon: IOSIcon,      name: 'iPhone / iPad — Chrome / Firefox',      steps: ui.igIosOtherSteps },
+    { id: 'safari-macos', Icon: MacIcon,      name: 'Mac — Safari',                          steps: ui.igMacSteps },
+    { id: 'android',      Icon: AndroidIcon,  name: 'Android — Chrome / Samsung Browser',    steps: ui.igAndroidSteps },
+    { id: 'chromium',     Icon: LaptopIcon,   name: 'Chrome / Edge / Brave — Desktop',       steps: ui.igChromiumSteps },
+    { id: 'firefox',      Icon: FirefoxIcon,  name: 'Firefox',                               steps: ui.igFirefoxSteps },
+  ];
+}
 
 export function InstallGuide() {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -175,8 +123,9 @@ export function InstallGuide() {
 
   if (!visible.value || isStandalone()) return null;
 
+  const platforms = buildPlatforms(getUI(cvLang.value));
   const current = detectPlatform();
-  const platform = PLATFORMS.find(p => p.id === current) ?? PLATFORMS[4];
+  const platform = platforms.find(p => p.id === current) ?? platforms[4];
 
   return (
     <div class="ig-wrap" ref={panelRef}>
