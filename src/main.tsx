@@ -7,6 +7,7 @@ import './styles/preview.css';
 import './styles/ai.css';
 import './styles/import.css';
 import './styles/langpicker.css';
+import './styles/installguide.css';
 
 const SPLASH_MIN_MS = 3500;
 const splashStart = performance.now();

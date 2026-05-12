@@ -2,6 +2,7 @@ import { signal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
 import { cvLang } from '../state/store';
 import { getUI } from '../i18n/sections';
+import { detectPlatform, isStandalone } from '../services/platform';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -11,32 +12,10 @@ interface BeforeInstallPromptEvent extends Event {
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
 const installState = signal<'hidden' | 'available' | 'ios' | 'ios-other' | 'safari-macos'>('hidden');
 
-function detectPlatform(): 'ios-safari' | 'ios-other' | 'safari-macos' | 'chromium' | 'other' {
-  const ua = navigator.userAgent;
-  const isIOS = /iphone|ipad|ipod/i.test(ua) && !(window as Window & { MSStream?: unknown }).MSStream;
-  if (isIOS) {
-    // CriOS = Chrome on iOS, FxiOS = Firefox, OPiOS = Opera, EdgiOS = Edge
-    if (/CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua)) return 'ios-other';
-    return 'ios-safari';
-  }
-  // Safari on macOS: vendor is Apple, no Chrome/Chromium in UA
-  const isSafariMac =
-    navigator.vendor === 'Apple Computer, Inc.' &&
-    !/chrome|chromium|crios/i.test(ua) &&
-    /safari/i.test(ua);
-  if (isSafariMac) return 'safari-macos';
-  if ('BeforeInstallPromptEvent' in window || /chrome/i.test(ua)) return 'chromium';
-  return 'other';
-}
-
 export function InstallPrompt() {
   useEffect(() => {
     if (localStorage.getItem('pwa-dismissed')) return;
-
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (navigator as Navigator & { standalone?: boolean }).standalone === true;
-    if (isStandalone) return;
+    if (isStandalone()) return;
 
     const platform = detectPlatform();
 

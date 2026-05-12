@@ -1,0 +1,175 @@
+/* ── INSTALL GUIDE WRAP ── */
+.ig-wrap {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* On mobile: sit above bottom nav + home indicator */
+@media (max-width: 1023px) {
+  .ig-wrap {
+    bottom: calc(var(--bottomnav) + env(safe-area-inset-bottom) + 12px);
+  }
+}
+
+/* ── TRIGGER BUTTON ── */
+.ig-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201,150,46,.4);
+  background: rgba(26,21,16,.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(244,239,228,.7);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  transition: border-color .2s ease, color .2s ease, box-shadow .2s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.ig-btn svg { width: 18px; height: 18px; }
+.ig-btn:hover,
+.ig-btn.ig-btn-active {
+  border-color: var(--amber);
+  color: var(--amber-bright);
+  box-shadow: 0 4px 20px rgba(0,0,0,.45), 0 0 0 3px rgba(201,150,46,.15);
+  background: rgba(30,25,16,.9);
+}
+
+/* ── BACKDROP (mobile only) ── */
+.ig-backdrop {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .ig-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: -1;
+    animation: ig-fade-in .2s ease;
+  }
+}
+@keyframes ig-fade-in {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+/* ── PANEL ── */
+.ig-panel {
+  background: #1f1a14;
+  border: 1px solid rgba(201,150,46,.2);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+  overflow: hidden;
+  animation: ig-pop .25s cubic-bezier(.16,1,.3,1);
+  width: 320px;
+  max-width: calc(100vw - 40px);
+}
+
+/* On mobile: bottom sheet with side margins */
+@media (max-width: 1023px) {
+  .ig-panel {
+    position: fixed;
+    bottom: calc(var(--bottomnav) + env(safe-area-inset-bottom) + 60px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 16px;
+    animation: ig-slide-up .3s cubic-bezier(.16,1,.3,1);
+  }
+}
+
+@keyframes ig-pop {
+  from { opacity: 0; transform: scale(.95) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes ig-slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HEADER ── */
+.ig-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.ig-title-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.ig-plat-svg {
+  width: 22px; height: 22px;
+  color: var(--amber);
+  flex-shrink: 0;
+}
+.ig-title {
+  font-family: var(--font-ui);
+  font-size: .9rem; font-weight: 600;
+  color: #f0e8d8;
+}
+.ig-close {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: none; border: none; border-radius: 6px;
+  color: rgba(244,239,228,.5);
+  cursor: pointer;
+  transition: color .2s, background .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.ig-close:hover { color: var(--amber-bright); background: rgba(201,150,46,.1); }
+.ig-close svg { width: 14px; height: 14px; }
+
+/* ── SCROLLABLE LIST ── */
+.ig-list {
+  overflow-y: auto;
+  max-height: calc(70vh - 56px);
+  padding: 8px 0 12px;
+}
+@media (min-width: 1024px) {
+  .ig-list { max-height: 420px; }
+}
+
+/* ── PLATFORM BLOCK ── */
+.ig-platform { padding: 4px 16px 16px; }
+
+.ig-plat-name {
+  font-family: var(--font-ui);
+  font-size: .75rem; font-weight: 600;
+  color: rgba(244,239,228,.4);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.ig-steps {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 4px;
+  counter-reset: step;
+}
+.ig-steps li {
+  counter-increment: step;
+  display: flex; align-items: baseline; gap: 8px;
+  font-family: var(--font-ui);
+  font-size: .77rem;
+  color: rgba(244,239,228,.65);
+  line-height: 1.4;
+}
+.ig-steps li::before {
+  content: counter(step);
+  font-size: .65rem; font-weight: 700;
+  color: var(--amber);
+  background: rgba(201,150,46,.15);
+  border-radius: 50%;
+  min-width: 18px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
