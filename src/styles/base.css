@@ -265,7 +265,7 @@ body {
 /* CONTENT */
 .content-area {
   flex: 1; position: relative;
-  height: calc(100vh - var(--topbar) - var(--bottomnav));
+  height: calc(100vh - var(--topbar) - var(--bottomnav) - env(safe-area-inset-bottom));
   overflow: hidden; display: block;
 }
 .panel {
@@ -300,14 +300,14 @@ body {
 
 /* BOTTOM NAV (mobile) — Material 3 navigation bar */
 .bottom-nav {
-  height: var(--bottomnav);
+  height: calc(var(--bottomnav) + env(safe-area-inset-bottom));
   background: var(--dark-surface-0);
   border-top: 1px solid var(--dark-hairline);
   box-shadow: 0 -1px 0 rgba(0, 0, 0, .35), 0 -8px 16px -8px rgba(0, 0, 0, .25);
-  display: flex; align-items: center;
+  display: flex; align-items: flex-start;
   flex-shrink: 0;
   position: relative; z-index: 100;
-  padding: 0 4px;
+  padding: 0 4px env(safe-area-inset-bottom);
   gap: 2px;
 }
 .nav-btn {
@@ -464,7 +464,7 @@ body {
 /* ── PWA INSTALL PROMPT ── */
 .install-prompt {
   position: fixed;
-  bottom: calc(var(--bottom-nav, 56px) + 12px);
+  bottom: calc(var(--bottom-nav, 56px) + env(safe-area-inset-bottom) + 12px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 500;
