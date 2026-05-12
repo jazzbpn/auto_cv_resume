@@ -1,5 +1,6 @@
 import { showToast } from '../components/Toast';
 import { cvLang } from '../state/store';
+import { getUI } from '../i18n/sections';
 
 /** Filesystem-safe version of the user's name: keeps case, swaps spaces for underscores, strips problematic chars. */
 function fileSafeName(s: string): string {
@@ -110,7 +111,8 @@ export async function downloadPDF(): Promise<void> {
   const original = btnText?.textContent ?? '';
   if (btn) btn.disabled = true;
   if (btnText) btnText.textContent = 'Generating PDF…';
-  showToast('Generating your PDF, please wait…');
+  const ui = getUI(cvLang.value);
+  showToast(ui.toastGeneratingPdf);
 
   try {
     const html = buildPrintHTML();
@@ -160,7 +162,7 @@ export async function downloadPDF(): Promise<void> {
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 60_000);
-        showToast('PDF ready — tap the ⬆ icon to save it.');
+        showToast(ui.toastPdfReadyIOS);
       }
     } else {
       // Desktop and Android — direct file download, no extra steps.
@@ -172,11 +174,11 @@ export async function downloadPDF(): Promise<void> {
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
-      showToast('Your PDF is ready — check your downloads.');
+      showToast(ui.toastPdfReady);
     }
   } catch (e) {
     console.error('[pdf] download failed:', e);
-    showToast(e instanceof Error ? e.message : 'PDF generation failed.');
+    showToast(e instanceof Error ? e.message : ui.toastPdfFailed);
   } finally {
     if (btn) btn.disabled = false;
     if (btnText) btnText.textContent = original;
@@ -195,7 +197,7 @@ export async function printResume(): Promise<void> {
     await printViaIframe(html);
   } catch (e) {
     console.error('[print] PDF export failed:', e);
-    showToast(e instanceof Error ? e.message : 'PDF export failed.');
+    showToast(e instanceof Error ? e.message : getUI(cvLang.value).toastPdfFailed);
   } finally {
     if (btn) btn.disabled = false;
     if (btnText) btnText.textContent = original;
@@ -282,7 +284,7 @@ async function printViaIframe(html: string): Promise<void> {
 
   iframe.onerror = () => {
     URL.revokeObjectURL(url);
-    showToast('PDF export failed.');
+    showToast(getUI(cvLang.value).toastPdfFailed);
   };
   iframe.src = url;
 

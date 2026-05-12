@@ -1,4 +1,4 @@
-import { cv, setPersonal, visibility, toggleSection, textDir, setTextDir, cvLang } from '../state/store';
+import { cv, setPersonal, visibility, toggleSection, cvLang } from '../state/store';
 import { getUI } from '../i18n/sections';
 import { SECTIONS,
   emptyEntry, emptyProject, emptyVolunteer, emptyConference,
@@ -61,23 +61,6 @@ export function Editor() {
               {s.l}
             </label>
           ))}
-        </div>
-        <div class="dir-row">
-          <span class="dir-lbl">{ui.textDirectionLabel}</span>
-          <div class="dir-seg">
-            <button
-              type="button"
-              class={`dir-btn${textDir.value === 'ltr' ? ' active' : ''}`}
-              onClick={() => setTextDir('ltr')}
-              title="Left-to-right (English, Hindi, Chinese…)"
-            >LTR</button>
-            <button
-              type="button"
-              class={`dir-btn${textDir.value === 'rtl' ? ' active' : ''}`}
-              onClick={() => setTextDir('rtl')}
-              title="Right-to-left (Arabic, Hebrew…)"
-            >RTL</button>
-          </div>
         </div>
       </Section>
 

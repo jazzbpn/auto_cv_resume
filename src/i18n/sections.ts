@@ -680,6 +680,10 @@ export interface UILabels {
   toastResumeOptimized: string;
   toastAlreadyOptimized: string;
   toastNoRewriteText: string;
+  toastGeneratingPdf: string;
+  toastPdfReadyIOS: string;
+  toastPdfReady: string;
+  toastPdfFailed: string;
 }
 
 const U: Record<LangCode, UILabels> = {
@@ -839,6 +843,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ Resume optimized. Score updated. Tap Undo to revert.",
     toastAlreadyOptimized: "✓ Your CV is already optimised — no rewrites needed.",
     toastNoRewriteText: "AI returned no rewrite text. Tap Re-analyse to try again.",
+    toastGeneratingPdf: "Generating your PDF, please wait…",
+    toastPdfReadyIOS: "PDF ready — tap the ⬆ icon to save it.",
+    toastPdfReady: "Your PDF is ready — check your downloads.",
+    toastPdfFailed: "PDF generation failed.",
 
   },
   ar: {
@@ -997,6 +1005,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "تمّ تحسين السيرة الذاتية. تم تحديث النتيجة. اضغط تراجع للعودة.",
     toastAlreadyOptimized: "السيرة الذاتية محسّنة بالفعل.",
     toastNoRewriteText: "لم يُعد الذكاء الاصطناعي أيّ نص.",
+    toastGeneratingPdf: "جارٍ إنشاء ملف PDF، يرجى الانتظار…",
+    toastPdfReadyIOS: "PDF جاهز — انقر على أيقونة ⬆ لحفظه.",
+    toastPdfReady: "PDF جاهز — تحقق من التنزيلات.",
+    toastPdfFailed: "فشل إنشاء PDF.",
   },
   ur: {
     sectionsToShow: 'دکھانے کے حصے',
@@ -1154,6 +1166,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "CV بہتر ہو گئی۔ اسکور اپڈیٹ ہوا۔ واپس کرنے کے لیے Undo دبائیں۔",
     toastAlreadyOptimized: "CV پہلے سے بہتر ہے۔",
     toastNoRewriteText: "AI نے کوئی متن واپس نہیں کیا۔",
+    toastGeneratingPdf: "آپ کا PDF بنایا جا رہا ہے، براہ کرم انتظار کریں…",
+    toastPdfReadyIOS: "PDF تیار ہے — اسے محفوظ کرنے کے لیے ⬆ آئیکن کو تھپتھپائیں۔",
+    toastPdfReady: "آپ کا PDF تیار ہے — اپنے ڈاؤن لوڈز چیک کریں۔",
+    toastPdfFailed: "PDF بنانے میں ناکامی۔",
   },
   hi: {
     sectionsToShow: 'दिखाए जाने वाले अनुभाग',
@@ -1311,6 +1327,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "Resume अनुकूलित हुआ। स्कोर अपडेट हुआ। वापस करने के लिए Undo दबाएं।",
     toastAlreadyOptimized: "Resume पहले से अनुकूलित है।",
     toastNoRewriteText: "AI ने कोई टेक्स्ट नहीं लौटाया।",
+    toastGeneratingPdf: "आपका PDF बनाया जा रहा है, कृपया प्रतीक्षा करें…",
+    toastPdfReadyIOS: "PDF तैयार है — इसे सहेजने के लिए ⬆ आइकन पर टैप करें।",
+    toastPdfReady: "आपका PDF तैयार है — अपने डाउनलोड देखें।",
+    toastPdfFailed: "PDF बनाने में विफलता।",
   },
   fr: {
     sectionsToShow: 'Sections à afficher',
@@ -1468,6 +1488,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV optimisé. Score mis à jour. Appuyez sur Annuler pour revenir.",
     toastAlreadyOptimized: "✓ Votre CV est déjà optimisé — aucune réécriture nécessaire.",
     toastNoRewriteText: "L'IA n'a renvoyé aucun texte. Réessayez avec Ré-analyser.",
+    toastGeneratingPdf: "Génération de votre PDF, veuillez patienter…",
+    toastPdfReadyIOS: "PDF prêt — appuyez sur l'icône ⬆ pour l'enregistrer.",
+    toastPdfReady: "Votre PDF est prêt — vérifiez vos téléchargements.",
+    toastPdfFailed: "Échec de la génération du PDF.",
 
   },
   es: {
@@ -1626,6 +1650,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV optimizado. Puntuación actualizada. Pulsa Deshacer para revertir.",
     toastAlreadyOptimized: "✓ Tu CV ya está optimizado — no se necesitan reescrituras.",
     toastNoRewriteText: "La IA no devolvió texto. Intenta Re-analizar de nuevo.",
+    toastGeneratingPdf: "Generando su PDF, por favor espere…",
+    toastPdfReadyIOS: "PDF listo — toca el ícono ⬆ para guardarlo.",
+    toastPdfReady: "Su PDF está listo — revise sus descargas.",
+    toastPdfFailed: "Error al generar el PDF.",
 
   },
   de: {
@@ -1784,6 +1812,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "Lebenslauf optimiert. Ergebnis aktualisiert. Zum Rückgängigmachen Undo tippen.",
     toastAlreadyOptimized: "Lebenslauf ist bereits optimiert.",
     toastNoRewriteText: "KI hat keinen Text zurückgegeben.",
+    toastGeneratingPdf: "PDF wird erstellt, bitte warten…",
+    toastPdfReadyIOS: "PDF bereit — tippen Sie auf das ⬆-Symbol zum Speichern.",
+    toastPdfReady: "Ihr PDF ist fertig — überprüfen Sie Ihre Downloads.",
+    toastPdfFailed: "PDF-Erstellung fehlgeschlagen.",
   },
   pt: {
     sectionsToShow: 'Secções a mostrar',
@@ -1941,6 +1973,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV otimizado. Pontuação atualizada. Pressione Desfazer para reverter.",
     toastAlreadyOptimized: "✓ O seu CV já está otimizado — sem necessidade de reescrita.",
     toastNoRewriteText: "A IA não devolveu texto. Tente Re-analisar novamente.",
+    toastGeneratingPdf: "Gerando seu PDF, por favor aguarde…",
+    toastPdfReadyIOS: "PDF pronto — toque no ícone ⬆ para salvar.",
+    toastPdfReady: "Seu PDF está pronto — verifique seus downloads.",
+    toastPdfFailed: "Falha ao gerar o PDF.",
 
   },
   zh: {
@@ -2099,6 +2135,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "简历已优化。评分已更新。点击撤销可恢复。",
     toastAlreadyOptimized: "简历已是最佳状态。",
     toastNoRewriteText: "AI 未返回任何文本。",
+    toastGeneratingPdf: "正在生成PDF，请稍候…",
+    toastPdfReadyIOS: "PDF已准备好 — 点击⬆图标保存。",
+    toastPdfReady: "您的PDF已准备好 — 请查看下载文件。",
+    toastPdfFailed: "PDF生成失败。",
   },
   ja: {
     sectionsToShow: '表示するセクション',
@@ -2256,6 +2296,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "履歴書が最適化されました。スコアが更新されました。元に戻すにはUndoをタップ。",
     toastAlreadyOptimized: "履歴書はすでに最適化されています。",
     toastNoRewriteText: "AIがテキストを返しませんでした。",
+    toastGeneratingPdf: "PDFを生成しています、お待ちください…",
+    toastPdfReadyIOS: "PDF準備完了 — ⬆アイコンをタップして保存してください。",
+    toastPdfReady: "PDFが完成しました — ダウンロードフォルダをご確認ください。",
+    toastPdfFailed: "PDF生成に失敗しました。",
   },
   ko: {
     sectionsToShow: '표시할 섹션',
@@ -2413,6 +2457,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ 이력서가 최적화되었습니다. 점수가 업데이트되었습니다. 실행 취소를 탭하여 되돌리세요.",
     toastAlreadyOptimized: "✓ 이력서가 이미 최적화되어 있습니다 — 재작성 불필요.",
     toastNoRewriteText: "AI가 텍스트를 반환하지 않았습니다. 다시 분석하세요.",
+    toastGeneratingPdf: "PDF를 생성 중입니다, 잠시 기다려 주세요…",
+    toastPdfReadyIOS: "PDF 준비 완료 — ⬆ 아이콘을 탭하여 저장하세요.",
+    toastPdfReady: "PDF가 준비되었습니다 — 다운로드를 확인하세요.",
+    toastPdfFailed: "PDF 생성에 실패했습니다.",
 
   },
   ru: {
@@ -2571,6 +2619,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ Резюме оптимизировано. Счёт обновлён. Нажмите «Отменить» для возврата.",
     toastAlreadyOptimized: "✓ Ваше резюме уже оптимизировано — переписывание не требуется.",
     toastNoRewriteText: "ИИ не вернул текст. Попробуйте повторный анализ.",
+    toastGeneratingPdf: "Создание PDF, пожалуйста, подождите…",
+    toastPdfReadyIOS: "PDF готов — нажмите на значок ⬆ для сохранения.",
+    toastPdfReady: "Ваш PDF готов — проверьте загрузки.",
+    toastPdfFailed: "Не удалось создать PDF.",
 
   },
   tr: {
@@ -2729,6 +2781,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV optimize edildi. Puan güncellendi. Geri almak için Geri Al'a dokunun.",
     toastAlreadyOptimized: "✓ CV'niz zaten optimize edilmiş — yeniden yazma gerekmiyor.",
     toastNoRewriteText: "YZ metin döndürmedi. Yeniden analiz edin.",
+    toastGeneratingPdf: "PDF'iniz oluşturuluyor, lütfen bekleyin…",
+    toastPdfReadyIOS: "PDF hazır — kaydetmek için ⬆ simgesine dokunun.",
+    toastPdfReady: "PDF'iniz hazır — indirmelerinizi kontrol edin.",
+    toastPdfFailed: "PDF oluşturma başarısız oldu.",
 
   },
   he: {
@@ -2887,6 +2943,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ קורות החיים אוּפְּטְמוּ. הציון עודכן. הקש בטל לחזרה.",
     toastAlreadyOptimized: "✓ קורות החיים שלך כבר מאוּפְּטָמִים — אין צורך בשכתוב.",
     toastNoRewriteText: "הבינה המלאכותית לא החזירה טקסט. נסה לנתח מחדש.",
+    toastGeneratingPdf: "מייצר את ה-PDF שלך, נא המתן…",
+    toastPdfReadyIOS: "ה-PDF מוכן — הקש על סמל ⬆ כדי לשמור אותו.",
+    toastPdfReady: "ה-PDF שלך מוכן — בדוק את ההורדות שלך.",
+    toastPdfFailed: "יצירת ה-PDF נכשלה.",
 
   },
   it: {
@@ -3045,6 +3105,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV ottimizzato. Punteggio aggiornato. Premi Annulla per ripristinare.",
     toastAlreadyOptimized: "✓ Il tuo CV è già ottimizzato — nessuna riscrittura necessaria.",
     toastNoRewriteText: "L'AI non ha restituito testo. Rianalizza e riprova.",
+    toastGeneratingPdf: "Generazione del PDF in corso, attendere prego…",
+    toastPdfReadyIOS: "PDF pronto — tocca l'icona ⬆ per salvarlo.",
+    toastPdfReady: "Il tuo PDF è pronto — controlla i tuoi download.",
+    toastPdfFailed: "Generazione PDF non riuscita.",
 
   },
   id: {
@@ -3203,6 +3267,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV dioptimalkan. Skor diperbarui. Ketuk Batalkan untuk kembali.",
     toastAlreadyOptimized: "✓ CV Anda sudah dioptimalkan — tidak perlu penulisan ulang.",
     toastNoRewriteText: "AI tidak mengembalikan teks. Coba analisis ulang.",
+    toastGeneratingPdf: "Membuat PDF Anda, harap tunggu…",
+    toastPdfReadyIOS: "PDF siap — ketuk ikon ⬆ untuk menyimpannya.",
+    toastPdfReady: "PDF Anda siap — periksa unduhan Anda.",
+    toastPdfFailed: "Gagal membuat PDF.",
 
   },
   bn: {
@@ -3361,6 +3429,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV অপ্টিমাইজ হয়েছে। স্কোর আপডেট হয়েছে। ফিরতে Undo চাপুন।",
     toastAlreadyOptimized: "✓ আপনার CV ইতিমধ্যে অপ্টিমাইজড — পুনর্লিখনের দরকার নেই।",
     toastNoRewriteText: "AI কোনো টেক্সট ফেরত দেয়নি। পুনরায় বিশ্লেষণ করুন।",
+    toastGeneratingPdf: "আপনার PDF তৈরি হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন…",
+    toastPdfReadyIOS: "PDF প্রস্তুত — এটি সংরক্ষণ করতে ⬆ আইকনে ট্যাপ করুন।",
+    toastPdfReady: "আপনার PDF প্রস্তুত — আপনার ডাউনলোড দেখুন।",
+    toastPdfFailed: "PDF তৈরি ব্যর্থ হয়েছে।",
 
   },
   nl: {
@@ -3519,6 +3591,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV geoptimaliseerd. Score bijgewerkt. Druk op Ongedaan maken om terug te keren.",
     toastAlreadyOptimized: "✓ Uw CV is al geoptimaliseerd — herschrijven niet nodig.",
     toastNoRewriteText: "AI heeft geen tekst geretourneerd. Probeer opnieuw te analyseren.",
+    toastGeneratingPdf: "Uw PDF wordt gegenereerd, even geduld…",
+    toastPdfReadyIOS: "PDF klaar — tik op het ⬆-pictogram om op te slaan.",
+    toastPdfReady: "Uw PDF is klaar — controleer uw downloads.",
+    toastPdfFailed: "PDF genereren mislukt.",
 
   },
   pl: {
@@ -3677,6 +3753,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV zoptymalizowane. Wynik zaktualizowany. Naciśnij Cofnij, aby przywrócić.",
     toastAlreadyOptimized: "✓ Twoje CV jest już zoptymalizowane — przepisywanie nie jest potrzebne.",
     toastNoRewriteText: "AI nie zwróciło tekstu. Spróbuj ponownie przeanalizować.",
+    toastGeneratingPdf: "Generowanie Twojego PDF, proszę czekać…",
+    toastPdfReadyIOS: "PDF gotowy — dotknij ikony ⬆, aby zapisać.",
+    toastPdfReady: "Twój PDF jest gotowy — sprawdź pobrane pliki.",
+    toastPdfFailed: "Generowanie PDF nie powiodło się.",
 
   },
   vi: {
@@ -3835,6 +3915,10 @@ const U: Record<LangCode, UILabels> = {
     toastResumeOptimized: "✓ CV đã được tối ưu hóa. Điểm đã cập nhật. Nhấn Hoàn tác để khôi phục.",
     toastAlreadyOptimized: "✓ CV của bạn đã được tối ưu hóa — không cần viết lại.",
     toastNoRewriteText: "AI không trả về văn bản. Thử Phân tích lại.",
+    toastGeneratingPdf: "Đang tạo PDF của bạn, vui lòng đợi…",
+    toastPdfReadyIOS: "PDF đã sẵn sàng — nhấn biểu tượng ⬆ để lưu.",
+    toastPdfReady: "PDF của bạn đã sẵn sàng — kiểm tra mục tải xuống.",
+    toastPdfFailed: "Tạo PDF thất bại.",
 
   },
 };
