@@ -78,13 +78,13 @@ export function InstallPrompt() {
         {state === 'ios' && (
           <>
             <strong>Add to Home Screen</strong>
-            <span>Tap <ShareIcon /> then "Add to Home Screen"</span>
+            <span>Tap <ThreeDotsIcon /> → <ShareIcon /> Share → Add to Home Screen</span>
           </>
         )}
         {state === 'safari-macos' && (
           <>
-            <strong>Add to Dock</strong>
-            <span>Safari menu: File → Add to Dock</span>
+            <strong>Install on your Mac</strong>
+            <span>Safari: File menu → Add to Dock</span>
           </>
         )}
         {state === 'available' && (
@@ -103,6 +103,17 @@ export function InstallPrompt() {
         </svg>
       </button>
     </div>
+  );
+}
+
+function ThreeDotsIcon() {
+  return (
+    <svg viewBox="0 0 20 6" fill="currentColor"
+      style="display:inline;width:16px;height:10px;vertical-align:-1px;margin:0 1px" aria-hidden>
+      <circle cx="2" cy="3" r="2"/>
+      <circle cx="10" cy="3" r="2"/>
+      <circle cx="18" cy="3" r="2"/>
+    </svg>
   );
 }
 
