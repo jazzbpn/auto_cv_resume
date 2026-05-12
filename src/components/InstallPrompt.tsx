@@ -7,19 +7,22 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
-const installState = signal<'hidden' | 'available' | 'ios' | 'safari-macos'>('hidden');
+const installState = signal<'hidden' | 'available' | 'ios' | 'ios-other' | 'safari-macos'>('hidden');
 
-function detectPlatform(): 'ios' | 'safari-macos' | 'chromium' | 'other' {
+function detectPlatform(): 'ios-safari' | 'ios-other' | 'safari-macos' | 'chromium' | 'other' {
   const ua = navigator.userAgent;
   const isIOS = /iphone|ipad|ipod/i.test(ua) && !(window as Window & { MSStream?: unknown }).MSStream;
-  if (isIOS) return 'ios';
-  // Safari on macOS: vendor is Apple, no Chrome/Chromium in UA, not iOS
+  if (isIOS) {
+    // CriOS = Chrome on iOS, FxiOS = Firefox, OPiOS = Opera, EdgiOS = Edge
+    if (/CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua)) return 'ios-other';
+    return 'ios-safari';
+  }
+  // Safari on macOS: vendor is Apple, no Chrome/Chromium in UA
   const isSafariMac =
     navigator.vendor === 'Apple Computer, Inc.' &&
     !/chrome|chromium|crios/i.test(ua) &&
     /safari/i.test(ua);
   if (isSafariMac) return 'safari-macos';
-  // Chrome / Edge / Brave / Opera — support beforeinstallprompt
   if ('BeforeInstallPromptEvent' in window || /chrome/i.test(ua)) return 'chromium';
   return 'other';
 }
@@ -35,8 +38,13 @@ export function InstallPrompt() {
 
     const platform = detectPlatform();
 
-    if (platform === 'ios') {
+    if (platform === 'ios-safari') {
       const t = setTimeout(() => { installState.value = 'ios'; }, 4000);
+      return () => clearTimeout(t);
+    }
+
+    if (platform === 'ios-other') {
+      const t = setTimeout(() => { installState.value = 'ios-other'; }, 4000);
       return () => clearTimeout(t);
     }
 
@@ -79,6 +87,12 @@ export function InstallPrompt() {
           <>
             <strong>Add to Home Screen</strong>
             <span>Tap <ThreeDotsIcon /> → <ShareIcon /> Share → Add to Home Screen</span>
+          </>
+        )}
+        {state === 'ios-other' && (
+          <>
+            <strong>Open in Safari to install</strong>
+            <span>iOS only allows installs from Safari</span>
           </>
         )}
         {state === 'safari-macos' && (
