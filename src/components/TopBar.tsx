@@ -1,4 +1,4 @@
-import { printResume } from '../services/print';
+import { downloadPDF } from '../services/print';
 import { track, wasAIUsed } from '../services/analytics';
 import { saveStatus, template, visibility, cvLang } from '../state/store';
 import { getUI } from '../i18n/sections';
@@ -35,7 +35,7 @@ export function TopBar({ onImport }: Props) {
               sections_visible_count: Object.values(visibility.value).filter(Boolean).length,
               ai_used: wasAIUsed(),
             });
-            void printResume();
+            void downloadPDF();
           }}>
             <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/>

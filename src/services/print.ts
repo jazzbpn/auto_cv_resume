@@ -104,6 +104,46 @@ function buildPrintHTML(): string {
   return `<!doctype html><html lang="${cvLang.value}" dir="${docDir}"><head><meta charset="UTF-8"><title>${title}</title>${fonts}<style>${styles}\n${PRINT_OVERRIDES}\n${pageReset}</style></head><body>${clone.outerHTML}</body></html>`;
 }
 
+export async function downloadPDF(): Promise<void> {
+  const btn = document.querySelector<HTMLButtonElement>('.export-btn');
+  const btnText = btn?.querySelector<HTMLElement>('.btn-text');
+  const original = btnText?.textContent ?? '';
+  if (btn) btn.disabled = true;
+  if (btnText) btnText.textContent = 'Generating PDF…';
+
+  try {
+    const html = buildPrintHTML();
+    const filename = exportFilename();
+
+    const response = await fetch('/api/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ html, filename }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({})) as { error?: string };
+      throw new Error(data.error ?? `Server error ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${filename}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  } catch (e) {
+    console.error('[pdf] download failed:', e);
+    showToast(e instanceof Error ? e.message : 'PDF generation failed.');
+  } finally {
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.textContent = original;
+  }
+}
+
 export async function printResume(): Promise<void> {
   const btn = document.querySelector<HTMLButtonElement>('.export-btn');
   const btnText = btn?.querySelector<HTMLElement>('.btn-text');

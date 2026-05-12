@@ -3,6 +3,12 @@
   "rewrites": [
     { "source": "/ai/:path*", "destination": "/api/ai/:path*" }
   ],
+  "functions": {
+    "api/pdf.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  },
   "headers": [
     {
       "source": "/robots.txt",
