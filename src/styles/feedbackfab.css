@@ -1,0 +1,237 @@
+/* ── FEEDBACK FAB WRAP ── */
+.fb-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* ── TRIGGER BUTTON ── */
+.fb-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201,150,46,.4);
+  background: rgba(26,21,16,.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(244,239,228,.7);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  transition: border-color .2s ease, color .2s ease, box-shadow .2s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.fb-btn svg { width: 18px; height: 18px; }
+.fb-btn:hover,
+.fb-btn.fb-btn-active {
+  border-color: var(--amber);
+  color: var(--amber-bright);
+  box-shadow: 0 4px 20px rgba(0,0,0,.45), 0 0 0 3px rgba(201,150,46,.15);
+  background: rgba(30,25,16,.9);
+}
+
+/* ── BACKDROP (mobile only) ── */
+.fb-backdrop {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .fb-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: -1;
+    animation: fb-fade-in .2s ease;
+  }
+}
+@keyframes fb-fade-in {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+/* ── PANEL ── */
+.fb-panel {
+  background: #1f1a14;
+  border: 1px solid rgba(201,150,46,.2);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+  overflow: hidden;
+  animation: fb-pop .25s cubic-bezier(.16,1,.3,1);
+  width: 300px;
+  max-width: calc(100vw - 40px);
+}
+
+@media (max-width: 1023px) {
+  .fb-panel {
+    position: fixed;
+    /* 12px stack base + 40px ig-btn + 10px gap + 40px fb-btn + 8px clearance = 110px */
+    bottom: calc(var(--bottomnav) + env(safe-area-inset-bottom) + 110px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: 100%;
+    border-radius: 16px;
+    animation: fb-slide-up .3s cubic-bezier(.16,1,.3,1);
+    z-index: 1;
+  }
+}
+
+@keyframes fb-pop {
+  from { opacity: 0; transform: scale(.95) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes fb-slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HEADER ── */
+.fb-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.fb-title {
+  font-family: var(--font-ui);
+  font-size: .9rem; font-weight: 600;
+  color: #f0e8d8;
+}
+.fb-close {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: none; border: none; border-radius: 6px;
+  color: rgba(244,239,228,.5);
+  cursor: pointer;
+  transition: color .2s, background .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.fb-close:hover { color: var(--amber-bright); background: rgba(201,150,46,.1); }
+.fb-close svg { width: 14px; height: 14px; }
+
+/* ── BODY ── */
+.fb-body {
+  padding: 14px 16px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ── TYPE SELECTOR ── */
+.fb-types {
+  display: flex; gap: 6px;
+}
+.fb-type-btn {
+  flex: 1;
+  padding: 5px 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(201,150,46,.2);
+  background: rgba(255,255,255,.03);
+  color: rgba(244,239,228,.55);
+  font-family: var(--font-ui);
+  font-size: .72rem; font-weight: 500;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.fb-type-btn:hover {
+  border-color: rgba(201,150,46,.45);
+  color: rgba(244,239,228,.8);
+  background: rgba(201,150,46,.07);
+}
+.fb-type-btn.fb-type-active {
+  border-color: var(--amber);
+  color: var(--amber-bright);
+  background: rgba(201,150,46,.12);
+}
+.fb-type-btn:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+/* ── TEXTAREA ── */
+.fb-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(201,150,46,.18);
+  border-radius: 10px;
+  color: rgba(244,239,228,.85);
+  font-family: var(--font-ui);
+  font-size: .8rem;
+  line-height: 1.5;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  transition: border-color .2s;
+}
+.fb-textarea::placeholder { color: rgba(244,239,228,.25); }
+.fb-textarea:focus { border-color: rgba(201,150,46,.5); }
+.fb-textarea:disabled { opacity: .45; cursor: default; }
+
+/* ── EMAIL INPUT ── */
+.fb-email {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(201,150,46,.18);
+  border-radius: 10px;
+  color: rgba(244,239,228,.85);
+  font-family: var(--font-ui);
+  font-size: .8rem;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color .2s;
+}
+.fb-email::placeholder { color: rgba(244,239,228,.25); }
+.fb-email:focus { border-color: rgba(201,150,46,.5); }
+.fb-email:disabled { opacity: .45; cursor: default; }
+.fb-email.fb-email-invalid { border-color: rgba(248,113,113,.5); }
+.fb-email.fb-email-invalid:focus { border-color: #f87171; }
+
+.fb-field-error {
+  font-family: var(--font-ui);
+  font-size: .72rem;
+  color: #f87171;
+  margin: -4px 0 0;
+}
+
+/* ── STATUS MESSAGES ── */
+.fb-status {
+  font-family: var(--font-ui);
+  font-size: .75rem;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.fb-status-error {
+  color: #f87171;
+  background: rgba(248,113,113,.1);
+  border: 1px solid rgba(248,113,113,.2);
+}
+.fb-status-success {
+  color: #86efac;
+  background: rgba(134,239,172,.1);
+  border: 1px solid rgba(134,239,172,.2);
+}
+
+/* ── SUBMIT BUTTON ── */
+.fb-submit {
+  align-self: flex-end;
+  padding: 7px 18px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(201,150,46,.5);
+  background: rgba(201,150,46,.12);
+  color: var(--amber-bright);
+  font-family: var(--font-ui);
+  font-size: .8rem; font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, opacity .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.fb-submit:hover:not(:disabled) {
+  background: rgba(201,150,46,.2);
+  border-color: var(--amber);
+}
+.fb-submit:disabled {
+  opacity: .4;
+  cursor: default;
+}

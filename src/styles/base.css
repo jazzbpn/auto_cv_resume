@@ -461,3 +461,20 @@ body {
 .resume[dir=rtl] .r-edesc,
 .resume[dir=rtl] .r-summary { line-height: 2; }
 
+/* ── FAB STACK — shared anchor for all bottom-right FABs ── */
+.fab-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+@media (max-width: 1023px) {
+  .fab-stack {
+    bottom: calc(var(--bottomnav) + env(safe-area-inset-bottom) + 12px);
+  }
+}
+

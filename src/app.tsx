@@ -8,6 +8,7 @@ import { AnalysePanel } from './components/AnalysePanel';
 import { ImportModal } from './components/ImportModal';
 import { Toast } from './components/Toast';
 import { InstallGuide } from './components/InstallGuide';
+import { FeedbackFab } from './components/FeedbackFab';
 import { mobilePanel } from './state/ui';
 import { track } from './services/analytics';
 import type { MobilePanel } from './state/ui';
@@ -52,7 +53,10 @@ export function App() {
       <BottomNav active={panel} onSelect={(p) => { mobilePanel.value = p; }} />
       {importOpen.value && <ImportModal onClose={() => { importOpen.value = false; }} />}
       <Toast />
-      <InstallGuide />
+      <div class="fab-stack">
+        <FeedbackFab />
+        <InstallGuide />
+      </div>
     </>
   );
 }

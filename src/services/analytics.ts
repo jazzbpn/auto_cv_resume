@@ -40,7 +40,9 @@ export type AnalyticsEvent =
   | { name: 'ai_autofix_success' }
   | { name: 'ai_autofix_undo' }
   | { name: 'ai_error'; props: { stage: AIStage; reason: AIErrorReason } }
-  | { name: 'export'; props: { template: string; sections_visible_count: number; ai_used: boolean } };
+  | { name: 'export'; props: { template: string; sections_visible_count: number; ai_used: boolean } }
+  | { name: 'feedback_open' }
+  | { name: 'feedback_sent'; props: { type: string } };
 
 export function track<E extends AnalyticsEvent>(
   ...args: E extends { props: infer P } ? [E['name'], P] : [E['name']]
