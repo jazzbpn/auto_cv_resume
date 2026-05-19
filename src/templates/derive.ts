@@ -11,6 +11,8 @@ export interface ResumeData {
   softSkills: string[];
   toolSkills: string[];
   interests: string[];
+  photo: string | null;
+  showPhoto: boolean;
   /** When set, overrides the personal summary (used by AI preview). */
   summaryOverride?: string;
   /** When set, overrides desc on experience entries by index. */
@@ -20,7 +22,7 @@ export interface ResumeData {
 export function buildResumeData(
   cv: CV,
   visibility: Record<SectionKey, boolean>,
-  opts: { summaryOverride?: string; expOverrides?: Map<number, string> } = {},
+  opts: { summaryOverride?: string; expOverrides?: Map<number, string>; photo?: string | null; showPhoto?: boolean } = {},
 ): ResumeData {
   const p = cv.personal;
   const contacts: Contact[] = [];
@@ -47,6 +49,8 @@ export function buildResumeData(
     softSkills: splitCSV(p.skillsSoft),
     toolSkills: splitCSV(p.skillsTools),
     interests: splitCSV(p.interests),
+    photo: opts.photo ?? null,
+    showPhoto: opts.showPhoto ?? false,
     ...(opts.summaryOverride !== undefined ? { summaryOverride: opts.summaryOverride } : {}),
     ...(opts.expOverrides !== undefined ? { expOverrides: opts.expOverrides } : {}),
   };

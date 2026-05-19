@@ -1,0 +1,77 @@
+.pu-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+.pu-container { position: relative; display: inline-block; }
+
+.pu-avatar {
+  position: relative;
+  width: 88px; height: 88px; border-radius: 50%;
+  background: var(--surface-2); border: 2px dashed var(--border);
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  touch-action: manipulation;
+}
+.pu-avatar:hover { border-color: var(--accent); border-style: solid; background: var(--surface-3); }
+.pu-avatar:active { background: var(--surface-3); }
+
+.pu-file-input {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+  z-index: 1;
+  /* Ensures iOS taps register on the native file input */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pu-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  pointer-events: none;
+}
+
+.pu-placeholder {
+  pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--muted);
+}
+.pu-placeholder svg { width: 26px; height: 26px; }
+.pu-placeholder span {
+  font-size: .58rem; font-family: var(--font-ui);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+
+.pu-remove {
+  position: absolute; top: -4px; right: -4px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #e53935; border: 2px solid var(--surface-1);
+  color: #fff; font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0; font-weight: 700;
+  z-index: 10;
+  transition: background var(--dur-fast) var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.pu-remove:hover { background: #c62828; }
+
+/* Override global label block-display for the toggle row */
+label.pu-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  font-size: .78rem;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  color: var(--muted);
+  cursor: pointer;
+  margin-bottom: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+label.pu-toggle input[type="checkbox"] {
+  width: 14px; height: 14px;
+  cursor: pointer;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  margin: 0;
+}

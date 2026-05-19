@@ -715,6 +715,9 @@ export interface UILabels {
   igAndroidSteps: string[];
   igChromiumSteps: string[];
   igFirefoxSteps: string[];
+  uploadPhoto: string;
+  removePhoto: string;
+  showPhotoLabel: string;
 }
 
 const U: Record<LangCode, UILabels> = {
@@ -906,6 +909,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Tap the menu icon (⋮) in your browser', 'Tap "Add to Home screen"', 'Tap "Add" to confirm'],
     igChromiumSteps: ['Look for the install icon (⊕) in the address bar', 'Click it and select "Install"', 'Or: open the browser menu (⋮) → "Install ResumePDF"'],
     igFirefoxSteps: ['Firefox does not support PWA installs', 'Open this page in Chrome, Edge, or Brave to install'],
+    uploadPhoto: 'Upload Photo',
+    removePhoto: 'Remove Photo',
+    showPhotoLabel: 'Show photo on CV',
 
   },
   ar: {
@@ -1096,6 +1102,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['اضغط على أيقونة القائمة (⋮) في متصفحك', 'اضغط على "إضافة إلى الشاشة الرئيسية"', 'اضغط على "إضافة" للتأكيد'],
     igChromiumSteps: ['ابحث عن أيقونة التثبيت (⊕) في شريط العنوان', 'انقر عليها واختر "تثبيت"', 'أو: افتح قائمة المتصفح (⋮) → "تثبيت ResumePDF"'],
     igFirefoxSteps: ['Firefox لا يدعم تثبيت تطبيقات PWA', 'افتح هذه الصفحة في Chrome أو Edge أو Brave للتثبيت'],
+    uploadPhoto: 'رفع الصورة',
+    removePhoto: 'إزالة الصورة',
+    showPhotoLabel: 'إظهار الصورة في السيرة الذاتية',
   },
   ur: {
     sectionsToShow: 'دکھانے کے حصے',
@@ -1285,6 +1294,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['اپنے براؤزر میں مینو آئیکن (⋮) دبائیں', '"Add to Home screen" دبائیں', 'تصدیق کے لیے "Add" دبائیں'],
     igChromiumSteps: ['ایڈریس بار میں انسٹال آئیکن (⊕) تلاش کریں', 'اس پر کلک کریں اور "Install" منتخب کریں', 'یا: براؤزر مینو (⋮) → "Install ResumePDF"'],
     igFirefoxSteps: ['Firefox PWA انسٹال کو سپورٹ نہیں کرتا', 'انسٹال کرنے کے لیے یہ صفحہ Chrome، Edge یا Brave میں کھولیں'],
+    uploadPhoto: 'تصویر اپلوڈ کریں',
+    removePhoto: 'تصویر ہٹائیں',
+    showPhotoLabel: 'CV میں تصویر دکھائیں',
   },
   hi: {
     sectionsToShow: 'दिखाए जाने वाले अनुभाग',
@@ -1474,6 +1486,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['अपने ब्राउज़र में मेनू आइकन (⋮) दबाएं', '"Add to Home screen" दबाएं', 'पुष्टि के लिए "Add" दबाएं'],
     igChromiumSteps: ['एड्रेस बार में इंस्टॉल आइकन (⊕) देखें', 'उस पर क्लिक करें और "Install" चुनें', 'या: ब्राउज़र मेनू (⋮) → "Install ResumePDF"'],
     igFirefoxSteps: ['Firefox PWA इंस्टॉल को सपोर्ट नहीं करता', 'इंस्टॉल करने के लिए यह पेज Chrome, Edge या Brave में खोलें'],
+    uploadPhoto: 'फ़ोटो अपलोड करें',
+    removePhoto: 'फ़ोटो हटाएं',
+    showPhotoLabel: 'CV में फ़ोटो दिखाएं',
   },
   fr: {
     sectionsToShow: 'Sections à afficher',
@@ -1663,6 +1678,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Appuyez sur l\'icône du menu (⋮) dans votre navigateur', 'Appuyez sur "Ajouter à l\'écran d\'accueil"', 'Appuyez sur "Ajouter" pour confirmer'],
     igChromiumSteps: ['Cherchez l\'icône d\'installation (⊕) dans la barre d\'adresse', 'Cliquez dessus et sélectionnez "Installer"', 'Ou : ouvrez le menu du navigateur (⋮) → "Installer ResumePDF"'],
     igFirefoxSteps: ['Firefox ne prend pas en charge l\'installation PWA', 'Ouvrez cette page dans Chrome, Edge ou Brave pour installer'],
+    uploadPhoto: 'Télécharger une photo',
+    removePhoto: 'Supprimer la photo',
+    showPhotoLabel: 'Afficher la photo sur le CV',
 
   },
   es: {
@@ -1853,6 +1871,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Toca el icono del menú (⋮) en tu navegador', 'Toca "Añadir a pantalla de inicio"', 'Toca "Añadir" para confirmar'],
     igChromiumSteps: ['Busca el icono de instalación (⊕) en la barra de direcciones', 'Haz clic en él y selecciona "Instalar"', 'O: abre el menú del navegador (⋮) → "Instalar ResumePDF"'],
     igFirefoxSteps: ['Firefox no admite instalaciones PWA', 'Abre esta página en Chrome, Edge o Brave para instalar'],
+    uploadPhoto: 'Subir foto',
+    removePhoto: 'Eliminar foto',
+    showPhotoLabel: 'Mostrar foto en el CV',
 
   },
   de: {
@@ -2043,6 +2064,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Das Menü-Symbol (⋮) im Browser antippen', 'Auf "Zum Startbildschirm hinzufügen" tippen', '"Hinzufügen" zur Bestätigung antippen'],
     igChromiumSteps: ['Das Installationssymbol (⊕) in der Adressleiste suchen', 'Darauf klicken und "Installieren" auswählen', 'Oder: Browsermenü (⋮) → "ResumePDF installieren"'],
     igFirefoxSteps: ['Firefox unterstützt keine PWA-Installation', 'Diese Seite in Chrome, Edge oder Brave öffnen, um zu installieren'],
+    uploadPhoto: 'Foto hochladen',
+    removePhoto: 'Foto entfernen',
+    showPhotoLabel: 'Foto im Lebenslauf anzeigen',
   },
   pt: {
     sectionsToShow: 'Secções a mostrar',
@@ -2232,6 +2256,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Toque no ícone do menu (⋮) no seu navegador', 'Toque em "Adicionar à tela inicial"', 'Toque em "Adicionar" para confirmar'],
     igChromiumSteps: ['Procure o ícone de instalação (⊕) na barra de endereços', 'Clique nele e selecione "Instalar"', 'Ou: abra o menu do navegador (⋮) → "Instalar ResumePDF"'],
     igFirefoxSteps: ['Firefox não suporta instalação de PWA', 'Abra esta página no Chrome, Edge ou Brave para instalar'],
+    uploadPhoto: 'Carregar foto',
+    removePhoto: 'Remover foto',
+    showPhotoLabel: 'Mostrar foto no CV',
 
   },
   zh: {
@@ -2422,6 +2449,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['点击浏览器中的菜单图标 (⋮)', '点击"添加到主屏幕"', '点击"添加"确认'],
     igChromiumSteps: ['在地址栏中查找安装图标 (⊕)', '点击它并选择"安装"', '或：打开浏览器菜单 (⋮) → "安装 ResumePDF"'],
     igFirefoxSteps: ['Firefox 不支持 PWA 安装', '请在 Chrome、Edge 或 Brave 中打开此页面进行安装'],
+    uploadPhoto: '上传照片',
+    removePhoto: '移除照片',
+    showPhotoLabel: '在简历中显示照片',
   },
   ja: {
     sectionsToShow: '表示するセクション',
@@ -2611,6 +2641,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['ブラウザのメニューアイコン (⋮) をタップ', '「ホーム画面に追加」をタップ', '「追加」をタップして確認'],
     igChromiumSteps: ['アドレスバーのインストールアイコン (⊕) を探す', 'クリックして「インストール」を選択', 'またはブラウザメニュー (⋮) → 「ResumePDFをインストール」'],
     igFirefoxSteps: ['Firefox は PWA インストールに対応していません', 'Chrome、Edge、または Brave でページを開いてインストール'],
+    uploadPhoto: '写真をアップロード',
+    removePhoto: '写真を削除',
+    showPhotoLabel: '履歴書に写真を表示',
   },
   ko: {
     sectionsToShow: '표시할 섹션',
@@ -2800,6 +2833,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['브라우저에서 메뉴 아이콘 (⋮) 탭하기', '"홈 화면에 추가" 탭하기', '"추가"를 탭하여 확인'],
     igChromiumSteps: ['주소 표시줄에서 설치 아이콘 (⊕) 찾기', '클릭하고 "설치" 선택', '또는: 브라우저 메뉴 (⋮) → "ResumePDF 설치"'],
     igFirefoxSteps: ['Firefox는 PWA 설치를 지원하지 않습니다', 'Chrome, Edge 또는 Brave에서 페이지를 열어 설치하세요'],
+    uploadPhoto: '사진 업로드',
+    removePhoto: '사진 제거',
+    showPhotoLabel: 'CV에 사진 표시',
 
   },
   ru: {
@@ -2990,6 +3026,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Нажмите значок меню (⋮) в браузере', 'Нажмите «Добавить на главный экран»', 'Нажмите «Добавить» для подтверждения'],
     igChromiumSteps: ['Найдите значок установки (⊕) в адресной строке', 'Нажмите и выберите «Установить»', 'Или: откройте меню браузера (⋮) → «Установить ResumePDF»'],
     igFirefoxSteps: ['Firefox не поддерживает установку PWA', 'Откройте страницу в Chrome, Edge или Brave для установки'],
+    uploadPhoto: 'Загрузить фото',
+    removePhoto: 'Удалить фото',
+    showPhotoLabel: 'Показать фото в резюме',
 
   },
   tr: {
@@ -3180,6 +3219,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Tarayıcınızdaki menü simgesine (⋮) dokunun', '"Ana ekrana ekle"ye dokunun', 'Onaylamak için "Ekle"ye dokunun'],
     igChromiumSteps: ['Adres çubuğundaki yükleme simgesini (⊕) arayın', 'Tıklayın ve "Yükle"yi seçin', 'Veya: tarayıcı menüsü (⋮) → "ResumePDF\'yi Yükle"'],
     igFirefoxSteps: ['Firefox PWA yüklemesini desteklemiyor', 'Yüklemek için bu sayfayı Chrome, Edge veya Brave\'de açın'],
+    uploadPhoto: 'Fotoğraf yükle',
+    removePhoto: 'Fotoğrafı kaldır',
+    showPhotoLabel: 'CV\'de fotoğraf göster',
 
   },
   he: {
@@ -3370,6 +3412,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['הקש על סמל התפריט (⋮) בדפדפן', 'הקש על "הוסף למסך הבית"', 'הקש על "הוסף" לאישור'],
     igChromiumSteps: ['חפש את סמל ההתקנה (⊕) בשורת הכתובת', 'לחץ עליו ובחר "התקן"', 'או: פתח את תפריט הדפדפן (⋮) → "התקן את ResumePDF"'],
     igFirefoxSteps: ['Firefox אינו תומך בהתקנת PWA', 'פתח דף זה ב-Chrome, Edge או Brave להתקנה'],
+    uploadPhoto: 'העלה תמונה',
+    removePhoto: 'הסר תמונה',
+    showPhotoLabel: 'הצג תמונה בקורות חיים',
 
   },
   it: {
@@ -3560,6 +3605,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Tocca l\'icona del menu (⋮) nel tuo browser', 'Tocca "Aggiungi alla schermata Home"', 'Tocca "Aggiungi" per confermare'],
     igChromiumSteps: ['Cerca l\'icona di installazione (⊕) nella barra degli indirizzi', 'Cliccaci sopra e seleziona "Installa"', 'Oppure: apri il menu del browser (⋮) → "Installa ResumePDF"'],
     igFirefoxSteps: ['Firefox non supporta l\'installazione PWA', 'Apri questa pagina in Chrome, Edge o Brave per installare'],
+    uploadPhoto: 'Carica foto',
+    removePhoto: 'Rimuovi foto',
+    showPhotoLabel: 'Mostra foto nel CV',
 
   },
   id: {
@@ -3750,6 +3798,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Ketuk ikon menu (⋮) di browser Anda', 'Ketuk "Tambahkan ke layar utama"', 'Ketuk "Tambahkan" untuk mengonfirmasi'],
     igChromiumSteps: ['Cari ikon instal (⊕) di bilah alamat', 'Klik dan pilih "Instal"', 'Atau: buka menu browser (⋮) → "Instal ResumePDF"'],
     igFirefoxSteps: ['Firefox tidak mendukung instalasi PWA', 'Buka halaman ini di Chrome, Edge, atau Brave untuk menginstal'],
+    uploadPhoto: 'Unggah foto',
+    removePhoto: 'Hapus foto',
+    showPhotoLabel: 'Tampilkan foto di CV',
 
   },
   bn: {
@@ -3940,6 +3991,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['আপনার ব্রাউজারে মেনু আইকন (⋮) ট্যাপ করুন', '"Add to Home screen" ট্যাপ করুন', 'নিশ্চিত করতে "Add" ট্যাপ করুন'],
     igChromiumSteps: ['ঠিকানা বারে ইনস্টল আইকন (⊕) খুঁজুন', 'এটিতে ক্লিক করুন এবং "Install" বেছে নিন', 'অথবা: ব্রাউজার মেনু (⋮) → "Install ResumePDF"'],
     igFirefoxSteps: ['Firefox PWA ইনস্টল সমর্থন করে না', 'ইনস্টল করতে Chrome, Edge বা Brave-এ এই পৃষ্ঠাটি খুলুন'],
+    uploadPhoto: 'ছবি আপলোড করুন',
+    removePhoto: 'ছবি সরান',
+    showPhotoLabel: 'CV তে ছবি দেখান',
 
   },
   nl: {
@@ -4130,6 +4184,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Tik op het menupictogram (⋮) in je browser', 'Tik op "Toevoegen aan startscherm"', 'Tik op "Toevoegen" om te bevestigen'],
     igChromiumSteps: ['Zoek het installatiepictogram (⊕) in de adresbalk', 'Klik erop en selecteer "Installeren"', 'Of: open het browsermenu (⋮) → "ResumePDF installeren"'],
     igFirefoxSteps: ['Firefox ondersteunt geen PWA-installaties', 'Open deze pagina in Chrome, Edge of Brave om te installeren'],
+    uploadPhoto: 'Foto uploaden',
+    removePhoto: 'Foto verwijderen',
+    showPhotoLabel: 'Foto weergeven in CV',
 
   },
   pl: {
@@ -4320,6 +4377,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Dotknij ikony menu (⋮) w przeglądarce', 'Dotknij „Dodaj do ekranu głównego"', 'Dotknij „Dodaj", aby potwierdzić'],
     igChromiumSteps: ['Poszukaj ikony instalacji (⊕) na pasku adresu', 'Kliknij ją i wybierz „Zainstaluj"', 'Lub: otwórz menu przeglądarki (⋮) → „Zainstaluj ResumePDF"'],
     igFirefoxSteps: ['Firefox nie obsługuje instalacji PWA', 'Otwórz tę stronę w Chrome, Edge lub Brave, aby zainstalować'],
+    uploadPhoto: 'Prześlij zdjęcie',
+    removePhoto: 'Usuń zdjęcie',
+    showPhotoLabel: 'Pokaż zdjęcie w CV',
 
   },
   vi: {
@@ -4510,6 +4570,9 @@ const U: Record<LangCode, UILabels> = {
     igAndroidSteps: ['Nhấn biểu tượng menu (⋮) trong trình duyệt', 'Nhấn "Thêm vào màn hình chính"', 'Nhấn "Thêm" để xác nhận'],
     igChromiumSteps: ['Tìm biểu tượng cài đặt (⊕) trên thanh địa chỉ', 'Nhấp vào đó và chọn "Cài đặt"', 'Hoặc: mở menu trình duyệt (⋮) → "Cài đặt ResumePDF"'],
     igFirefoxSteps: ['Firefox không hỗ trợ cài đặt PWA', 'Mở trang này trong Chrome, Edge hoặc Brave để cài đặt'],
+    uploadPhoto: 'Tải ảnh lên',
+    removePhoto: 'Xóa ảnh',
+    showPhotoLabel: 'Hiển thị ảnh trên CV',
 
   },
 };

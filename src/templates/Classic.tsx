@@ -20,8 +20,15 @@ export function Classic({ data }: { data: ResumeData }) {
 
   return (
     <article class="resume classic" dir={textDir.value}>
-      <h1 class="r-name">{p.name}</h1>
-      <div class="r-jtitle">{p.title}</div>
+      <div class="r-header">
+        <div class="r-header-info">
+          <h1 class="r-name">{p.name}</h1>
+          <div class="r-jtitle">{p.title}</div>
+        </div>
+        {data.showPhoto && data.photo && (
+          <img src={data.photo} alt="" class="r-photo" aria-hidden="true" />
+        )}
+      </div>
       <ContactRow items={contacts} />
       <PersonalDetails rows={personalDetails} />
 

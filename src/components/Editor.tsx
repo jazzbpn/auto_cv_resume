@@ -1,5 +1,6 @@
 import { cv, setPersonal, visibility, toggleSection, cvLang } from '../state/store';
 import { getUI } from '../i18n/sections';
+import { PhotoUpload } from './PhotoUpload';
 import { SECTIONS,
   emptyEntry, emptyProject, emptyVolunteer, emptyConference,
   emptyCertification, emptyAward, emptyPublication, emptyLanguage, emptyReference,
@@ -65,6 +66,7 @@ export function Editor() {
       </Section>
 
       <Section title={ui.personalInfo} open>
+        <PhotoUpload />
         <PersonalField id="name"  label={ui.fullName} />
         <PersonalField id="title" label={ui.professionalTitle} />
         <div class="field-row">

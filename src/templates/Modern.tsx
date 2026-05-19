@@ -20,6 +20,9 @@ export function Modern({ data }: { data: ResumeData }) {
   return (
     <article class="resume modern" dir={textDir.value}>
       <aside class="mod-left">
+        {data.showPhoto && data.photo && (
+          <img src={data.photo} alt="" class="mod-photo" aria-hidden="true" />
+        )}
         <div class="mod-name">{p.name}</div>
         <div class="mod-jtitle">{p.title}</div>
 

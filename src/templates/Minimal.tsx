@@ -55,8 +55,15 @@ export function Minimal({ data }: { data: ResumeData }) {
 
   return (
     <article class="resume minimal" dir={textDir.value}>
-      <h1 class="r-name">{p.name}</h1>
-      <div class="r-jtitle">{p.title}</div>
+      <div class="r-header-row">
+        <div>
+          <h1 class="r-name">{p.name}</h1>
+          <div class="r-jtitle">{p.title}</div>
+        </div>
+        {data.showPhoto && data.photo && (
+          <img src={data.photo} alt="" class="r-photo-sm" aria-hidden="true" />
+        )}
+      </div>
       <ContactRow items={contacts} />
       <PersonalDetails rows={personalDetails} />
 

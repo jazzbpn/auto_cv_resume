@@ -2,10 +2,11 @@ import { signal, computed, effect } from '@preact/signals';
 import type { CV, SectionKey, TemplateId, AIResult, AIOptimize, CollectionKey } from '../types';
 import { type LangCode, LANG_META } from '../i18n/sections';
 import { DEFAULT_CV, DEFAULT_TEMPLATE, DEFAULT_VISIBILITY } from './defaults';
-import { idbGet, idbPut, requestPersistentStorage } from '../services/idb';
+import { idbGet, idbPut, idbDel, requestPersistentStorage } from '../services/idb';
 
 const STORAGE_KEY = 'cv-builder.v1';
 const IDB_KEY = 'app-state-v1';
+const PHOTO_IDB_KEY = 'photo-v1';
 
 interface Persisted {
   cv: CV;
@@ -13,6 +14,7 @@ interface Persisted {
   visibility: Record<SectionKey, boolean>;
   textDir: 'ltr' | 'rtl';
   cvLang: LangCode;
+  showPhoto: boolean;
 }
 
 /**
@@ -25,7 +27,7 @@ interface Persisted {
 function loadSync(): Persisted {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY, textDir: 'ltr', cvLang: 'en' };
+    if (!raw) return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY, textDir: 'ltr', cvLang: 'en', showPhoto: true };
     const p = JSON.parse(raw) as Partial<Persisted>;
     return {
       cv: p.cv ?? DEFAULT_CV,
@@ -33,9 +35,10 @@ function loadSync(): Persisted {
       visibility: { ...DEFAULT_VISIBILITY, ...(p.visibility ?? {}) },
       textDir: p.textDir ?? 'ltr',
       cvLang: p.cvLang ?? 'en',
+      showPhoto: p.showPhoto ?? true,
     };
   } catch {
-    return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY, textDir: 'ltr', cvLang: 'en' };
+    return { cv: DEFAULT_CV, template: DEFAULT_TEMPLATE, visibility: DEFAULT_VISIBILITY, textDir: 'ltr', cvLang: 'en', showPhoto: true };
   }
 }
 
@@ -52,6 +55,12 @@ export function setCvLang(lang: LangCode) {
   cvLang.value = lang;
   textDir.value = LANG_META[lang].dir;
 }
+
+export const photo = signal<string | null>(null);
+export const showPhoto = signal<boolean>(initial.showPhoto);
+export function setPhoto(src: string | null) { photo.value = src; }
+export function setShowPhoto(v: boolean) { showPhoto.value = v; }
+
 export const aiResult = signal<AIResult | null>(null);
 /**
  * Result of the secondary "optimize" call (rewrites + projected score).
@@ -79,7 +88,10 @@ export const lastSavedAt = signal<number | null>(null);
 let hydrating = true;
 async function hydrate(): Promise<void> {
   try {
-    const persisted = await idbGet<Persisted>(IDB_KEY);
+    const [persisted, storedPhoto] = await Promise.all([
+      idbGet<Persisted>(IDB_KEY),
+      idbGet<string>(PHOTO_IDB_KEY),
+    ]);
     if (persisted) {
       if (persisted.cv) cv.value = persisted.cv;
       if (persisted.template) template.value = persisted.template;
@@ -88,6 +100,7 @@ async function hydrate(): Promise<void> {
       }
       if (persisted.textDir) textDir.value = persisted.textDir;
       if (persisted.cvLang) cvLang.value = persisted.cvLang;
+      showPhoto.value = persisted.showPhoto ?? true;
     } else {
       // No IDB record yet — likely a returning user with localStorage data,
       // or a brand-new visitor. Either way, write current signal state to
@@ -98,8 +111,10 @@ async function hydrate(): Promise<void> {
         visibility: visibility.value,
         textDir: textDir.value,
         cvLang: cvLang.value,
+        showPhoto: showPhoto.value,
       } satisfies Persisted);
     }
+    if (storedPhoto) photo.value = storedPhoto;
   } finally {
     hydrating = false;
   }
@@ -111,7 +126,7 @@ void requestPersistentStorage();
 let saveTimer: number | undefined;
 let firstRun = true;
 effect(() => {
-  const snapshot: Persisted = { cv: cv.value, template: template.value, visibility: visibility.value, textDir: textDir.value, cvLang: cvLang.value };
+  const snapshot: Persisted = { cv: cv.value, template: template.value, visibility: visibility.value, textDir: textDir.value, cvLang: cvLang.value, showPhoto: showPhoto.value };
   // Skip flagging the very first effect run as "saving" — it's just init.
   if (firstRun) { firstRun = false; return; }
   // Don't write back the synchronous defaults on top of IDB during hydration.
@@ -132,6 +147,18 @@ effect(() => {
       saveStatus.value = 'error';
     }
   }, 250);
+});
+
+let firstRunPhoto = true;
+effect(() => {
+  const p = photo.value;
+  if (firstRunPhoto) { firstRunPhoto = false; return; }
+  if (hydrating) return;
+  if (p) {
+    void idbPut(PHOTO_IDB_KEY, p);
+  } else {
+    void idbDel(PHOTO_IDB_KEY);
+  }
 });
 
 export function setPersonal<K extends keyof CV['personal']>(key: K, value: CV['personal'][K]) {

@@ -1,6 +1,6 @@
 import { Suspense } from 'preact/compat';
 import { useEffect, useRef } from 'preact/hooks';
-import { cv, template, setTemplate, visibility, cvLang } from '../state/store';
+import { cv, template, setTemplate, visibility, cvLang, photo, showPhoto } from '../state/store';
 import { TEMPLATES } from '../templates';
 import { buildResumeData } from '../templates/derive';
 import { track } from '../services/analytics';
@@ -77,7 +77,7 @@ function ScaledResume() {
   }, []);
 
   const Template = TEMPLATES[template.value];
-  const data = buildResumeData(cv.value, visibility.value);
+  const data = buildResumeData(cv.value, visibility.value, { photo: photo.value, showPhoto: showPhoto.value });
 
   return (
     <div class="preview-scale-wrap" ref={wrapRef} id="preview-scale-wrap">

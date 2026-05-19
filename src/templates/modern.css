@@ -1,3 +1,4 @@
+.resume.modern .mod-photo{width:120px;height:120px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 14px}
 .resume.modern{padding:0;display:grid;grid-template-columns:230px 1fr}
 .resume.modern .mod-left{background:var(--ink);color:var(--paper);padding:36px 20px 40px}
 .resume.modern .mod-right{padding:36px 36px 44px;overflow:hidden}
