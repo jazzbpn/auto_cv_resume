@@ -1,4 +1,4 @@
-.pu-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.pu-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 16px; }
 
 .pu-container { position: relative; display: inline-block; }
 
@@ -53,12 +53,43 @@
 }
 .pu-remove:hover { background: #c62828; }
 
-/* Override global label block-display for the toggle row */
-label.pu-toggle {
+.pu-toggle {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 7px;
+}
+.pu-toggle input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--hairline-strong);
+  border-radius: 3px;
+  background: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+.pu-toggle input[type="checkbox"]:hover { border-color: var(--amber); }
+.pu-toggle input[type="checkbox"]:checked {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+.pu-toggle input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 1px;
+  width: 5px; height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+/* Override global label block-display inside the toggle row */
+.pu-toggle label {
+  display: inline;
   font-size: .78rem;
   font-family: var(--font-ui);
   font-weight: 400;
@@ -67,11 +98,4 @@ label.pu-toggle {
   margin-bottom: 0;
   text-transform: none;
   letter-spacing: 0;
-}
-label.pu-toggle input[type="checkbox"] {
-  width: 14px; height: 14px;
-  cursor: pointer;
-  accent-color: var(--accent);
-  flex-shrink: 0;
-  margin: 0;
 }

@@ -55,14 +55,15 @@ export function PhotoUpload() {
           </button>
         )}
       </div>
-      <label class="pu-toggle">
+      <div class="pu-toggle">
         <input
+          id="pu-show-photo"
           type="checkbox"
           checked={showPhoto.value}
-          onChange={() => setShowPhoto(!showPhoto.value)}
+          onChange={(e) => setShowPhoto((e.currentTarget as HTMLInputElement).checked)}
         />
-        {ui.showPhotoLabel}
-      </label>
+        <label for="pu-show-photo">{ui.showPhotoLabel}</label>
+      </div>
     </div>
   );
 }

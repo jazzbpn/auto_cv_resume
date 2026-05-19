@@ -911,7 +911,7 @@ const U: Record<LangCode, UILabels> = {
     igFirefoxSteps: ['Firefox does not support PWA installs', 'Open this page in Chrome, Edge, or Brave to install'],
     uploadPhoto: 'Upload Photo',
     removePhoto: 'Remove Photo',
-    showPhotoLabel: 'Show photo on CV',
+    showPhotoLabel: 'Show photo on Resume',
 
   },
   ar: {
