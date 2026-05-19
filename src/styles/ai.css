@@ -753,6 +753,14 @@
 }
 .ai-kw.present { background: rgba(16, 185, 129, .14); color: #8effb8; border: 1px solid rgba(16, 185, 129, .35); }
 .ai-kw.missing { background: rgba(231, 76, 60, .14);  color: #ffa090; border: 1px solid rgba(231, 76, 60, .35); }
+.ai-kw-btn {
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.ai-kw-btn.missing:hover { background: rgba(231, 76, 60, .28); border-color: rgba(231, 76, 60, .6); }
+.ai-kw-btn.added { background: rgba(16, 185, 129, .14); color: #8effb8; border: 1px solid rgba(16, 185, 129, .35); cursor: default; }
+.ai-kw-icon { font-size: .68rem; opacity: .8; }
 
 /* ───────── STICKY BOTTOM FOOTER ───────── */
 .analyse-footer {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix, cvLang } from '../state/store';
+import { aiResult, aiOptimize, aiSnapshot, applyAIFix, undoAIFix, commitAIFix, cvLang, cv, setPersonal } from '../state/store';
 import { getUI } from '../i18n/sections';
 import { aiJD, aiStatus, aiError, aiOptimizeStatus, aiOptimizeError, runAIReview, runAIOptimize } from '../state/ai';
 import { track, classifyAIError, markAIUsed } from '../services/analytics';
@@ -444,6 +444,15 @@ function IssueCard({ issue }: { issue: AIIssue }) {
 function KeywordsAccordion({ present, missing }: { present: string[]; missing: string[] }) {
   if (!present.length && !missing.length) return null;
   const ui = getUI(cvLang.value);
+  const [added, setAdded] = useState<Set<string>>(new Set());
+
+  function handleAdd(keyword: string) {
+    if (added.has(keyword)) return;
+    const current = cv.value.personal.skillsTech.trim();
+    setPersonal('skillsTech', current ? `${current}, ${keyword}` : keyword);
+    setAdded(prev => new Set([...prev, keyword]));
+  }
+
   return (
     <div class="ai-sections">
       <Collapsible title={ui.atsKeywordsTitle} badge={present.length + missing.length} accent="#3498db" defaultOpen>
@@ -459,7 +468,18 @@ function KeywordsAccordion({ present, missing }: { present: string[]; missing: s
           <div class="ai-kw-block">
             <div class="ai-kw-head ai-kw-missing">{ui.missingAdd}</div>
             <div class="ai-kw-wrap">
-              {missing.slice(0, 30).map((k, i) => <span class="ai-kw missing" key={i}>{k}</span>)}
+              {missing.slice(0, 30).map((k, i) => (
+                <button
+                  type="button"
+                  class={`ai-kw ai-kw-btn${added.has(k) ? ' added' : ' missing'}`}
+                  key={i}
+                  onClick={() => handleAdd(k)}
+                  title={added.has(k) ? 'Added to Technical Skills' : 'Add to Technical Skills'}
+                >
+                  {k}
+                  <span class="ai-kw-icon" aria-hidden>{added.has(k) ? '✓' : '+'}</span>
+                </button>
+              ))}
             </div>
           </div>
         )}
